@@ -10,15 +10,15 @@ OBJS		= $(SRCS:.cpp=.o)
 
 # EXECUTABLES & LIBRARIES
 ################################################################################
-NAME		= containers
+NAME		= tester
 
 # DIRECTORIES
 ################################################################################
-HEADERS		= .
+HEADERS		= containers
 
 # FLAGS
 ################################################################################
-CPPFLAGS		:= -Wall -Wextra -Werror -Wno-conversion -std=c++98 -pedantic
+CPPFLAGS		+= -Wall -Wextra -Werror -std=c++98 -pedantic
 
 ifeq ($(DEBUG), true)
 	CPPFLAGS	+= -fsanitize=address -g3 -O0
@@ -31,7 +31,7 @@ endif
 # RULES
 ################################################################################
 .c.o:
-			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) -I$(HEADERS)
+			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) -I$(HEADERS)  
 
 $(NAME):	$(OBJS)
 			$(CC) $(CPPFLAGS) $(OBJS) -o $(NAME) -I$(HEADERS)
