@@ -16,21 +16,23 @@
 
 namespace	ft
 {
-	template < class T > 
+	template < class T, class A = std::allocator<T> > 
 	class vector
 	{
 		public:
 			/* ************************************************************** */
+			/* 	MEMBER TYPES                                                  */
+			/* ************************************************************** */
+			// Memory
+			typedef A							allocator_type;
+			
+			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
 			/* ************************************************************** */
 			// Constructors
-			explicit vector(void);
+			explicit vector(const allocator_type &alloc = allocator_type());
 			// Destructor
-			~vector();
-
-			/* ************************************************************** */
-			/* 	MEMBER TYPES                                                  */
-			/* ************************************************************** */
+			~vector(void);
 
 			/* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
@@ -43,9 +45,10 @@ namespace	ft
 			void	push_back(const T &val);
 
 		private:
-			T			*_array;
-			std::size_t	_size;
-			std::size_t	_capacity;
+			T				*_array;
+			allocator_type	_allocator;
+			std::size_t		_size;
+			std::size_t		_capacity;
 	};
 }
 
