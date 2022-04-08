@@ -6,12 +6,13 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/08 11:48:07 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/08 13:22:36 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 /* ************************************************************************** */
 /*  CONSTRUCTORS & DESTRUCTOR                                                 */
@@ -21,6 +22,14 @@ ft::vector<T,A>::vector(const allocator_type &alloc)
 : _allocator(alloc), _size(0), _capacity(0)
 {
 	this->_array = this->_allocator.allocate(this->_capacity);
+}
+
+template < class T, class A > 
+ft::vector<T,A>::vector(const vector &x)
+: _allocator(x.get_allocator()), _size(x.size()), _capacity(x.capacity())
+{
+	this->_array = this->_allocator.allocate(this->_capacity);
+	std::copy(x.begin(), x.end(), this->begin());
 }
 
 template < class T, class A > 

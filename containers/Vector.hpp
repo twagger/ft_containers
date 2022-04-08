@@ -24,17 +24,20 @@ namespace	ft
 			/* 	MEMBER TYPES & ALIASES                                        */
 			/* ************************************************************** */
 			// Type
-			typedef T	value_type;
+			typedef T			value_type;
 			// Memory
-			typedef A	allocator_type;
+			typedef A			allocator_type;
+			// Size
+			typedef	std::size_t	size_type;
 			// Iterators
 			class iterator : public std::iterator<std::random_access_iterator_tag, T> 
 			{
 				public:
-					// constructors
+					// constructors and destructor
 					iterator(void) : p(NULL) {}
 					iterator(T *x) : p(x) {}
 					iterator(const iterator &it) : p(it.p) {}
+					~iterator();
 
 					// operators overload  
 					iterator	&operator++(void) {++this->p;return *this;}
@@ -52,12 +55,14 @@ namespace	ft
 					// attributes
 					T	*p;
 			};
+			typedef iterator	const_iterator;
 
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
 			/* ************************************************************** */
 			// Constructors
 			explicit vector(const allocator_type &alloc = allocator_type());
+			vector(const vector	&x);
 			// Destructor
 			~vector(void);
 
@@ -73,9 +78,14 @@ namespace	ft
 			void			push_back(const T &val);
 			// Allocator
 			allocator_type	get_allocator() const {return (this->_allocator);};
+			// Capacity
+			size_type		size(void) const {return (this->_size);};
+			size_type		capacity(void) const {return (this->_capacity);};
 			// Iterators
-			iterator		begin(void) {return (this->_array);} ;
+			iterator		begin(void) {return (this->_array);};
 			iterator		end(void) {return (this->_array + this->_size);};
+			const_iterator	begin(void) const {return (this->_array);};
+			const_iterator	end(void) const {return (this->_array + this->_size);};
 
 		private:
 			value_type		*_array;
