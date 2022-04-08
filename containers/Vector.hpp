@@ -27,7 +27,32 @@ namespace	ft
 			typedef T	value_type;
 			// Memory
 			typedef A	allocator_type;
-			
+			// Iterators
+			class iterator : public std::iterator<std::random_access_iterator_tag, T> 
+			{
+				public:
+					// constructors
+					iterator(void) : p(NULL) {}
+					iterator(T *x) : p(x) {}
+					iterator(const iterator &it) : p(it.p) {}
+
+					// operators overload  
+					iterator	&operator++(void) {++this->p;return *this;}
+					iterator 	operator++(int) {iterator tmp(*this); operator++(); return tmp;}
+					iterator	&operator--(void) {--this->p;return *this;}
+					iterator 	operator--(int) {iterator tmp(*this); operator--(); return tmp;}
+					bool 		operator==(const iterator& rhs) const {return this->p == rhs.p;}
+					bool 		operator!=(const iterator& rhs) const {return this->p != rhs.p;}
+					bool 		operator<(const iterator& rhs) const {return this->p < rhs.p;}
+					bool 		operator<=(const iterator& rhs) const {return this->p <= rhs.p;}
+					bool 		operator>(const iterator& rhs) const {return this->p > rhs.p;}
+					bool 		operator>=(const iterator& rhs) const {return this->p >= rhs.p;}
+					T			&operator*(void) {return *(this->p);}
+					
+					// attributes
+					T	*p;
+			};
+
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
 			/* ************************************************************** */
@@ -44,8 +69,13 @@ namespace	ft
 			/* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
+			// Modifier
 			void			push_back(const T &val);
-			allocator_type	get_allocator(void) const;
+			// Allocator
+			allocator_type	get_allocator() const {return (this->_allocator);};
+			// Iterators
+			iterator		begin(void) {return (this->_array);} ;
+			iterator		end(void) {return (this->_array + this->_size);};
 
 		private:
 			value_type		*_array;
