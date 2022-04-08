@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/08 11:12:18 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/08 11:24:22 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,10 @@ void	ft::vector<T,A>::push_back(const T &val)
 	}
 	this->_array[this->_size] = val;
 	++this->_size;
+}
+
+template < class T, class A > 
+typename ft::vector<T,A>::allocator_type	ft::vector<T,A>::get_allocator(void) const
+{
+	return (this->_allocator);
 }

@@ -21,10 +21,12 @@ namespace	ft
 	{
 		public:
 			/* ************************************************************** */
-			/* 	MEMBER TYPES                                                  */
+			/* 	MEMBER TYPES & ALIASES                                        */
 			/* ************************************************************** */
+			// Type
+			typedef T	value_type;
 			// Memory
-			typedef A							allocator_type;
+			typedef A	allocator_type;
 			
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -42,10 +44,11 @@ namespace	ft
 			/* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
-			void	push_back(const T &val);
+			void			push_back(const T &val);
+			allocator_type	get_allocator(void) const;
 
 		private:
-			T				*_array;
+			value_type		*_array;
 			allocator_type	_allocator;
 			std::size_t		_size;
 			std::size_t		_capacity;
