@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:53:26 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 11:13:21 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/12 11:44:33 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,13 @@ int main(void)
 	ft::vector<int>	myCopiedVector(myVector);
 	myCopiedVector.push_back(38);
 	myCopiedVector.push_back(49);
-	i = 0;
-	for (ft::vector<int>::iterator it = myCopiedVector.begin(); it < myCopiedVector.end(); ++it)
-	{
-		std::cout << "vector[" << i++ << "] : " << *it << std::endl;
-	}
-	
+	std::cout << "creation : OK" << std::endl;
+
 	// TEST 3
 	std::cout << std::endl;
 	std::cout << "\033[1;35m ---[ TEST 3 : Use iterators on FT Vector ]--- \033[0m" << std::endl;
 	i = 0;
-	for (ft::vector<int>::iterator it = myVector.begin(); it < myVector.end(); ++it)
+	for (ft::vector<int>::iterator it = myCopiedVector.begin(); it < myCopiedVector.end(); ++it)
 	{
 		std::cout << "vector[" << i++ << "] : " << *it << std::endl;
 	}
