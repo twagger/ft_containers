@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:53:26 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/08 12:18:38 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/12 10:44:07 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int main(void)
 	myCopiedVector.push_back(38);
 	myCopiedVector.push_back(49);
 	i = 0;
-	for (ft::vector<int>::iterator it = myVector.begin(); it < myVector.end(); ++it)
+	for (ft::vector<int>::iterator it = myCopiedVector.begin(); it < myCopiedVector.end(); ++it)
 	{
 		std::cout << "vector[" << i++ << "] : " << *it << std::endl;
 	}

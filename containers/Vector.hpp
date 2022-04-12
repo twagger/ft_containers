@@ -13,6 +13,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <memory>
+# include <cstddef>
 
 namespace	ft
 {
@@ -37,7 +38,6 @@ namespace	ft
 					iterator(void) : p(NULL) {}
 					iterator(T *x) : p(x) {}
 					iterator(const iterator &it) : p(it.p) {}
-					~iterator();
 
 					// operators overload  
 					iterator	&operator++(void) {++this->p;return *this;}
@@ -51,11 +51,37 @@ namespace	ft
 					bool 		operator>(const iterator& rhs) const {return this->p > rhs.p;}
 					bool 		operator>=(const iterator& rhs) const {return this->p >= rhs.p;}
 					T			&operator*(void) {return *(this->p);}
+					const T		&operator*(void) const {return *(this->p);}
+					ptrdiff_t	operator-(const iterator& rhs) const {return (this->p - rhs.p);}
 					
 					// attributes
 					T	*p;
 			};
-			typedef iterator	const_iterator;
+			class const_iterator : public std::iterator<std::random_access_iterator_tag, T> 
+			{
+				public:
+					// constructors and destructor
+					const_iterator(void) : p(NULL) {}
+					const_iterator(T *x) : p(x) {}
+					const_iterator(const const_iterator &it) : p(it.p) {}
+
+					// operators overload  
+					const_iterator	&operator++(void) {++this->p;return *this;}
+					const_iterator 	operator++(int) {const_iterator tmp(*this); operator++(); return tmp;}
+					const_iterator	&operator--(void) {--this->p;return *this;}
+					const_iterator 	operator--(int) {const_iterator tmp(*this); operator--(); return tmp;}
+					bool 			operator==(const const_iterator& rhs) const {return this->p == rhs.p;}
+					bool 			operator!=(const const_iterator& rhs) const {return this->p != rhs.p;}
+					bool 			operator<(const const_iterator& rhs) const {return this->p < rhs.p;}
+					bool 			operator<=(const const_iterator& rhs) const {return this->p <= rhs.p;}
+					bool 			operator>(const const_iterator& rhs) const {return this->p > rhs.p;}
+					bool 			operator>=(const const_iterator& rhs) const {return this->p >= rhs.p;}
+					const T			&operator*(void) const {return *(this->p);}
+					ptrdiff_t		operator-(const const_iterator& rhs) const {return (this->p - rhs.p);}
+					
+					// attributes
+					T	*p;
+			};
 
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
