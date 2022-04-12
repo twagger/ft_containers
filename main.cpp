@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:53:26 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 11:44:33 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/12 17:35:27 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,20 @@ int main(void)
 	{
 		std::cout << "vector[" << i++ << "] : " << *it << std::endl;
 	}
+	
+	// TEST 4
+	std::cout << std::endl;
+	std::cout << "\033[1;35m ---[ TEST 4 : Use reverse iterators on FT Vector ]--- \033[0m" << std::endl;
+	ft::vector<int>::iterator it(myCopiedVector.begin());
+	ft::vector<int>::iterator ite(myCopiedVector.end());
+	ft::vector<int>::reverse_iterator rev_it(ite);
+	ft::vector<int>::reverse_iterator rev_ite(it);
 
+  	std::cout << "MyCopiedVector reversed content :";
+  	while (rev_it != rev_ite)
+    	std::cout << ' ' << *rev_it++;
+ 	std::cout << '\n';
+	
 	// END OF PROGRAM
 	std::cout << std::endl;
 	std::cout << "\033[1;35m ---[ End of program ]--- \033[0m" << std::endl;
