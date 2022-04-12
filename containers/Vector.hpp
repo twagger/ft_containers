@@ -14,6 +14,7 @@
 # define VECTOR_HPP
 # include <memory>
 # include <cstddef>
+# include "../iterators/iterator.hpp"
 
 namespace	ft
 {
@@ -25,64 +26,15 @@ namespace	ft
 			/* 	MEMBER TYPES & ALIASES                                        */
 			/* ************************************************************** */
 			// Type
-			typedef T			value_type;
+			typedef T								value_type;
 			// Memory
-			typedef A			allocator_type;
+			typedef A								allocator_type;
 			// Size
-			typedef	std::size_t	size_type;
+			typedef	std::size_t						size_type;
 			// Iterators
-			class iterator : public std::iterator<std::random_access_iterator_tag, T> 
-			{
-				public:
-					// constructors and destructor
-					iterator(void) : p(NULL) {}
-					iterator(T *x) : p(x) {}
-					iterator(const iterator &it) : p(it.p) {}
-
-					// operators overload  
-					iterator	&operator++(void) {++this->p;return *this;}
-					iterator 	operator++(int) {iterator tmp(*this); operator++(); return tmp;}
-					iterator	&operator--(void) {--this->p;return *this;}
-					iterator 	operator--(int) {iterator tmp(*this); operator--(); return tmp;}
-					bool 		operator==(const iterator& rhs) const {return this->p == rhs.p;}
-					bool 		operator!=(const iterator& rhs) const {return this->p != rhs.p;}
-					bool 		operator<(const iterator& rhs) const {return this->p < rhs.p;}
-					bool 		operator<=(const iterator& rhs) const {return this->p <= rhs.p;}
-					bool 		operator>(const iterator& rhs) const {return this->p > rhs.p;}
-					bool 		operator>=(const iterator& rhs) const {return this->p >= rhs.p;}
-					T			&operator*(void) {return *(this->p);}
-					const T		&operator*(void) const {return *(this->p);}
-					ptrdiff_t	operator-(const iterator& rhs) const {return (this->p - rhs.p);}
-					
-					// attributes
-					T	*p;
-			};
-			class const_iterator : public std::iterator<std::random_access_iterator_tag, T> 
-			{
-				public:
-					// constructors and destructor
-					const_iterator(void) : p(NULL) {}
-					const_iterator(T *x) : p(x) {}
-					const_iterator(const const_iterator &it) : p(it.p) {}
-
-					// operators overload  
-					const_iterator	&operator++(void) {++this->p;return *this;}
-					const_iterator 	operator++(int) {const_iterator tmp(*this); operator++(); return tmp;}
-					const_iterator	&operator--(void) {--this->p;return *this;}
-					const_iterator 	operator--(int) {const_iterator tmp(*this); operator--(); return tmp;}
-					bool 			operator==(const const_iterator& rhs) const {return this->p == rhs.p;}
-					bool 			operator!=(const const_iterator& rhs) const {return this->p != rhs.p;}
-					bool 			operator<(const const_iterator& rhs) const {return this->p < rhs.p;}
-					bool 			operator<=(const const_iterator& rhs) const {return this->p <= rhs.p;}
-					bool 			operator>(const const_iterator& rhs) const {return this->p > rhs.p;}
-					bool 			operator>=(const const_iterator& rhs) const {return this->p >= rhs.p;}
-					const T			&operator*(void) const {return *(this->p);}
-					ptrdiff_t		operator-(const const_iterator& rhs) const {return (this->p - rhs.p);}
-					
-					// attributes
-					T	*p;
-			};
-
+			typedef typename ft::iterator<T>		iterator;
+			typedef typename ft::const_iterator<T>	const_iterator;
+			
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
 			/* ************************************************************** */

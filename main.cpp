@@ -6,14 +6,14 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:53:26 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 10:44:07 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/12 11:13:21 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include "./containers/Vector.hpp"
 #include <memory>
 #include <algorithm>
+#include "containers/Vector.hpp"
 
 int main(void)
 {

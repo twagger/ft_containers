@@ -14,7 +14,9 @@ NAME		= tester
 
 # DIRECTORIES
 ################################################################################
-HEADERS		= containers
+H1			= containers
+H2			= iterators
+HEADERS		= -I$(H1) -I$(H2) 
 
 # FLAGS
 ################################################################################
@@ -31,10 +33,10 @@ endif
 # RULES
 ################################################################################
 .c.o:
-			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) -I$(HEADERS)  
+			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) $(HEADERS)  
 
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(OBJS) -o $(NAME) -I$(HEADERS)
+			$(CC) $(CPPFLAGS) $(OBJS) -o $(NAME) $(HEADERS)
 
 all:		$(NAME)
 
