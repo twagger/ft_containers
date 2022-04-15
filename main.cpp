@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/15 15:48:10 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/15 15:59:47 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include "containers/Vector.hpp"
 
 #include <gtest/gtest.h>
+
+/*
+** ------------------------
+** Commands to launch tests 
+** ------------------------
+**  cmake -S . -B build && cmake --build build && cd build && ctest ; cd ..
+**  cmake -S . -B build && cmake --build build && cd build && ctest --verbose ; cd ..
+*/
 
 class VectorTest : public ::testing::Test {
 	protected:
