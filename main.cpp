@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/15 15:59:47 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/15 16:21:22 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,10 @@ TEST_F(VectorTest, pushBackTest) {
 	MyVector.push_back(42);
 	StdVector.push_back(42);
 	EXPECT_EQ(MyVector[0], StdVector[0]);
+}
+
+TEST_F(VectorTest, algorithmTest) {
+	std::fill(MyVector.begin(), MyVector.end(), 43);
+	std::fill(StdVector.begin(), StdVector.end(), 43);
+	EXPECT_EQ(MyVector.size(), StdVector.size());
 }
