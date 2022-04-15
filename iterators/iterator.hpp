@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 17:35:09 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/15 11:54:16 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ namespace	ft
 			iterator(void) : _p(NULL) {}
 			iterator(pointer x) : _p(x) {}
 			iterator(const iterator &it) : _p(it._p) {}
+			~iterator(void) {}
 
 			// operators overload  
 			iterator		&operator++(void) {++this->_p;return *this;}
@@ -45,10 +46,18 @@ namespace	ft
 			bool 			operator>(const iterator& rhs) const {return this->_p > rhs._p;}
 			bool 			operator>=(const iterator& rhs) const {return this->_p >= rhs._p;}
 
+			difference_type	operator+(const iterator& rhs) const {return (this->_p + rhs._p);}
+			difference_type	operator+(difference_type n) const {return (this->_p + n);}
+			iterator		&operator+=(difference_type n) {this->_p += n; return (*this);}
+			difference_type	operator-(const iterator& rhs) const {return (this->_p - rhs._p);}
+			difference_type	operator-(difference_type n) const {return (this->_p - n);}
+			iterator		&operator-=(difference_type n) {this->_p -= n; return (*this);}
+
 			reference		operator*(void) {return *(this->_p);}
 			const reference	operator*(void) const {return *(this->_p);}
+			pointer			operator->(void) const {return (this->_p);}
 
-			difference_type	operator-(const iterator& rhs) const {return (this->_p - rhs._p);}
+			reference		operator[](difference_type n) const {return *(this->_p + n);}
 
 			// member attributes
 			pointer	_p;
@@ -69,6 +78,7 @@ namespace	ft
 			const_iterator(void) : _p(NULL) {}
 			const_iterator(pointer x) : _p(x) {}
 			const_iterator(const const_iterator &it) : _p(it._p) {}
+			~const_iterator(void) {}
 
 			// operators overload  
 			const_iterator	&operator++(void) {++this->_p;return *this;}
@@ -83,9 +93,17 @@ namespace	ft
 			bool 			operator>(const const_iterator& rhs) const {return this->_p > rhs._p;}
 			bool 			operator>=(const const_iterator& rhs) const {return this->_p >= rhs._p;}
 
-			reference		operator*(void) const {return *(this->_p);}
-
+			difference_type	operator+(const const_iterator& rhs) const {return (this->_p + rhs._p);}
+			difference_type	operator+(difference_type n) const {return (this->_p + n);}
+			const_iterator	&operator+=(difference_type n) {this->_p += n; return (*this);}
 			difference_type	operator-(const const_iterator& rhs) const {return (this->_p - rhs._p);}
+			difference_type	operator-(difference_type n) const {return (this->_p - n);}
+			const_iterator	&operator-=(difference_type n) {this->_p -= n; return (*this);}
+
+			reference		operator*(void) const {return *(this->_p);}
+			pointer			operator->(void) const {return (this->_p);}
+
+			reference		operator[](difference_type n) const {return *(this->_p + n);}
 
 			// member attributes
 			pointer	_p;
@@ -104,9 +122,9 @@ namespace	ft
 			typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
 
 			// constructors and destructor
-			reverse_iterator(void) : current() {};
-			explicit reverse_iterator(iterator_type	it) : current(it) {};
-			reverse_iterator(const reverse_iterator<Iter> &rev_it) : current(rev_it.current) {};
+			reverse_iterator(void) : current() {}
+			explicit reverse_iterator(iterator_type	it) : current(it) {}
+			reverse_iterator(const reverse_iterator<Iter> &rev_it) : current(rev_it.current) {}
 
 			// operators overload  
 			reverse_iterator	&operator++(void) {--this->current;return *this;}
@@ -114,10 +132,10 @@ namespace	ft
 			reverse_iterator	&operator--(void) {++this->current;return *this;}
 			reverse_iterator 	operator--(int) {reverse_iterator tmp(*this); ++this->current; return tmp;}
 
-			reverse_iterator	operator+(difference_type n) const {return reverse_iterator(this->current - n);};
-			reverse_iterator	&operator+=(difference_type n) {this->current -= n; return (*this);};
-			reverse_iterator	operator-(difference_type n) const {return reverse_iterator(this->current + n);};
-			reverse_iterator	&operator-=(difference_type n) {this->current += n; return (*this);};
+			reverse_iterator	operator+(difference_type n) const {return reverse_iterator(this->current - n);}
+			reverse_iterator	&operator+=(difference_type n) {this->current -= n; return (*this);}
+			reverse_iterator	operator-(difference_type n) const {return reverse_iterator(this->current + n);}
+			reverse_iterator	&operator-=(difference_type n) {this->current += n; return (*this);}
 
 			reference			operator*(void) const {iterator_type tmp = this->current; return (*--tmp);}
 			pointer				operator->(void) const {iterator_type tmp = this->current; return (--tmp);}
@@ -131,13 +149,39 @@ namespace	ft
 			iterator_type current;
 	};
 	// Non member operator overloads
-	template< typename Iter >
+	template< class Iter >
 	bool	operator==(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
-	{ return (lhs.base() == rhs.base());}
+	{return (lhs.base() == rhs.base());}
 
-	template< typename Iter >
+	template< class Iter >
 	bool	operator!=(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
-	{ return !(lhs == rhs);}
+	{return (lhs.base() != rhs.base());}
+
+	template< class Iter >
+  	bool	operator<(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+	{return (rhs.base() > lhs.base());}
+
+	template< class Iter >
+	bool	operator<=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+	{return (rhs.base() >= lhs.base());}
+	
+	template< class Iter >
+	bool	operator>(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+	{return (rhs.base() < lhs.base());}
+
+	template< class Iter >
+	bool	operator>=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+	{return (lhs.base() <= rhs.base());}
+
+	template< class Iter >
+  	reverse_iterator<Iter>	operator+(typename reverse_iterator<Iter>::difference_type n,
+		const reverse_iterator<Iter> &rev_it)
+	{return reverse_iterator<Iter>(rev_it.base() - n);}
+
+	template< class Iter >
+ 	typename reverse_iterator<Iter>::difference_type	operator-(const reverse_iterator<Iter> &lhs,
+		const reverse_iterator<Iter> &rhs)
+	{return reverse_iterator<Iter>(rhs.base() - lhs.base());}
 }
 
 #endif
