@@ -6,6 +6,7 @@
 ## Other
 .DS_Store
 tester
+build
 
 # Debug files
 *.dSYM/
