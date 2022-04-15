@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 14:43:09 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/15 17:19:34 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,14 @@ ft::vector<T,A>::vector(const allocator_type &alloc)
 : _allocator(alloc), _size(0), _capacity(0)
 {
 	this->_array = this->_allocator.allocate(this->_capacity);
-	this->_begin = this->_array;
-	this->_end = this->_begin;
+}
+
+template < class T, class A > 
+ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type &alloc)
+: _allocator(alloc), _size(n), _capacity(n)
+{
+	this->_array = this->_allocator.allocate(this->_capacity);
+	std::fill(this->begin(), this->end(), val);
 }
 
 template < class T, class A > 

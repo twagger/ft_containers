@@ -49,6 +49,8 @@ namespace	ft
 			/* ************************************************************** */
 			// Constructors
 			explicit vector(const allocator_type &alloc = allocator_type());
+			explicit vector(size_type n, const value_type &val = value_type(), 
+				const allocator_type &alloc = allocator_type());
 			vector(const vector	&x);
 			// Destructor
 			~vector(void);
@@ -77,10 +79,8 @@ namespace	ft
 		private:
 			value_type		*_array;
 			allocator_type	_allocator;
-			std::size_t		_size;
-			std::size_t		_capacity;
-			value_type		*_begin;
-			value_type		*_end;
+			size_type		_size;
+			size_type		_capacity;
 	};
 }
 

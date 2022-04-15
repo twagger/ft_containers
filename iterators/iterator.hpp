@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/15 16:18:18 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/15 17:31:56 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace	ft
 			iterator		operator+(const iterator& rhs) const {return (this->_p + rhs._p);}
 			iterator		operator+(difference_type n) const {return (this->_p + n);}
 			iterator		&operator+=(difference_type n) {this->_p += n; return (*this);}
-			iterator		operator-(const iterator& rhs) const {return (this->_p - rhs._p);}
+			difference_type	operator-(const iterator& rhs) const {return (this->_p - rhs._p);}
 			iterator		operator-(difference_type n) const {return (this->_p - n);}
 			iterator		&operator-=(difference_type n) {this->_p -= n; return (*this);}
 
@@ -96,7 +96,7 @@ namespace	ft
 			const_iterator	operator+(const const_iterator& rhs) const {return *(this->_p + rhs._p);}
 			const_iterator	operator+(difference_type n) const {return *(this->_p + n);}
 			const_iterator	&operator+=(difference_type n) {this->_p += n; return (*this);}
-			const_iterator	operator-(const const_iterator& rhs) const {return (this->_p - rhs._p);}
+			difference_type	operator-(const const_iterator& rhs) const {return (this->_p - rhs._p);}
 			const_iterator	operator-(difference_type n) const {return (this->_p - n);}
 			const_iterator	&operator-=(difference_type n) {this->_p -= n; return (*this);}
 
