@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/15 17:57:59 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/17 15:26:54 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@
 
 class VectorTest : public ::testing::Test {
 	protected:
-		ft::vector<int>	MyVector(10, 42);
-		std::vector<int> StdVector(10, 42);
+		ft::vector<int>	MyVector;
+		std::vector<int> StdVector;
 };
 
-// Contructor tests
+/* ************************************************************************** */
+/*  CONSTRUCTOR TESTS                                                         */
+/* ************************************************************************** */
 
 TEST(VectorTest_Constructor, defaultConstructor) {
 	ft::vector<int> MyVector;
@@ -72,17 +74,69 @@ TEST(VectorTest_Constructor, copyConstructor) {
 
 // Member type tests > SFINAE ?
 
-// Iterator tests
+/* ************************************************************************** */
+/*  ITERATOR TESTS                                                            */
+/* ************************************************************************** */
 
 TEST_F(VectorTest, iteratorBasic) {
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
 	ft::vector<int>::iterator	it = MyVector.begin();
 	it++;
 	it--;
 	EXPECT_EQ(it, MyVector.begin());
 }
 
+/* ************************************************************************** */
+/*  CAPACITY TESTS                                                            */
+/* ************************************************************************** */
+// Max size
+TEST_F(VectorTest, maxSize) {
+	EXPECT_EQ(MyVector.max_size(), StdVector.max_size());
+}
+// Resize
+/*
+TEST_F(VectorTest, resize) {
+	MyVector.resize(15, 5);
+	StdVector.resize(15, 5);
+	EXPECT_EQ(MyVector.size(), StdVector.size());
+	EXPECT_EQ(MyVector.capacity(), StdVector.capacity());
+	EXPECT_EQ(MyVector[12], StdVector[12]);
+	EXPECT_EQ(MyVector[12], 5);
+	MyVector.resize(2, 5);
+	StdVector.resize(2, 5);
+	EXPECT_EQ(MyVector.size(), StdVector.size());
+	EXPECT_EQ(MyVector.capacity(), StdVector.capacity());
+}
+*/
+// Reserve
+TEST_F(VectorTest, reserveBasic) {
+	MyVector.reserve(10);
+	EXPECT_EQ(MyVector.capacity(), 10);
+}
 
-// Capacity tests
+TEST_F(VectorTest, doubleCapacityIfNeeded) {
+	MyVector.reserve(10);
+	for (int i = 0; i < 11; ++i)
+	{
+		MyVector.push_back(i);
+	}
+	EXPECT_EQ(MyVector.capacity(), 20);
+}
+
+TEST_F(VectorTest, reserveLessHasNoEffect) {
+	MyVector.reserve(10);
+	EXPECT_EQ(MyVector.capacity(), 10);
+	MyVector.reserve(5);
+	EXPECT_EQ(MyVector.capacity(), 10);
+}
+
+TEST_F(VectorTest, reserveTooMuchThrowExeption) {
+	EXPECT_THROW(MyVector.reserve(MyVector.max_size() + 1), std::length_error);
+}
 
 // Element access tests
 

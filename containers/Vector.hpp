@@ -58,30 +58,78 @@ namespace	ft
 			/* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
 			/* ************************************************************** */
-			T	&operator[](std::size_t	n);
+			T		&operator[](std::size_t	n);
+			vector	&operator=(const vector& x);
 
 			/* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
-			// Modifier
-			void			push_back(const T &val);
-			// Allocator
-			allocator_type	get_allocator() const {return (this->_allocator);};
-			// Capacity
-			size_type		size(void) const {return (this->_size);};
-			size_type		capacity(void) const {return (this->_capacity);};
 			// Iterators
-			iterator		begin(void) {return iterator(this->_array);};
-			iterator		end(void) {return iterator(this->_array + this->_size);};
-			const_iterator	begin(void) const {return const_iterator(this->_array);};
-			const_iterator	end(void) const {return const_iterator(this->_array + this->_size);};
+			iterator				begin(void) {return iterator(this->_array);}
+			iterator				end(void) {return iterator(this->_array + this->_size);}
+			const_iterator			begin(void) const {return const_iterator(this->_array);}
+			const_iterator			end(void) const {return const_iterator(this->_array + this->_size);}
+			reverse_iterator		rbegin(void) {return reverse_iterator(this->end());}
+			const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(this->end());}
+			reverse_iterator		rend(void) {return reverse_iterator(this->begin());}
+			const_reverse_iterator	rend(void) const {return const_reverse_iterator(this->begin());}
+			// Capacity
+			size_type		size(void) const {return (this->_size);}
+			size_type		max_size(void) const {return (this->_allocator.max_size());}
+			void			resize(size_type n, value_type val = value_type()); // TPP
+			size_type		capacity(void) const {return (this->_capacity);}
+			bool			empty(void) const {return (this->_size > 0);}
+			void			reserve(size_type n); // TPP
+			// Access
+			reference		at(size_type n) {return (this[n]);};
+			const_reference at (size_type n) const {return (this[n]);};
+			reference 		front(void) {return (this[0]);};
+			const_reference front(void) const {return (this[0]);};
+			reference 		back(void) {return (this[this->size - 1]);};
+			const_reference back(void) const {return (this[this->size - 1]);};
+			// Modifiers
+			template< class InputIterator >
+  			void 			assign (InputIterator first, InputIterator last); // TPP
+			void 			assign (size_type n, const value_type &val); // TPP
+			void			push_back(const T &val); // TPP
+			void			pop_back(void) {if (this->_size > 0){this->_allocator.destroy(this[this->_size - 1]);--this->_size;}};
+			iterator		insert(iterator position, const value_type &val); // TPP
+			void 			insert(iterator position, size_type n, const value_type	&val); // TPP
+			template< class InputIterator >
+		    void			insert(iterator position, InputIterator first, InputIterator last); // TPP
+			iterator		erase(iterator position); // TPP
+			iterator		erase(iterator first, iterator last); // TPP
+			void			swap(vector &x); // TPP
+			void			clear(void); // TPP
+			// Allocator
+			allocator_type	get_allocator() const {return allocator_type(this->_allocator);}
 
 		private:
+			// Attributes
 			value_type		*_array;
 			allocator_type	_allocator;
 			size_type		_size;
 			size_type		_capacity;
+
+			// Functions
+			void			_fill_insert();
+			void			_erase_at_end();
 	};
+	// Non member function overloads
+	template <class T, class A>
+	bool operator==(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	bool operator!=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	bool operator<(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	bool operator<=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	bool operator>(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	bool operator>=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	template <class T, class A>
+	void swap(vector<T,A> &x, vector<T,A> &y);
 }
 
 # include "Vector.tpp"
