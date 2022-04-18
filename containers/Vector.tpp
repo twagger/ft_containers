@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/17 15:03:23 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/18 12:21:32 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 /* ************************************************************************** */
 /*  CONSTRUCTORS & DESTRUCTOR                                                 */
 /* ************************************************************************** */
+// Default
 template < class T, class A > 
 ft::vector<T,A>::vector(const allocator_type &alloc)
 : _allocator(alloc), _size(0), _capacity(0)
@@ -25,6 +26,7 @@ ft::vector<T,A>::vector(const allocator_type &alloc)
 	this->_array = this->_allocator.allocate(this->_capacity);
 }
 
+// Fill
 template < class T, class A > 
 ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type &alloc)
 : _allocator(alloc), _size(n), _capacity(n)
@@ -33,6 +35,9 @@ ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type
 	std::fill(this->begin(), this->end(), val);
 }
 
+// Range
+
+// Copy
 template < class T, class A > 
 ft::vector<T,A>::vector(const vector &x)
 : _allocator(x.get_allocator()), _size(x.size()), _capacity(x.capacity())
@@ -41,6 +46,7 @@ ft::vector<T,A>::vector(const vector &x)
 	std::copy(x.begin(), x.end(), this->begin());
 }
 
+// Destructor
 template < class T, class A > 
 ft::vector<T,A>::~vector(void)
 {
@@ -50,6 +56,7 @@ ft::vector<T,A>::~vector(void)
 /* ************************************************************************** */
 /* 	OPERATOR OVERLOADS                                                        */
 /* ************************************************************************** */
+// Operator []
 template < class T, class A > 
 T	&ft::vector<T,A>::operator[](std::size_t n)
 {
@@ -63,6 +70,7 @@ T	&ft::vector<T,A>::operator[](std::size_t n)
 	}
 }
 
+// Operator =
 template < class T, class A > 
 ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 {
@@ -80,7 +88,10 @@ ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 /* ************************************************************************** */
 /* 	MEMBER FUNCTIONS                                                          */
 /* ************************************************************************** */
-// Capacity
+/* ************************************************************************** */
+/*  CAPACITY                                                                  */
+/* ************************************************************************** */
+// Resize
 /*
 template < class T, class A > 
 void	ft::vector<T,A>::resize(size_type n, value_type val)
@@ -97,6 +108,7 @@ void	ft::vector<T,A>::resize(size_type n, value_type val)
 	}
 }
 */
+// Reserve
 template < class T, class A > 
 void	ft::vector<T,A>::reserve(size_type n)
 {
@@ -116,28 +128,52 @@ void	ft::vector<T,A>::reserve(size_type n)
 	}
 }
 
-// Modifiers
+/* ************************************************************************** */
+/*  MODIFIERS                                                                 */
+/* ************************************************************************** */
+// Push back
 template < class T, class A > 
 void	ft::vector<T,A>::push_back(const T &val)
 {
 	T			*tmp;
 	std::size_t	new_capacity;
 	
-	if (this->_size == this->_capacity)
+	if (this->size() == this->capacity())
 	{
-		new_capacity = this->_capacity * 2;
-		if (this->_capacity == 0)
+		new_capacity = this->capacity() * 2;
+		if (this->capacity() == 0)
 			new_capacity = 1;
-		tmp = this->_allocator.allocate(new_capacity);
-		for (std::size_t i = 0; i < this->_size; ++i)
+		tmp = this->get_allocator().allocate(new_capacity);
+		for (std::size_t i = 0; i < this->size(); ++i)
 		{
 			tmp[i] = this->_array[i];
 		}
-		this->_allocator.deallocate(this->_array, this->_capacity);
+		this->get_allocator().deallocate(this->_array, this->capacity());
 		this->_array = tmp;
-		this->_capacity = this->_capacity * 2;
+		this->_capacity = this->capacity() * 2;
 	}
-	this->_array[this->_size] = val;
+	this->_array[this->size()] = val;
 	++this->_size;
 }
 
+// Clear
+template < class T, class A > 
+void	ft::vector<T,A>::clear(void)
+{
+	for (int i = 0; i < this->size(); ++i)
+		this->get_allocator().destroy(this->_array + i);
+	this->_size = 0;
+}
+
+// Assign
+template < class T, class A, class InputIterator > 
+void ft::vector<T,A>::assign(InputIterator first, InputIterator last)
+{
+
+} 
+
+template < class T, class A > 
+void ft::vector<T,A>::assign (size_type n, const value_type &val)
+{
+
+}

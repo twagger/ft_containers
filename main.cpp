@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/17 15:26:54 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/18 12:03:37 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,16 @@ class VectorTest : public ::testing::Test {
 /*  CONSTRUCTOR TESTS                                                         */
 /* ************************************************************************** */
 
-TEST(VectorTest_Constructor, defaultConstructor) {
+TEST(VectorTest_Constructor, defaultConstructorEmptySize) {
 	ft::vector<int> MyVector;
 	EXPECT_EQ(MyVector.size(), 0)
-		<< "Default vector should be empty";
+		<< "Default vector should have a 0 size";
+}
+
+TEST(VectorTest_Constructor, defaultConstructorEmptyCapacity) {
+	ft::vector<int> MyVector;
+	EXPECT_EQ(MyVector.capacity(), 0)
+		<< "Default vector should have a 0 capacity";
 }
 
 TEST(VectorTest_Constructor, fillConstructor) {
@@ -48,8 +54,6 @@ TEST(VectorTest_Constructor, fillConstructor) {
 		EXPECT_EQ(MyVector[i], 42)
 			<< "Filled vector should contain n elements with the given value";
 	}
-	EXPECT_THROW(MyVector[6], std::out_of_range)
-		<< "Access to out of range value should throw an error";
 }
 
 /*
@@ -138,14 +142,135 @@ TEST_F(VectorTest, reserveTooMuchThrowExeption) {
 	EXPECT_THROW(MyVector.reserve(MyVector.max_size() + 1), std::length_error);
 }
 
-// Element access tests
+/* ************************************************************************** */
+/*  ELEMENT ACCESS TESTS                                                      */
+/* ************************************************************************** */
+// operator[]
+TEST_F(VectorTest, operatorBracketInRange) {
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	EXPECT_EQ(MyVector[1], 43);
+	EXPECT_EQ(MyVector[1], StdVector[1]);
+}
 
-// Modifier tests
+TEST_F(VectorTest, operatorBracketOutOfRange) {
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	EXPECT_THROW(MyVector[2], std::out_of_range);
+}
 
-// Allocator tests
+// at
+TEST_F(VectorTest, atInRange) {
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	EXPECT_EQ(MyVector.at(1), 43);
+	EXPECT_EQ(MyVector.at(1), StdVector.at(1));
+}
 
-// Relational operator tests
+TEST_F(VectorTest, atOutOfRange) {
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	EXPECT_THROW(MyVector.at(2), std::out_of_range);
+}
 
-// Swap tests
+// front
+TEST_F(VectorTest, frontOnNonEmpty) {
+	MyVector.push_back(41);
+	MyVector.push_back(43);
+	StdVector.push_back(41);
+	StdVector.push_back(43);
+	EXPECT_EQ(MyVector.front(), 41);
+	EXPECT_EQ(MyVector.front(), StdVector.front());
+}
 
-// Performance tests
+TEST_F(VectorTest, frontOnEmpty) {
+	EXPECT_THROW(MyVector.front(), std::out_of_range);
+}
+
+// back
+TEST_F(VectorTest, backOnNonEmpty) {
+	MyVector.push_back(41);
+	MyVector.push_back(43);
+	StdVector.push_back(41);
+	StdVector.push_back(43);
+	EXPECT_EQ(MyVector.back(), 43);
+	EXPECT_EQ(MyVector.back(), StdVector.back());
+}
+
+TEST_F(VectorTest, backOnEmpty) {
+	EXPECT_THROW(MyVector.back(), std::out_of_range);
+}
+
+/* ************************************************************************** */
+/*  MODIFIER TESTS                                                            */
+/* ************************************************************************** */
+// pop back
+TEST_F(VectorTest, popBackOk) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	StdVector.push_back(41);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	EXPECT_EQ(MyVector.back(), 43);
+	EXPECT_EQ(StdVector.back(), 43);
+	MyVector.pop_back();
+	StdVector.pop_back();
+	EXPECT_EQ(MyVector.back(), 42);
+	EXPECT_EQ(StdVector.back(), 42);
+}
+
+TEST_F(VectorTest, popBackEmptyNoThrow) {
+	EXPECT_NO_THROW(MyVector.pop_back());
+	EXPECT_NO_THROW(StdVector.pop_back());
+}
+
+// clear
+TEST_F(VectorTest, clearOk) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	StdVector.push_back(41);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	MyVector.clear();
+	StdVector.clear();
+	MyVector.push_back(666);
+	StdVector.push_back(666);
+	EXPECT_EQ(MyVector.front(), 666);
+	EXPECT_EQ(StdVector.front(), 666);
+}
+
+TEST_F(VectorTest, clearChangesSizeToZero) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	StdVector.push_back(41);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	MyVector.clear();
+	StdVector.clear();
+	EXPECT_EQ(MyVector.size(), 0);
+	EXPECT_EQ(StdVector.size(), 0);
+}
+
+TEST_F(VectorTest, clearDoesntAffectCapacity) {
+	ft::vector<int>::size_type	capaMy;
+	std::vector<int>::size_type	capaStd;
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	capaMy = MyVector.capacity();
+	StdVector.push_back(41);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	capaStd = StdVector.capacity();
+	MyVector.clear();
+	StdVector.clear();
+	EXPECT_EQ(MyVector.capacity(), capaMy);
+	EXPECT_EQ(StdVector.capacity(), capaStd);
+}
