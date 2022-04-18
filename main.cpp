@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/18 12:03:37 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/18 14:16:35 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@
 
 class VectorTest : public ::testing::Test {
 	protected:
-		ft::vector<int>	MyVector;
-		std::vector<int> StdVector;
+		ft::vector<int>		MyVector;
+		ft::vector<int>		MyTmpVector;
+		std::vector<int>	StdVector;
+		std::vector<int>	StdTmpVector;
 };
 
 /* ************************************************************************** */
@@ -208,6 +210,51 @@ TEST_F(VectorTest, backOnEmpty) {
 /* ************************************************************************** */
 /*  MODIFIER TESTS                                                            */
 /* ************************************************************************** */
+// assign
+TEST_F(VectorTest, assignRangeExtendsCapacity) {
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	EXPECT_EQ(MyVector.capacity(), 0);
+	EXPECT_EQ(MyTmpVector.capacity(), 4);
+	MyVector.assign(MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(MyVector.capacity(), 3);
+}
+
+TEST_F(VectorTest, assignRangeChangesSize) {
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	MyVector.assign(MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(MyVector.size(), 3);
+}
+
+TEST_F(VectorTest, assignRangeCopiesValues) {
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	MyVector.assign(MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(std::equal(MyVector.begin(), MyVector.end(), MyTmpVector.begin()), true);
+}
+
+TEST_F(VectorTest, assignFillExtendsCapacity) {
+	EXPECT_EQ(MyVector.capacity(), 0);
+	MyVector.assign(5, 42);
+	EXPECT_EQ(MyVector.capacity(), 5);
+}
+
+TEST_F(VectorTest, assignFillChangesSize) {
+	EXPECT_EQ(MyVector.size(), 0);
+	MyVector.assign(5, 42);
+	EXPECT_EQ(MyVector.size(), 5);
+}
+
+TEST_F(VectorTest, assignFillCopiesValues) {
+	MyVector.assign(5, 42);
+	for (int i = 0; i < MyVector.size(); ++i)
+		EXPECT_EQ(MyVector[i], 42);
+}
+
 // pop back
 TEST_F(VectorTest, popBackOk) {
 	MyVector.push_back(41);

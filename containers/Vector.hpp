@@ -18,6 +18,18 @@
 
 namespace	ft
 {
+	// Enable_if with SFINAE principle
+	template < bool, typename T = void >
+	struct enable_if
+	{};
+
+	template < typename T >
+	struct enable_if< true, T >
+	{
+  		typedef T type;
+	};
+
+	// Vector
 	template < class T, class A = std::allocator<T> > 
 	class vector
 	{
@@ -89,8 +101,8 @@ namespace	ft
 			const_reference back(void) const {return ((*this)[this->size() - 1]);};
 			// Modifiers
 			template< class InputIterator >
-  			void 			assign (InputIterator first, InputIterator last); // TPP
-			void 			assign (size_type n, const value_type &val); // TPP
+  			void 			assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type firs, InputIterator last); // TPP
+			void 			assign(size_type n, const value_type &val); // TPP
 			void			push_back(const T &val); // TPP - OK
 			void			pop_back(void) {if (this->_size > 0){this->get_allocator().destroy(&(*this)[this->size() - 1]);--this->_size;}};
 			iterator		insert(iterator position, const value_type &val); // TPP

@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/18 12:21:32 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/18 15:13:37 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type
 	std::fill(this->begin(), this->end(), val);
 }
 
-// Range
+// Range - Ajouter un enable if pour eviter de confondre avec le fill constructor
 
 // Copy
 template < class T, class A > 
@@ -140,17 +140,16 @@ void	ft::vector<T,A>::push_back(const T &val)
 	
 	if (this->size() == this->capacity())
 	{
-		new_capacity = this->capacity() * 2;
+		this->_capacity = this->capacity() * 2;
 		if (this->capacity() == 0)
-			new_capacity = 1;
-		tmp = this->get_allocator().allocate(new_capacity);
+			this->_capacity = 1;
+		tmp = this->get_allocator().allocate(this->capacity());
 		for (std::size_t i = 0; i < this->size(); ++i)
 		{
 			tmp[i] = this->_array[i];
 		}
 		this->get_allocator().deallocate(this->_array, this->capacity());
 		this->_array = tmp;
-		this->_capacity = this->capacity() * 2;
 	}
 	this->_array[this->size()] = val;
 	++this->_size;
@@ -165,15 +164,32 @@ void	ft::vector<T,A>::clear(void)
 	this->_size = 0;
 }
 
-// Assign
-template < class T, class A, class InputIterator > 
-void ft::vector<T,A>::assign(InputIterator first, InputIterator last)
+// Assign -> differencier les deux avec enable_if
+template < class T, class A >
+template < class InputIterator > 
+void ft::vector<T,A>::assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last)
 {
-
+	this->clear();
+	if (last - first > this->capacity())
+	{
+		this->get_allocator().deallocate(this->_array, this->capacity());
+		this->_capacity = last - first;
+		this->get_allocator().allocate(this->capacity());
+	}
+	std::copy(first, last, this->begin());
+	this->_size = last - first;
 } 
 
 template < class T, class A > 
 void ft::vector<T,A>::assign (size_type n, const value_type &val)
 {
-
+	this->clear();
+	if (n > this->capacity())
+	{
+		this->get_allocator().deallocate(this->_array, this->capacity());
+		this->_capacity = n;
+		this->get_allocator().allocate(this->capacity());
+	}
+	std::fill(this->begin(), this->begin() + n, val);
+	this->_size = n;
 }
