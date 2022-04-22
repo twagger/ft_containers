@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/22 14:24:56 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/22 15:05:59 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,24 @@ ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 /* ************************************************************************** */
 /* 	MEMBER FUNCTIONS                                                          */
 /* ************************************************************************** */
+/* ************************************************************************** */
+/*  PRIVATE                                                                   */
+/* ************************************************************************** */
+// Realloc
+template< class T, class A >
+void	ft::vector<T,A>::_realloc(size_type n)
+{
+	pointer	p;
+
+	p = this->get_allocator().allocate(n);
+	std::copy(this->begin(), this->end(), p);
+	for (int i = n; i < this->size(); ++i)
+		this->get_allocator().destroy(this->_array + i);
+	this->_allocator.deallocate(this->_array, this->_capacity);
+	this->_capacity = n;
+	this->_array = p;
+}
+
 /* ************************************************************************** */
 /*  CAPACITY                                                                  */
 /* ************************************************************************** */
@@ -201,9 +219,18 @@ void ft::vector<T,A>::assign (size_type n, const value_type &val)
 
 // insert
 template < class T, class A >
-iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
+typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
 {
-
+	if (this->size() + 1 > this->capacity())
+		this->_realloc(this->size() + 1);
+	if (position == this->end())
+		this[this->size()] = val;
+	else
+	{
+		std::copy(position, this->end(), position + 1);
+		this[this-size() - (this->end() - position)] = val;
+	}
+	this->_size += 1;
 }
 
 template < class T, class A >

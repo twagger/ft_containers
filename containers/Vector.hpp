@@ -124,8 +124,7 @@ namespace	ft
 			size_type		_capacity;
 
 			// Functions
-			void			_fill_insert(iterator it, size_type n, value_type val);
-			void			_erase_at_end(iterator it);
+			void			_realloc(size_type n);
 	};
 	/* ********************************************************************** */
 	/* 	NON MEMBER FUNCTIONS OVERLOAD                                         */

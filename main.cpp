@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/22 12:17:42 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/22 15:04:47 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,4 +389,20 @@ TEST_F(VectorTest, clearDoesntAffectCapacity) {
 	StdVector.clear();
 	EXPECT_EQ(MyVector.capacity(), capaMy);
 	EXPECT_EQ(StdVector.capacity(), capaStd);
+}
+
+// Insert
+TEST_F(VectorTest, insertBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	EXPECT_EQ(MyVector.size(), 3);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	MyVector.insert(MyVector.begin(), 40);
+	EXPECT_EQ(MyVector.size(), 1);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	EXPECT_EQ(MyVector[0], 40);
+	EXPECT_EQ(MyVector[1], 41);
+	EXPECT_EQ(MyVector[2], 42);
+	EXPECT_EQ(MyVector[3], 43);
 }

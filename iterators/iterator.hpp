@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/15 17:31:56 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/22 14:58:33 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ namespace	ft
 
 			// operators overload  
 			iterator		&operator++(void) {++this->_p;return *this;}
-			iterator 		operator++(int) {iterator tmp(*this); ++this->_p; return tmp;}
+			iterator		operator++(int) {iterator tmp(*this); ++this->_p; return tmp;}
 			iterator		&operator--(void) {--this->_p;return *this;}
-			iterator 		operator--(int) {iterator tmp(*this); --this->_p; return tmp;}
+			iterator		operator--(int) {iterator tmp(*this); --this->_p; return tmp;}
 
 			bool 			operator==(const iterator& rhs) const {return this->_p == rhs._p;}
 			bool 			operator!=(const iterator& rhs) const {return this->_p != rhs._p;}
