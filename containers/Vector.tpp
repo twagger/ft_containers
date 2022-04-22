@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/18 15:13:37 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/22 14:24:56 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,22 +92,31 @@ ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 /*  CAPACITY                                                                  */
 /* ************************************************************************** */
 // Resize
-/*
 template < class T, class A > 
 void	ft::vector<T,A>::resize(size_type n, value_type val)
 {
-	if (n > this->_size)
+	pointer	tmp;
+
+	if (n > this->size())
 	{
-		//defaut_append(n - this->_size, val)
+		if (n > this->capacity())
+		{
+			tmp = this->get_allocator().allocate(n);
+			std::copy(this->begin(), this->end(), tmp);
+			this->get_allocator().deallocate(this->_array, this->capacity());
+			this->_array = tmp;
+			this->_capacity = n;
+		}
+		std::fill_n(this->end(), n - this->size(), val);
 	}
-	else
+	else if (n < this->size())
 	{
-		std::for_each(this->begin() + n, this->end(), this->_allocator.destroy);
-		this->_allocator.deallocate(this->_array + n, this->end() - n);
-		this->_size = n;
+		for (int i = n; i < this->size(); ++i)
+			this->get_allocator().destroy(this->_array + i);
 	}
+	this->_size = n;
 }
-*/
+
 // Reserve
 template < class T, class A > 
 void	ft::vector<T,A>::reserve(size_type n)
@@ -135,8 +144,7 @@ void	ft::vector<T,A>::reserve(size_type n)
 template < class T, class A > 
 void	ft::vector<T,A>::push_back(const T &val)
 {
-	T			*tmp;
-	std::size_t	new_capacity;
+	pointer	tmp;
 	
 	if (this->size() == this->capacity())
 	{
@@ -144,10 +152,7 @@ void	ft::vector<T,A>::push_back(const T &val)
 		if (this->capacity() == 0)
 			this->_capacity = 1;
 		tmp = this->get_allocator().allocate(this->capacity());
-		for (std::size_t i = 0; i < this->size(); ++i)
-		{
-			tmp[i] = this->_array[i];
-		}
+		std::copy(this->begin(), this->end(), tmp);
 		this->get_allocator().deallocate(this->_array, this->capacity());
 		this->_array = tmp;
 	}
@@ -192,4 +197,24 @@ void ft::vector<T,A>::assign (size_type n, const value_type &val)
 	}
 	std::fill(this->begin(), this->begin() + n, val);
 	this->_size = n;
+}
+
+// insert
+template < class T, class A >
+iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
+{
+
+}
+
+template < class T, class A >
+void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &val)
+{
+
+}
+
+template < class T, class A >
+template< class InputIterator >
+void	ft::vector<T,A>::insert(iterator position, InputIterator first, InputIterator last)
+{
+
 }

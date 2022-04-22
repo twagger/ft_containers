@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/18 14:16:35 by twagner          ###   ########.fr       */
+/*   Updated: 2022/04/22 12:17:42 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,21 +103,68 @@ TEST_F(VectorTest, iteratorBasic) {
 TEST_F(VectorTest, maxSize) {
 	EXPECT_EQ(MyVector.max_size(), StdVector.max_size());
 }
+
 // Resize
-/*
-TEST_F(VectorTest, resize) {
-	MyVector.resize(15, 5);
-	StdVector.resize(15, 5);
-	EXPECT_EQ(MyVector.size(), StdVector.size());
-	EXPECT_EQ(MyVector.capacity(), StdVector.capacity());
-	EXPECT_EQ(MyVector[12], StdVector[12]);
-	EXPECT_EQ(MyVector[12], 5);
-	MyVector.resize(2, 5);
-	StdVector.resize(2, 5);
-	EXPECT_EQ(MyVector.size(), StdVector.size());
-	EXPECT_EQ(MyVector.capacity(), StdVector.capacity());
+TEST_F(VectorTest, resizeBiggerSizeSameCapa)
+{
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	MyVector.resize(7, 38);
+	EXPECT_EQ(MyVector.size(), 7);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_EQ(MyVector[5], 38);
 }
-*/
+
+TEST_F(VectorTest, resizeBiggerSizeBiggerCapa)
+{
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	MyVector.resize(22, 38);
+	EXPECT_EQ(MyVector.size(), 22);
+	EXPECT_EQ(MyVector.capacity(), 22);
+	EXPECT_EQ(MyVector[20], 38);
+}
+
+TEST_F(VectorTest, resizeSmallerSize)
+{
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	MyVector.resize(2, 38);
+	EXPECT_EQ(MyVector.size(), 2);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_THROW(MyVector[3], std::out_of_range);
+}
+
+TEST_F(VectorTest, resizeSameSize)
+{
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	MyVector.resize(5, 38);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_EQ(MyVector[3], 42);
+}
+
 // Reserve
 TEST_F(VectorTest, reserveBasic) {
 	MyVector.reserve(10);
@@ -253,6 +300,28 @@ TEST_F(VectorTest, assignFillCopiesValues) {
 	MyVector.assign(5, 42);
 	for (int i = 0; i < MyVector.size(); ++i)
 		EXPECT_EQ(MyVector[i], 42);
+}
+
+// push back
+TEST_F(VectorTest, pushBackOk) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+}
+
+TEST_F(VectorTest, pushBackDoubleCapacity) {
+	MyVector.push_back(41);
+	EXPECT_EQ(MyVector.capacity(), 1);
+	MyVector.push_back(42);
+	EXPECT_EQ(MyVector.capacity(), 2);
+	MyVector.push_back(43);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	EXPECT_EQ(MyVector.capacity(), 8);
 }
 
 // pop back
