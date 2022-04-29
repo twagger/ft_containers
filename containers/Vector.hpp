@@ -70,8 +70,8 @@ namespace	ft
 			/* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
 			/* ************************************************************** */
-			T		&operator[](std::size_t	n);
-			vector	&operator=(const vector& x);
+			value_type  &operator[](std::size_t	n);
+			vector      &operator=(const vector& x);
 
 			/* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
@@ -101,14 +101,14 @@ namespace	ft
 			const_reference back(void) const {return ((*this)[this->size() - 1]);};
 			// Modifiers
 			template< class InputIterator >
-  			void 			assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type firs, InputIterator last); // TPP - OK
+  			void 			assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last); // TPP - OK
 			void 			assign(size_type n, const value_type &val); // TPP - OK
 			void			push_back(const T &val); // TPP - OK
 			void			pop_back(void) {if (this->_size > 0){this->get_allocator().destroy(&(*this)[this->size() - 1]);--this->_size;}};
-			iterator		insert(iterator position, const value_type &val); // TPP
-			void 			insert(iterator position, size_type n, const value_type &val); // TPP
+			iterator		insert(iterator position, const value_type &val); // TPP - OK
+			void 			insert(iterator position, size_type n, const value_type &val); // TPP - OK
 			template< class InputIterator >
-		    void			insert(iterator position, InputIterator first, InputIterator last); // TPP
+		    void			insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last); // TPP - OK
 			iterator		erase(iterator position); // TPP
 			iterator		erase(iterator first, iterator last); // TPP
 			void			swap(vector &x); // TPP
@@ -123,7 +123,7 @@ namespace	ft
 			size_type		_size;
 			size_type		_capacity;
 
-			// Functions
+			// Functions - OK
 			void			_realloc(size_type n);
 	};
 	/* ********************************************************************** */

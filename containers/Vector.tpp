@@ -187,7 +187,7 @@ void	ft::vector<T,A>::clear(void)
 	this->_size = 0;
 }
 
-// Assign -> differencier les deux avec enable_if
+// Assign
 template < class T, class A >
 template < class InputIterator > 
 void ft::vector<T,A>::assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last)
@@ -221,27 +221,85 @@ void ft::vector<T,A>::assign (size_type n, const value_type &val)
 template < class T, class A >
 typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
 {
-	if (this->size() + 1 > this->capacity())
-		this->_realloc(this->size() + 1);
-	if (position == this->end())
-		this[this->size()] = val;
-	else
-	{
-		std::copy(position, this->end(), position + 1);
-		this[this-size() - (this->end() - position)] = val;
-	}
-	this->_size += 1;
+    int index;
+
+    this->_size += 1;
+    if (this->size() > this->capacity())
+    {
+        index = this->size() - (this->end() - position);
+        this->_realloc(this->size());
+        position = this->begin() + index;
+    }
+    if (position == this->end())
+        (*this)[this->size() - 1] = val;
+    else
+    {
+        std::copy_backward(position, this->end(), this->end() + 1);
+        (*this)[this->size() - (this->end() - position)] = val;
+    }
+    return (position);
 }
 
 template < class T, class A >
 void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &val)
 {
+    unsigned int    index;
 
+    this->_size += n;
+    if (this->size() > this->capacity())
+    {
+        index = this->size() - (this->end() - position);
+        this->_realloc(this->size());
+        position = this->begin() + index;
+    }
+    if (position == this->end())
+        std::fill_n(this->end(), n, val);
+    else
+    {
+        std::copy_backward(position, this->end(), this->end() + n);
+        std::fill_n(position, n, val);
+    }
 }
 
 template < class T, class A >
 template< class InputIterator >
-void	ft::vector<T,A>::insert(iterator position, InputIterator first, InputIterator last)
+void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last)
+{
+    unsigned int    index;
+    unsigned int    size;
+
+    size = last - first;
+    this->_size += size;
+    if (this->size() > this->capacity())
+    {
+        index = this->size() - (this->end() - position);
+        this->_realloc(this->size());
+        position = this->begin() + index;
+    }
+    if (position == this->end())
+        std::copy(first, last, position);
+    else
+    {
+        std::copy_backward(position, this->end(), this->end() + size);
+        std::copy(first, last, position);
+    }
+}
+
+// Erase
+template < class T, class A >
+typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator position)
+{
+    this->get_allocator().destroy(&*position);
+    std::cout << "1" << std::endl;
+    std::copy(position + 1, this->end(), position);   
+    std::cout << "2" << std::endl;
+    this->get_allocator().destroy(&*(this->end() - 1));
+    std::cout << "3" << std::endl;
+    --this->_size;
+}
+
+template < class T, class A >
+typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator first, iterator last)
 {
 
 }

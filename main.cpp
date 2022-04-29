@@ -99,6 +99,11 @@ TEST_F(VectorTest, iteratorBasic) {
 /* ************************************************************************** */
 /*  CAPACITY TESTS                                                            */
 /* ************************************************************************** */
+// capacity
+TEST_F(VectorTest, ZeroCapacity) {
+    EXPECT_EQ(MyVector.capacity(), 0);
+}
+
 // Max size
 TEST_F(VectorTest, maxSize) {
 	EXPECT_EQ(MyVector.max_size(), StdVector.max_size());
@@ -392,17 +397,204 @@ TEST_F(VectorTest, clearDoesntAffectCapacity) {
 }
 
 // Insert
-TEST_F(VectorTest, insertBegin) {
+TEST_F(VectorTest, insertSingleBegin) {
 	MyVector.push_back(41);
 	MyVector.push_back(42);
 	MyVector.push_back(43);
-	EXPECT_EQ(MyVector.size(), 3);
-	EXPECT_EQ(MyVector.capacity(), 4);
 	MyVector.insert(MyVector.begin(), 40);
-	EXPECT_EQ(MyVector.size(), 1);
+	EXPECT_EQ(MyVector.size(), 4);
 	EXPECT_EQ(MyVector.capacity(), 4);
 	EXPECT_EQ(MyVector[0], 40);
 	EXPECT_EQ(MyVector[1], 41);
 	EXPECT_EQ(MyVector[2], 42);
 	EXPECT_EQ(MyVector[3], 43);
+}
+
+TEST_F(VectorTest, insertSingleEnd) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.insert(MyVector.end(), 44);
+	EXPECT_EQ(MyVector.size(), 4);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+	EXPECT_EQ(MyVector[3], 44);
+}
+
+TEST_F(VectorTest, insertSingleMiddle) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.insert(MyVector.begin() + 2, 88);
+	EXPECT_EQ(MyVector.size(), 4);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 88);
+	EXPECT_EQ(MyVector[3], 43);
+}
+
+TEST_F(VectorTest, insertIncreaseCapacity) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.insert(MyVector.begin() + 2, 88);
+	MyVector.insert(MyVector.begin(), 100);
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 5);
+	EXPECT_EQ(MyVector[0], 100);
+	EXPECT_EQ(MyVector[1], 41);
+	EXPECT_EQ(MyVector[2], 42);
+	EXPECT_EQ(MyVector[3], 88);
+	EXPECT_EQ(MyVector[4], 43);
+}
+
+TEST_F(VectorTest, insertFillBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.insert(MyVector.begin(), 1, 42);
+	EXPECT_EQ(MyVector.size(), 4);
+	EXPECT_EQ(MyVector.capacity(), 4);
+	EXPECT_EQ(MyVector[0], 42);
+	EXPECT_EQ(MyVector[1], 41);
+	EXPECT_EQ(MyVector[2], 42);
+	EXPECT_EQ(MyVector[3], 43);
+}
+
+TEST_F(VectorTest, insertFillIncreaseCapacity) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.insert(MyVector.begin(), 5, 42);
+	EXPECT_EQ(MyVector.size(), 8);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_EQ(MyVector[0], 42);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 42);
+	EXPECT_EQ(MyVector[3], 42);
+	EXPECT_EQ(MyVector[4], 42);
+	EXPECT_EQ(MyVector[5], 41);
+	EXPECT_EQ(MyVector[6], 42);
+	EXPECT_EQ(MyVector[7], 43);
+}
+
+TEST_F(VectorTest, insertFillEnd) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyVector.insert(MyVector.end(), 2, 42);
+	EXPECT_EQ(MyVector.size(), 7);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+	EXPECT_EQ(MyVector[3], 44);
+	EXPECT_EQ(MyVector[4], 45);
+	EXPECT_EQ(MyVector[5], 42);
+	EXPECT_EQ(MyVector[6], 42);
+}
+
+TEST_F(VectorTest, insertFillMiddle) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyVector.insert(MyVector.begin() + 3, 2, 42);
+	EXPECT_EQ(MyVector.size(), 7);
+	EXPECT_EQ(MyVector.capacity(), 8);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+	EXPECT_EQ(MyVector[3], 42);
+	EXPECT_EQ(MyVector[4], 42);
+	EXPECT_EQ(MyVector[5], 44);
+	EXPECT_EQ(MyVector[6], 45);
+}
+
+TEST_F(VectorTest, insertRangeBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(1);
+	MyTmpVector.push_back(2);
+	MyTmpVector.push_back(3);
+	MyVector.insert(MyVector.begin(), MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(MyVector.size(), 6);
+	EXPECT_EQ(MyVector.capacity(), 6);
+	EXPECT_EQ(MyVector[0], 1);
+	EXPECT_EQ(MyVector[1], 2);
+	EXPECT_EQ(MyVector[2], 3);
+	EXPECT_EQ(MyVector[3], 41);
+	EXPECT_EQ(MyVector[4], 42);
+	EXPECT_EQ(MyVector[5], 43);
+}
+
+TEST_F(VectorTest, insertPartRangeBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(1);
+	MyTmpVector.push_back(2);
+	MyTmpVector.push_back(3);
+	MyVector.insert(MyVector.begin(), MyTmpVector.begin() + 1, MyTmpVector.end());
+	EXPECT_EQ(MyVector.size(), 5);
+	EXPECT_EQ(MyVector.capacity(), 5);
+	EXPECT_EQ(MyVector[0], 2);
+	EXPECT_EQ(MyVector[1], 3);
+	EXPECT_EQ(MyVector[2], 41);
+	EXPECT_EQ(MyVector[3], 42);
+	EXPECT_EQ(MyVector[4], 43);
+}
+
+TEST_F(VectorTest, insertRangeEnd) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(1);
+	MyTmpVector.push_back(2);
+	MyTmpVector.push_back(3);
+	MyVector.insert(MyVector.end(), MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(MyVector.size(), 6);
+	EXPECT_EQ(MyVector.capacity(), 6);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+	EXPECT_EQ(MyVector[3], 1);
+	EXPECT_EQ(MyVector[4], 2);
+	EXPECT_EQ(MyVector[5], 3);
+}
+
+TEST_F(VectorTest, insertRangeMiddle) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(1);
+	MyTmpVector.push_back(2);
+	MyTmpVector.push_back(3);
+	MyVector.insert(MyVector.begin() + 2, MyTmpVector.begin(), MyTmpVector.end());
+	EXPECT_EQ(MyVector.size(), 6);
+	EXPECT_EQ(MyVector.capacity(), 6);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 1);
+	EXPECT_EQ(MyVector[3], 2);
+	EXPECT_EQ(MyVector[4], 3);
+	EXPECT_EQ(MyVector[5], 43);
+}
+
+// Erase
+TEST_F(VectorTest, eraseSingleBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.erase(MyVector.begin());
+	EXPECT_EQ(MyVector.size(), 2);
+	EXPECT_EQ(MyVector[0], 42);
+	EXPECT_EQ(MyVector[1], 43);
 }
