@@ -76,7 +76,7 @@ namespace	ft
 			/* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
-			// Iterators - OK
+			// Iterators
 			iterator				begin(void) {return iterator(this->_array);}
 			iterator				end(void) {return iterator(this->_array + this->_size);}
 			const_iterator			begin(void) const {return const_iterator(this->_array);}
@@ -85,14 +85,14 @@ namespace	ft
 			const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(this->end());}
 			reverse_iterator		rend(void) {return reverse_iterator(this->begin());}
 			const_reverse_iterator	rend(void) const {return const_reverse_iterator(this->begin());}
-			// Capacity - OK
+			// Capacity
 			size_type		size(void) const {return (this->_size);}
 			size_type		max_size(void) const {return (this->_allocator.max_size());}
-			void			resize(size_type n, value_type val = value_type()); // TPP
+			void			resize(size_type n, value_type val = value_type());
 			size_type		capacity(void) const {return (this->_capacity);}
 			bool			empty(void) const {return (this->_size > 0);}
-			void			reserve(size_type n); // TPP - OK
-			// Access - OK
+			void			reserve(size_type n);
+			// Access
 			reference		at(size_type n) {return ((*this)[n]);};
 			const_reference at(size_type n) const {return ((*this)[n]);};
 			reference 		front(void) {return ((*this)[0]);};
@@ -101,29 +101,29 @@ namespace	ft
 			const_reference back(void) const {return ((*this)[this->size() - 1]);};
 			// Modifiers
 			template< class InputIterator >
-  			void 			assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last); // TPP - OK
-			void 			assign(size_type n, const value_type &val); // TPP - OK
-			void			push_back(const T &val); // TPP - OK
+  			void 			assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last);
+			void 			assign(size_type n, const value_type &val);
+			void			push_back(const T &val);
 			void			pop_back(void) {if (this->_size > 0){this->get_allocator().destroy(&(*this)[this->size() - 1]);--this->_size;}};
-			iterator		insert(iterator position, const value_type &val); // TPP - OK
-			void 			insert(iterator position, size_type n, const value_type &val); // TPP - OK
+			iterator		insert(iterator position, const value_type &val);
+			void 			insert(iterator position, size_type n, const value_type &val);
 			template< class InputIterator >
-		    void			insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last); // TPP - OK
-			iterator		erase(iterator position); // TPP - OK
-			iterator		erase(iterator first, iterator last); // TPP - OK
-			void			swap(vector &x); // TPP
-			void			clear(void); // TPP - OK
-			// Allocator - OK
+		    void			insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last);
+			iterator		erase(iterator position);
+			iterator		erase(iterator first, iterator last);
+			void			swap(vector &x);
+			void			clear(void);
+			// Allocator
 			allocator_type	get_allocator() const {return allocator_type(this->_allocator);}
 
 		private:
-			// Attributes - OK
+			// Attributes
 			value_type		*_array;
 			allocator_type	_allocator;
 			size_type		_size;
 			size_type		_capacity;
 
-			// Functions - OK
+			// Functions
 			void			_realloc(size_type n);
 	};
 	/* ********************************************************************** */
@@ -131,19 +131,19 @@ namespace	ft
 	/* ********************************************************************** */
 	// Non member function overloads
 	template <class T, class A>
-	bool operator==(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	bool operator!=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	bool operator<(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	bool operator<=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	bool operator>(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	bool operator>=(const vector<T,A> &lhs, const vector<T,A> &rhs);
+	bool operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
 	template <class T, class A>
-	void swap(vector<T,A> &x, vector<T,A> &y);
+	void swap(ft::vector<T,A> &x, ft::vector<T,A> &y);
 }
 
 # include "Vector.tpp"

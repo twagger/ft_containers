@@ -332,3 +332,34 @@ void    ft::vector<T,A>::swap(vector &x)
     x._capacity = tmp_capacity;
     x._allocator = tmp_alloc;
 }
+
+// Non member operator overloads
+template <class T, class A>
+bool ft::operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    if (lhs.size() == rhs.size())
+    {
+        return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+    }
+    return (false);
+}
+
+template <class T, class A>
+bool ft::operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    if (lhs.size() == rhs.size())
+    {
+        return (!std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+    }
+    return (true);
+}
+
+template <class T, class A>
+bool ft::operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    if (lhs.size() == rhs.size())
+    {
+        return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+    }
+    return (false);
+}
