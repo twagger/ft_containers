@@ -598,3 +598,97 @@ TEST_F(VectorTest, eraseSingleBegin) {
 	EXPECT_EQ(MyVector[0], 42);
 	EXPECT_EQ(MyVector[1], 43);
 }
+
+TEST_F(VectorTest, eraseSingleEnd) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.erase(MyVector.end() - 1);
+	EXPECT_EQ(MyVector.size(), 2);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+}
+
+TEST_F(VectorTest, eraseSingleMiddle) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.erase(MyVector.begin() + 1);
+	EXPECT_EQ(MyVector.size(), 2);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 43);
+}
+
+TEST_F(VectorTest, eraseRangeBegin) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyVector.erase(MyVector.begin(), MyVector.begin() + 2);
+	EXPECT_EQ(MyVector.size(), 3);
+	EXPECT_EQ(MyVector[0], 43);
+	EXPECT_EQ(MyVector[1], 44);
+	EXPECT_EQ(MyVector[2], 45);
+    // Test against std
+    StdVector.push_back(41);
+	StdVector.push_back(42);
+	StdVector.push_back(43);
+	StdVector.push_back(44);
+	StdVector.push_back(45);
+	StdVector.erase(StdVector.begin(), StdVector.begin() + 2);
+	EXPECT_EQ(StdVector.size(), 3);
+	EXPECT_EQ(StdVector[0], 43);
+	EXPECT_EQ(StdVector[1], 44);
+	EXPECT_EQ(StdVector[2], 45);
+
+}
+
+TEST_F(VectorTest, eraseRangeEnd) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyVector.erase(MyVector.end() - 2, MyVector.end());
+	EXPECT_EQ(MyVector.size(), 3);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 42);
+	EXPECT_EQ(MyVector[2], 43);
+}
+
+TEST_F(VectorTest, eraseRangeMiddle) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyVector.erase(MyVector.begin() + 1, MyVector.begin() + 3);
+	EXPECT_EQ(MyVector.size(), 3);
+	EXPECT_EQ(MyVector[0], 41);
+	EXPECT_EQ(MyVector[1], 44);
+	EXPECT_EQ(MyVector[2], 45);
+}
+
+// Swap
+TEST_F(VectorTest, swapBasic) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyVector.push_back(44);
+	MyVector.push_back(45);
+	MyTmpVector.push_back(1);
+	MyTmpVector.push_back(2);
+    MyVector.swap(MyTmpVector);
+	EXPECT_EQ(MyVector.size(), 2);
+	EXPECT_EQ(MyVector.capacity(), 2);
+	EXPECT_EQ(MyTmpVector.size(), 5);
+	EXPECT_EQ(MyTmpVector.capacity(), 8);
+	EXPECT_EQ(MyVector[0], 1);
+	EXPECT_EQ(MyVector[1], 2);
+	EXPECT_EQ(MyTmpVector[0], 41);
+	EXPECT_EQ(MyTmpVector[1], 42);
+	EXPECT_EQ(MyTmpVector[2], 43);
+	EXPECT_EQ(MyTmpVector[3], 44);
+	EXPECT_EQ(MyTmpVector[4], 45);
+}

@@ -289,17 +289,46 @@ void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!std::num
 template < class T, class A >
 typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator position)
 {
+    iterator    result(&*position);
+
     this->get_allocator().destroy(&*position);
-    std::cout << "1" << std::endl;
     std::copy(position + 1, this->end(), position);   
-    std::cout << "2" << std::endl;
     this->get_allocator().destroy(&*(this->end() - 1));
-    std::cout << "3" << std::endl;
     --this->_size;
+    return (result);
 }
 
 template < class T, class A >
 typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator first, iterator last)
 {
+    iterator    result(first);
 
+    for (ft::vector<T,A>::iterator it = first; it < last; ++it)
+        this->get_allocator().destroy(&*it);
+    std::copy(last, this->end(), first);   
+    this->_size -= (last - first);
+    return (result);
+}
+
+// Swap
+template < class T, class A >
+void    ft::vector<T,A>::swap(vector &x)
+{
+    value_type      *tmp_arr;
+    allocator_type  tmp_alloc;
+	size_type       tmp_size;
+	size_type       tmp_capacity;
+
+    tmp_arr = this->_array;
+    tmp_size = this->size();
+    tmp_capacity = this->capacity();
+    tmp_alloc = this->get_allocator();
+    this->_array = x._array;
+    this->_size = x.size();
+    this->_capacity = x.capacity();
+    this->_allocator = x.get_allocator();
+    x._array = tmp_arr;
+    x._size = tmp_size;
+    x._capacity = tmp_capacity;
+    x._allocator = tmp_alloc;
 }

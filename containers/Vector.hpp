@@ -109,8 +109,8 @@ namespace	ft
 			void 			insert(iterator position, size_type n, const value_type &val); // TPP - OK
 			template< class InputIterator >
 		    void			insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last); // TPP - OK
-			iterator		erase(iterator position); // TPP
-			iterator		erase(iterator first, iterator last); // TPP
+			iterator		erase(iterator position); // TPP - OK
+			iterator		erase(iterator first, iterator last); // TPP - OK
 			void			swap(vector &x); // TPP
 			void			clear(void); // TPP - OK
 			// Allocator - OK
