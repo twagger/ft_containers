@@ -36,6 +36,15 @@ ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type
 }
 
 // Range - Ajouter un enable if pour eviter de confondre avec le fill constructor
+template < class T, class A > 
+template <class InputIterator>
+ft::vector<T,A>::vector(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,\
+InputIterator last, const allocator_type &alloc)
+: _allocator(alloc), _size(last - first), _capacity(last - first)
+{
+	this->_array = this->_allocator.allocate(this->_capacity);
+    std::copy(first, last, this->begin());
+}
 
 // Copy
 template < class T, class A > 

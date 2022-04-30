@@ -63,6 +63,9 @@ namespace	ft
 			explicit vector(const allocator_type &alloc = allocator_type());
 			explicit vector(size_type n, const value_type &val = value_type(), 
 				const allocator_type &alloc = allocator_type());
+            template <class InputIterator>
+            vector(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last,
+                const allocator_type& alloc = allocator_type());
 			vector(const vector	&x);
 			// Destructor
 			~vector(void);
