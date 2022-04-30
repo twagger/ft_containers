@@ -94,7 +94,7 @@ namespace	ft
 			bool 			operator>=(const const_iterator& rhs) const {return this->_p >= rhs._p;}
 
 			const_iterator	operator+(const const_iterator& rhs) const {return *(this->_p + rhs._p);}
-			const_iterator	operator+(difference_type n) const {return *(this->_p + n);}
+			const_iterator	operator+(difference_type n) const {return (this->_p + n);}
 			const_iterator	&operator+=(difference_type n) {this->_p += n; return (*this);}
 			difference_type	operator-(const const_iterator& rhs) const {return (this->_p - rhs._p);}
 			const_iterator	operator-(difference_type n) const {return (this->_p - n);}

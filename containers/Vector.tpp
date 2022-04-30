@@ -312,7 +312,7 @@ typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator first, itera
 
 // Swap
 template < class T, class A >
-void    ft::vector<T,A>::swap(vector &x)
+void    ft::vector<T,A>::swap(ft::vector<T,A> &x)
 {
     value_type      *tmp_arr;
     allocator_type  tmp_alloc;
@@ -347,19 +347,52 @@ bool ft::operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 template <class T, class A>
 bool ft::operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 {
-    if (lhs.size() == rhs.size())
-    {
-        return (!std::equal(lhs.begin(), lhs.end(), rhs.begin()));
-    }
-    return (true);
+    return (!(lhs == rhs));
 }
 
 template <class T, class A>
 bool ft::operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 {
-    if (lhs.size() == rhs.size())
-    {
-        return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
-    }
-    return (false);
+    return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+}
+
+template <class T, class A>
+bool ft::operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    return (!(rhs < lhs));
+}
+
+template <class T, class A>
+bool ft::operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    return (rhs < lhs);
+}
+
+template <class T, class A>
+bool ft::operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+{
+    return (!(lhs < rhs));
+}
+
+// Non member swap
+template < class T, class A >
+void    ft::swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
+{
+    typename ft::vector<A,T>::value_type      *tmp_arr;
+    typename ft::vector<A,T>::allocator_type  tmp_alloc;
+	typename ft::vector<A,T>::size_type       tmp_size;
+	typename ft::vector<A,T>::size_type       tmp_capacity;
+
+    tmp_arr = x._array;
+    tmp_size = x.size();
+    tmp_capacity = x.capacity();
+    tmp_alloc = x.get_allocator();
+    x._array = y._array;
+    x._size = y.size();
+    x._capacity = y.capacity();
+    x._allocator = y.get_allocator();
+    y._array = tmp_arr;
+    y._size = tmp_size;
+    y._capacity = tmp_capacity;
+    y._allocator = tmp_alloc;
 }

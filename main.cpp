@@ -716,3 +716,43 @@ TEST_F(VectorTest, equalOperatorTrue) {
 TEST_F(VectorTest, equalOperatorEmpty) {
 	EXPECT_EQ(MyVector == MyTmpVector, true);
 }
+
+TEST_F(VectorTest, greaterThanOperatorFalse) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	EXPECT_EQ(MyVector > MyTmpVector, false);
+}
+
+TEST_F(VectorTest, greaterThanOperatorTrue) {
+	MyVector.push_back(41);
+	MyVector.push_back(43);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	EXPECT_EQ(MyVector > MyTmpVector, true);
+}
+
+TEST_F(VectorTest, greaterThanOrEqualOperatorFalse) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(42);
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	EXPECT_EQ(MyVector >= MyTmpVector, false);
+}
+
+TEST_F(VectorTest, greaterThanOrEqualOperatorTrue) {
+	MyVector.push_back(41);
+	MyVector.push_back(42);
+	MyVector.push_back(43);
+	MyTmpVector.push_back(41);
+	MyTmpVector.push_back(42);
+	MyTmpVector.push_back(43);
+	EXPECT_EQ(MyVector >= MyTmpVector, true);
+}
