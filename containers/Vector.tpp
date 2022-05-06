@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 15:24:28 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 17:29:19 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type
 // Range - Ajouter un enable if pour eviter de confondre avec le fill constructor
 template < class T, class A > 
 template <class InputIterator>
-ft::vector<T,A>::vector(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,\
+ft::vector<T,A>::vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,\
 InputIterator last, const allocator_type &alloc)
 : _allocator(alloc), _size(last - first), _capacity(last - first)
 {
@@ -200,7 +200,7 @@ void	ft::vector<T,A>::clear(void)
 // Assign
 template < class T, class A >
 template < class InputIterator > 
-void ft::vector<T,A>::assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last)
+void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
 	this->clear();
 	if (last - first > this->capacity())
@@ -275,7 +275,7 @@ void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &v
 
 template < class T, class A >
 template< class InputIterator >
-void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first, InputIterator last)
+void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
     unsigned int    index;
     unsigned int    size;
