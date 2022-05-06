@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 12:19:30 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 17:46:51 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace	ft
             /* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
 			/* ************************************************************** */
-			stack   &operator=(const stack &x);
+			stack   &operator=(const stack &x) {this->c = other.c;return (*this);};
             
             /* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
@@ -51,11 +51,11 @@ namespace	ft
             reference       top(void) {return this->c.back();};
             const_reference top(void) const {return this->c.back();};
             // Capacity
-            bool                empty(void) const {return this->c.empty();};
-            size_type           size(void) const {return this->c.size();};
+            bool            empty(void) const {return this->c.empty();};
+            size_type       size(void) const {return this->c.size();};
             // Modifiers
-            void                push(const value_type &val) {return this->c.push_back(val);};
-            void                pop(void) {return this->c.pop_back();};
+            void            push(const value_type &val) {return this->c.push_back(val);};
+            void            pop(void) {return this->c.pop_back();};
 
         protected:
 			// Member object
@@ -63,15 +63,31 @@ namespace	ft
         
         private:
 	        // Non member function overloads
-	        friend bool operator==(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator==(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
+            {
+                return (lhs.c == rhs.c);
+            }
 	        friend bool operator!=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+            {
+                return (lhs.c != rhs.c);
+            }
 	        friend bool operator<(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+            {
+                return (lhs.c < rhs.c);
+            }
 	        friend bool operator<=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+            {
+                return (lhs.c <= rhs.c);
+            }
 	        friend bool operator>(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+            {
+                return (lhs.c > rhs.c);
+            }
 	        friend bool operator>=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+            {
+                return (lhs.c >= rhs.c);
+            }
     };
 }
-
-# include "Stack.tpp"
 
 #endif
