@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/22 15:05:59 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 10:43:32 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <memory>
 #include <algorithm>
 #include <exception>
+#include "../utils/utils.hpp"
 
 /* ************************************************************************** */
 /*  CONSTRUCTORS & DESTRUCTOR                                                 */
@@ -348,7 +349,7 @@ bool ft::operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 {
     if (lhs.size() == rhs.size())
     {
-        return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+        return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
     }
     return (false);
 }
@@ -362,7 +363,7 @@ bool ft::operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 template <class T, class A>
 bool ft::operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
 {
-    return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+    return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 
 template <class T, class A>
