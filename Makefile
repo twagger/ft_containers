@@ -5,7 +5,7 @@ CC			= c++
 
 # SOURCES
 ################################################################################
-SRCS		= main.cpp
+SRCS		= all_tests.cpp
 OBJS		= $(SRCS:.cpp=.o)
 
 # EXECUTABLES & LIBRARIES
@@ -16,7 +16,9 @@ NAME		= tester
 ################################################################################
 H1			= containers
 H2			= iterators
-HEADERS		= -I$(H1) -I$(H2) 
+H3			= utils
+H4			= tests
+HEADERS		= -I$(H1) -I$(H2) -I$(H3) -I$(H4)
 
 # FLAGS
 ################################################################################
@@ -32,7 +34,7 @@ endif
 
 # RULES
 ################################################################################
-.c.o:
+.cpp.o:
 			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) $(HEADERS)  
 
 $(NAME):	$(OBJS)
@@ -48,4 +50,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean c.o re
+.PHONY:		all clean fclean .cpp.o re
