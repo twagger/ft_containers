@@ -17,14 +17,14 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(
-  vector_tests
+  all_tests
   main.cpp
 )
 
 target_link_libraries(
-  vector_tests
+  all_tests
   gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(vector_tests)
+gtest_discover_tests(all_tests)

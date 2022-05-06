@@ -15,19 +15,13 @@
 # include <memory>
 # include <cstddef>
 # include "../iterators/iterator.hpp"
+#include "../utils/utils.hpp"
 
 namespace	ft
 {
 	// Enable_if with SFINAE principle
-	template < bool, typename T = void >
-	struct enable_if
-	{};
-
-	template < typename T >
-	struct enable_if< true, T >
-	{
-  		typedef T type;
-	};
+	template < bool, typename T = void > struct enable_if {};
+	template < typename T >	struct enable_if< true, T >	{typedef T type;};
 
 	// Vector
 	template < class T, class A = std::allocator<T> > 
@@ -128,25 +122,63 @@ namespace	ft
 
 			// Functions
 			void			_realloc(size_type n);
+
+        	// Non member function overloads
+        	friend bool operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {
+                if (lhs.size() == rhs.size())
+                {
+                    return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+                }
+                return (false);
+            }
+
+        	friend bool operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {
+                return (!(lhs == rhs));
+            }
+
+        	friend bool operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {
+                return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+            } 
+
+        	friend bool operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {     
+                return (!(rhs < lhs));
+            }
+
+        	friend bool operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {
+                return (rhs < lhs);
+            }
+
+        	friend bool operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            {                
+                return (!(lhs < rhs));
+            }
+
+        	friend void swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
+            {
+                typename ft::vector<T,A>::value_type      *tmp_arr;
+                typename ft::vector<T,A>::allocator_type  tmp_alloc;
+                typename ft::vector<T,A>::size_type       tmp_size;
+                typename ft::vector<T,A>::size_type       tmp_capacity;
+
+                tmp_arr = x._array;
+                tmp_size = x.size();
+                tmp_capacity = x.capacity();
+                tmp_alloc = x.get_allocator();
+                x._array = y._array;
+                x._size = y.size();
+                x._capacity = y.capacity();
+                x._allocator = y.get_allocator();
+                y._array = tmp_arr;
+                y._size = tmp_size;
+                y._capacity = tmp_capacity;
+                y._allocator = tmp_alloc;
+            }
 	};
-	/* ********************************************************************** */
-	/* 	NON MEMBER FUNCTIONS OVERLOAD                                         */
-	/* ********************************************************************** */
-	// Non member function overloads
-	template <class T, class A>
-	bool operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	bool operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	bool operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	bool operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	bool operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	bool operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs);
-	template <class T, class A>
-	void swap(ft::vector<T,A> &x, ft::vector<T,A> &y);
 }
 
 # include "Vector.tpp"

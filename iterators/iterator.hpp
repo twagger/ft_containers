@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/22 14:58:33 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:44:18 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,41 +147,35 @@ namespace	ft
 
 		protected:
 			iterator_type current;
+
+        private:
+            // Non member operator overloads
+            friend bool	operator==(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
+            {return (lhs.base() == rhs.base());}
+
+            friend bool	operator!=(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
+            {return (lhs.base() != rhs.base());}
+
+            friend bool	operator<(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+            {return (rhs.base() > lhs.base());}
+
+            friend bool	operator<=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+            {return (rhs.base() >= lhs.base());}
+
+            friend bool	operator>(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+            {return (rhs.base() < lhs.base());}
+
+            friend bool	operator>=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
+            {return (lhs.base() <= rhs.base());}
+
+            friend reverse_iterator<Iter>	operator+(typename reverse_iterator<Iter>::difference_type n,
+                const reverse_iterator<Iter> &rev_it)
+            {return reverse_iterator<Iter>(rev_it.base() - n);}
+
+            friend typename reverse_iterator<Iter>::difference_type	operator-(const reverse_iterator<Iter> &lhs,
+                const reverse_iterator<Iter> &rhs)
+            {return reverse_iterator<Iter>(rhs.base() - lhs.base());}
 	};
-	// Non member operator overloads
-	template< class Iter >
-	bool	operator==(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
-	{return (lhs.base() == rhs.base());}
-
-	template< class Iter >
-	bool	operator!=(const reverse_iterator<Iter>	&lhs, const reverse_iterator<Iter> &rhs)
-	{return (lhs.base() != rhs.base());}
-
-	template< class Iter >
-  	bool	operator<(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
-	{return (rhs.base() > lhs.base());}
-
-	template< class Iter >
-	bool	operator<=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
-	{return (rhs.base() >= lhs.base());}
-	
-	template< class Iter >
-	bool	operator>(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
-	{return (rhs.base() < lhs.base());}
-
-	template< class Iter >
-	bool	operator>=(const reverse_iterator<Iter> &lhs, const reverse_iterator<Iter> &rhs)
-	{return (lhs.base() <= rhs.base());}
-
-	template< class Iter >
-  	reverse_iterator<Iter>	operator+(typename reverse_iterator<Iter>::difference_type n,
-		const reverse_iterator<Iter> &rev_it)
-	{return reverse_iterator<Iter>(rev_it.base() - n);}
-
-	template< class Iter >
- 	typename reverse_iterator<Iter>::difference_type	operator-(const reverse_iterator<Iter> &lhs,
-		const reverse_iterator<Iter> &rhs)
-	{return reverse_iterator<Iter>(rhs.base() - lhs.base());}
 }
 
 #endif

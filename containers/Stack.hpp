@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 09:50:21 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 12:19:30 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,53 +25,53 @@ namespace	ft
             /* ************************************************************** */
 			/* 	MEMBER TYPES & ALIASES                                        */
 			/* ************************************************************** */
-			// Type
-			typedef T			value_type;
-			// Container
-            typedef Container   container_type;
-			// Size
-			typedef	std::size_t size_type;
+            typedef Container                               container_type;
+			typedef typename Container::value_type          value_type;
+			typedef typename Container::size_type           size_type;
+			typedef typename Container::reference           reference;
+			typedef typename Container::const_reference     const_reference;
 			
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
 			/* ************************************************************** */
-			// Constructors
-            explicit stack (const container_type &ctnr = container_type());
-
+			// Constructor
+            explicit stack(const container_type &cont = container_type()) : c(cont) {}
+			// Destructor
+            ~stack(void) {}
+            
+            /* ************************************************************** */
+			/* 	OPERATOR OVERLOADS                                            */
+			/* ************************************************************** */
+			stack   &operator=(const stack &x);
+            
             /* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
-            bool                empty(void) const;
-            size_type           size(void) const;
-            value_type          &top(void) const;
-            const value_type    &top(void) const;
-            void                push(const value_type &val);
-            void                pop(void);
+            // Element access
+            reference       top(void) {return this->c.back();};
+            const_reference top(void) const {return this->c.back();};
+            // Capacity
+            bool                empty(void) const {return this->c.empty();};
+            size_type           size(void) const {return this->c.size();};
+            // Modifiers
+            void                push(const value_type &val) {return this->c.push_back(val);};
+            void                pop(void) {return this->c.pop_back();};
 
+        protected:
+			// Member object
+			container_type  c;
+        
         private:
-			// Attributes
-			value_type		*_array;
-			allocator_type	_allocator;
-			size_type		_size;
-			size_type		_capacity;
-    }
-    /* ********************************************************************** */
-	/* 	NON MEMBER FUNCTIONS OVERLOAD                                         */
-	/* ********************************************************************** */
-	// Non member function overloads
-	template <class T, class A>
-	bool operator==(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
-	bool operator!=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
-	bool operator<(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
-	bool operator<=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
-	bool operator>(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
-	bool operator>=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
-	template <class T, class A>
+	        // Non member function overloads
+	        friend bool operator==(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator!=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator<(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator<=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator>(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator>=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+    };
 }
+
+# include "Stack.tpp"
 
 #endif

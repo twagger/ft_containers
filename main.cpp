@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/22 15:04:47 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:58:25 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <vector>
 #include "containers/Vector.hpp"
+#include "containers/Stack.hpp"
 
 #include <gtest/gtest.h>
 
@@ -755,4 +756,14 @@ TEST_F(VectorTest, greaterThanOrEqualOperatorTrue) {
 	MyTmpVector.push_back(42);
 	MyTmpVector.push_back(43);
 	EXPECT_EQ(MyVector >= MyTmpVector, true);
+}
+
+/* ************************************************************************** */
+/*  STACK CONSTRUCTOR TESTS                                                   */
+/* ************************************************************************** */
+
+TEST(StackTest_Constructor, defaultConstructor) {
+	ft::stack<int> MyStack;
+	EXPECT_EQ(MyStack.size(), 0)
+		<< "Default vector should have a 0 size";
 }

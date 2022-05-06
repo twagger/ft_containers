@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 10:43:32 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/06 15:24:28 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <memory>
 #include <algorithm>
 #include <exception>
-#include "../utils/utils.hpp"
 
 /* ************************************************************************** */
 /*  CONSTRUCTORS & DESTRUCTOR                                                 */
@@ -93,6 +92,7 @@ ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 	this->_size = x.size();
 	this->_array = this->_allocator.allocate(this->_capacity);
 	std::copy(x.begin(), x.end(), this->begin());
+    return (*this);
 }
 
 /* ************************************************************************** */
@@ -241,7 +241,9 @@ typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, co
         position = this->begin() + index;
     }
     if (position == this->end())
+    {
         (*this)[this->size() - 1] = val;
+    }
     else
     {
         std::copy_backward(position, this->end(), this->end() + 1);
@@ -277,13 +279,12 @@ void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!std::num
 {
     unsigned int    index;
     unsigned int    size;
-
+    
     size = last - first;
-    this->_size += size;
-    if (this->size() > this->capacity())
+    if (this->size() + size > this->capacity())
     {
         index = this->size() - (this->end() - position);
-        this->_realloc(this->size());
+        this->_realloc(this->size() + size);
         position = this->begin() + index;
     }
     if (position == this->end())
@@ -293,6 +294,7 @@ void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!std::num
         std::copy_backward(position, this->end(), this->end() + size);
         std::copy(first, last, position);
     }
+    this->_size += size;
 }
 
 // Erase
@@ -341,68 +343,4 @@ void    ft::vector<T,A>::swap(ft::vector<T,A> &x)
     x._size = tmp_size;
     x._capacity = tmp_capacity;
     x._allocator = tmp_alloc;
-}
-
-// Non member operator overloads
-template <class T, class A>
-bool ft::operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    if (lhs.size() == rhs.size())
-    {
-        return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
-    }
-    return (false);
-}
-
-template <class T, class A>
-bool ft::operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    return (!(lhs == rhs));
-}
-
-template <class T, class A>
-bool ft::operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-}
-
-template <class T, class A>
-bool ft::operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    return (!(rhs < lhs));
-}
-
-template <class T, class A>
-bool ft::operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    return (rhs < lhs);
-}
-
-template <class T, class A>
-bool ft::operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-{
-    return (!(lhs < rhs));
-}
-
-// Non member swap
-template < class T, class A >
-void    ft::swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
-{
-    typename ft::vector<A,T>::value_type      *tmp_arr;
-    typename ft::vector<A,T>::allocator_type  tmp_alloc;
-	typename ft::vector<A,T>::size_type       tmp_size;
-	typename ft::vector<A,T>::size_type       tmp_capacity;
-
-    tmp_arr = x._array;
-    tmp_size = x.size();
-    tmp_capacity = x.capacity();
-    tmp_alloc = x.get_allocator();
-    x._array = y._array;
-    x._size = y.size();
-    x._capacity = y.capacity();
-    x._allocator = y.get_allocator();
-    y._array = tmp_arr;
-    y._size = tmp_size;
-    y._capacity = tmp_capacity;
-    y._allocator = tmp_alloc;
 }
