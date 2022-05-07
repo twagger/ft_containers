@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Fixtures.hpp                                       :+:      :+:    :+:   */
+/*   fixtures.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 10:52:27 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/07 10:53:06 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/07 11:33:01 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FIXTURES_HPP
 # define FIXTURES_HPP
+# include <vector>
 
 class VectorTest : public ::testing::Test {
 	protected:

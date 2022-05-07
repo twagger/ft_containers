@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 17:29:19 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/07 12:36:17 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,9 +198,9 @@ void	ft::vector<T,A>::clear(void)
 }
 
 // Assign
-template < class T, class A >
+/*template < class T, class A >
 template < class InputIterator > 
-void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+void ft::vector<T,A>::assignv1(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
 	this->clear();
 	if (last - first > this->capacity())
@@ -211,6 +211,44 @@ void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterat
 	}
 	std::copy(first, last, this->begin());
 	this->_size = last - first;
+}*/
+
+template < class T, class A >
+template < class InputIterator > 
+void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+{
+    const size_type len = last - first;
+    value_type      *newarr;
+    InputIterator   mid;
+
+	if (len > this->capacity())
+	{
+        if (len > this->max_size())
+            throw std::length_error("length error");
+        newarr = this->get_allocator().allocate(len);
+        std::copy(first, last, newarr);
+        this->get_allocator().deallocate(this->_array, this->capacity());
+        for (int i = 0; i < this->size(); ++i)
+		    this->get_allocator().destroy(this->_array + i);
+		this->get_allocator().deallocate(this->_array, this->capacity()); // problem here
+        this->_array = newarr;
+        this->_capacity = len;
+        this->_size = len;
+	}
+	else if (this->size() >= len)
+    {
+        std::copy(first, last, this->begin());
+        for (int i = len; i < this->size(); ++i)
+	        this->get_allocator().destroy(this->_array + i);
+        this->_size = len;
+    }
+    else // len > size()
+    {   
+        mid = first + this->size();
+        std::copy(first, mid, this->begin());
+        std::uninitialized_copy(mid, last, this->begin() + this->size());
+        this->_size = len;
+    }
 } 
 
 template < class T, class A > 
