@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 17:46:51 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/07 11:02:26 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace	ft
             /* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
 			/* ************************************************************** */
-			stack   &operator=(const stack &x) {this->c = other.c;return (*this);};
+			stack   &operator=(const stack &x) {this->c = x.c;return (*this);};
             
             /* ************************************************************** */
 			/* 	MEMBER FUNCTIONS                                              */
@@ -67,23 +67,23 @@ namespace	ft
             {
                 return (lhs.c == rhs.c);
             }
-	        friend bool operator!=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator!=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
             {
                 return (lhs.c != rhs.c);
             }
-	        friend bool operator<(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator<(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
             {
                 return (lhs.c < rhs.c);
             }
-	        friend bool operator<=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator<=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
             {
                 return (lhs.c <= rhs.c);
             }
-	        friend bool operator>(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator>(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
             {
                 return (lhs.c > rhs.c);
             }
-	        friend bool operator>=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs);
+	        friend bool operator>=(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
             {
                 return (lhs.c >= rhs.c);
             }

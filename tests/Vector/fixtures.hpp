@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   all_tests.cpp                                      :+:      :+:    :+:   */
+/*   Fixtures.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/15 15:17:50 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 18:08:14 by twagner          ###   ########.fr       */
+/*   Created: 2022/05/07 10:52:27 by twagner           #+#    #+#             */
+/*   Updated: 2022/05/07 10:53:06 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <gtest/gtest.h>
+#ifndef FIXTURES_HPP
+# define FIXTURES_HPP
 
-int main(int argc, char **argv)
-{
-    testing::InitGoogleTest(&argc, argv);
-    return (RUN_ALL_TESTS());
-}
+class VectorTest : public ::testing::Test {
+	protected:
+		ft::vector<int>		MyVector;
+		ft::vector<int>		MyTmpVector;
+		std::vector<int>	StdVector;
+		std::vector<int>	StdTmpVector;
+};
+
+#endif
