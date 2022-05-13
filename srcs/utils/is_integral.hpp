@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:52:59 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 13:22:04 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 14:48:44 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 
 namespace ft
 {
-	// Enable_if with SFINAE principle
-	template < bool, typename T = void > struct enable_if {};
-	template < typename T >	struct enable_if< true, T >	{typedef T type;};
-
     // Integral constant
     template <class T, T v>
     struct integral_constant {

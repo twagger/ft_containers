@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 12:31:01 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 15:04:34 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ ft::vector<T,A>::vector(const vector &x)
 template < class T, class A > 
 ft::vector<T,A>::~vector(void)
 {
-	this->_allocator.deallocate(this->_array, this->_capacity);
+    for (int i = 0; i < this->size(); ++i)
+		this->get_allocator().destroy(this->_array + i);
+	this->_allocator.deallocate(this->_array, this->capacity());
 }
 
 /* ************************************************************************** */

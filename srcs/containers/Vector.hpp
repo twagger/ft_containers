@@ -15,7 +15,10 @@
 # include <memory>
 # include <cstddef>
 # include "../iterators/iterator.hpp"
-# include "../utils/utils.hpp"
+# include "../utils/enable_if.hpp"
+# include "../utils/is_integral.hpp"
+# include "../utils/equal.hpp"
+# include "../utils/lexicographical_compare.hpp"
 
 namespace	ft
 {
@@ -55,14 +58,14 @@ namespace	ft
             template <class InputIterator>
             vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last,
                 const allocator_type& alloc = allocator_type());
-			vector(const vector	&x);
+			vector(const vector &x);
 			// Destructor
 			~vector(void);
 
 			/* ************************************************************** */
 			/* 	OPERATOR OVERLOADS                                            */
 			/* ************************************************************** */
-			value_type  &operator[](std::size_t	n);
+			value_type  &operator[](size_type n);
 			vector      &operator=(const vector& x);
 
 			/* ************************************************************** */
@@ -106,7 +109,7 @@ namespace	ft
 			void			swap(vector &x);
 			void			clear(void);
 			// Allocator
-			allocator_type	get_allocator() const {return allocator_type(this->_allocator);}
+			allocator_type	get_allocator(void) const {return allocator_type(this->_allocator);}
 
 		private:
 			// Attributes
