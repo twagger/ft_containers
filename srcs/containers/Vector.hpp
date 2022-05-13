@@ -45,8 +45,8 @@ namespace	ft
 			// Iterators
 			typedef ft::iterator<T>								iterator;
 			typedef ft::const_iterator<T>						const_iterator;
-			typedef ft::reverse_iterator<iterator>				reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef ft::reverse_iterator<iterator>			   reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 			
 			/* ************************************************************** */
 			/*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -54,10 +54,14 @@ namespace	ft
 			// Constructors
 			explicit vector(const allocator_type &alloc = allocator_type());
 			explicit vector(size_type n, const value_type &val = value_type(), 
-				const allocator_type &alloc = allocator_type());
+				            const allocator_type &alloc = allocator_type());
+            
             template <class InputIterator>
-            vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last,
+            vector(\
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                InputIterator>::type first, InputIterator last, \
                 const allocator_type& alloc = allocator_type());
+
 			vector(const vector &x);
 			// Destructor
 			~vector(void);
@@ -72,44 +76,73 @@ namespace	ft
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
 			// Iterators
-			iterator				begin(void) {return iterator(this->_array);}
-			iterator				end(void) {return iterator(this->_array + this->_size);}
-			const_iterator			begin(void) const {return const_iterator(this->_array);}
-			const_iterator			end(void) const {return const_iterator(this->_array + this->_size);}
-			reverse_iterator		rbegin(void) {return reverse_iterator(this->end());}
-			const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(this->end());}
-			reverse_iterator		rend(void) {return reverse_iterator(this->begin());}
-			const_reverse_iterator	rend(void) const {return const_reverse_iterator(this->begin());}
+			iterator				begin(void)
+            { return iterator(this->_array); }
+
+			iterator				end(void)
+            { return iterator(this->_array + this->_size); }
+
+			const_iterator			begin(void) const
+            { return const_iterator(this->_array); }
+
+			const_iterator			end(void) const
+            { return const_iterator(this->_array + this->_size); }
+
+			reverse_iterator		rbegin(void)
+            { return reverse_iterator(this->end()); }
+
+			const_reverse_iterator	rbegin(void) const
+            { return const_reverse_iterator(this->end()); }
+
+			reverse_iterator		rend(void)
+            { return reverse_iterator(this->begin()); }
+
+			const_reverse_iterator	rend(void) const
+            { return const_reverse_iterator(this->begin()); }
+
 			// Capacity
 			size_type		size(void) const {return (this->_size);}
-			size_type		max_size(void) const {return (this->_allocator.max_size());}
+			size_type		max_size(void) const
+            { return (this->_allocator.max_size()); }
+
 			void			resize(size_type n, value_type val = value_type());
 			size_type		capacity(void) const {return (this->_capacity);}
 			bool			empty(void) const {return (this->_size > 0);}
 			void			reserve(size_type n);
+
 			// Access
-			reference		at(size_type n) {return ((*this)[n]);};
-			const_reference at(size_type n) const {return ((*this)[n]);};
-			reference 		front(void) {return ((*this)[0]);};
-			const_reference front(void) const {return ((*this)[0]);};
-			reference 		back(void) {return ((*this)[this->size() - 1]);};
-			const_reference back(void) const {return ((*this)[this->size() - 1]);};
+			reference		at(size_type n) {return ((*this)[n]);}
+			const_reference at(size_type n) const {return ((*this)[n]);}
+			reference 		front(void) {return ((*this)[0]);}
+			const_reference front(void) const {return ((*this)[0]);}
+			reference 		back(void) {return ((*this)[this->size() - 1]);}
+			const_reference back(void) const
+            { return ((*this)[this->size() - 1]); }
+
 			// Modifiers
-			template< class InputIterator >
-  			void 			assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
 			void 			assign(size_type n, const value_type &val);
-			void			push_back(const T &val);
-			void			pop_back(void) {if (this->_size > 0){this->get_allocator().destroy(&(*this)[this->size() - 1]);--this->_size;}};
-			iterator		insert(iterator position, const value_type &val);
-			void 			insert(iterator position, size_type n, const value_type &val);
 			template< class InputIterator >
-		    void			insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
+  			void 			assign(\
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                InputIterator>::type first, InputIterator last);
+
+			iterator		insert(iterator position, const value_type &val);
+			void 			insert(iterator position, size_type n, \
+                                   const value_type &val);
+            template< class InputIterator >
+		    void			insert(iterator position, \
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                InputIterator>::type first, InputIterator last);
+
+			void			push_back(const T &val);
+			void			pop_back(void);
 			iterator		erase(iterator position);
 			iterator		erase(iterator first, iterator last);
 			void			swap(vector &x);
 			void			clear(void);
 			// Allocator
-			allocator_type	get_allocator(void) const {return allocator_type(this->_allocator);}
+			allocator_type	get_allocator(void) const
+            { return allocator_type(this->_allocator); }
 
 		private:
 			// Attributes
@@ -122,7 +155,8 @@ namespace	ft
 			pointer         _realloc(size_type n);
 
         	// Non member function overloads
-        	friend bool operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+        	friend bool operator==(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
             {
                 if (lhs.size() == rhs.size())
                 {
@@ -131,30 +165,26 @@ namespace	ft
                 return (false);
             }
 
-        	friend bool operator!=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            {
-                return (!(lhs == rhs));
-            }
+        	friend bool operator!=(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            { return (!(lhs == rhs)); }
 
-        	friend bool operator<(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            {
-                return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-            } 
+        	friend bool operator<(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), \
+                                                  rhs.begin(), rhs.end())); } 
 
-        	friend bool operator<=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            {     
-                return (!(rhs < lhs));
-            }
+        	friend bool operator<=(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            { return (!(rhs < lhs)); }
 
-        	friend bool operator>(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            {
-                return (rhs < lhs);
-            }
+        	friend bool operator>(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            { return (rhs < lhs); }
 
-        	friend bool operator>=(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            {                
-                return (!(lhs < rhs));
-            }
+        	friend bool operator>=(\
+            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            { return (!(lhs < rhs)); }
 
         	friend void swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
             {

@@ -6,14 +6,13 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 14:11:29 by twagner           #+#    #+#             */
-/*   Updated: 2022/04/12 17:09:57 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 16:10:00 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
 # include <cstddef>
-# include <iterator>
 
 namespace ft
 {

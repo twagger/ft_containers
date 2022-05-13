@@ -29,7 +29,8 @@ TEST_F(VectorTest, assignRangeCopiesValues) {
 	MyTmpVector.push_back(42);
 	MyTmpVector.push_back(43);
 	MyVector.assign(MyTmpVector.begin(), MyTmpVector.end());
-	EXPECT_EQ(std::equal(MyVector.begin(), MyVector.end(), MyTmpVector.begin()), true);
+	EXPECT_EQ(std::equal(MyVector.begin(), MyVector.end(), \
+        MyTmpVector.begin()), true);
 }
 
 TEST_F(VectorTest, assignFillExtendsCapacity) {
@@ -285,7 +286,8 @@ TEST_F(VectorTest, insertPartRangeBegin) {
 	MyTmpVector.push_back(1);
 	MyTmpVector.push_back(2);
 	MyTmpVector.push_back(3);
-	MyVector.insert(MyVector.begin(), MyTmpVector.begin() + 1, MyTmpVector.end());
+	MyVector.insert(MyVector.begin(), MyTmpVector.begin() + 1, \
+        MyTmpVector.end());
 	EXPECT_EQ(MyVector.size(), 5);
 	EXPECT_EQ(MyVector.capacity(), 5);
 	EXPECT_EQ(MyVector[0], 2);
@@ -320,7 +322,8 @@ TEST_F(VectorTest, insertRangeMiddle) {
 	MyTmpVector.push_back(1);
 	MyTmpVector.push_back(2);
 	MyTmpVector.push_back(3);
-	MyVector.insert(MyVector.begin() + 2, MyTmpVector.begin(), MyTmpVector.end());
+	MyVector.insert(MyVector.begin() + 2, MyTmpVector.begin(), \
+        MyTmpVector.end());
 	EXPECT_EQ(MyVector.size(), 6);
 	EXPECT_EQ(MyVector.capacity(), 6);
 	EXPECT_EQ(MyVector[0], 41);

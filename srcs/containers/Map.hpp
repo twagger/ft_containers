@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 15:22:25 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 17:28:55 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,12 @@
 # define MAP_HPP
 # include <memory>
 # include "../iterators/iterator.hpp"
-# include "../utils/enable_if.hpp"
-# include "../utils/is_integral.hpp"
-# include "../utils/equal.hpp"
-# include "../utils/lexicographical_compare.hpp"
+# include "../utils/pair.hpp"
 
 namespace	ft
 {
     template < class Key, class T, class Compare = std::less<Key>, \
-               class A = std::allocator<std::pair<const Key, T>> >
+               class A = std::allocator<pair<const Key, T>> >
     class map
 	{
         public:
@@ -78,52 +75,54 @@ namespace	ft
 			/* 	MEMBER FUNCTIONS                                              */
 			/* ************************************************************** */
 			// Iterators
-			iterator				begin(void) {return iterator(this->_array);}
-			iterator				end(void) {return iterator(this->_array + this->_size);}
-			const_iterator			begin(void) const {return const_iterator(this->_array);}
-			const_iterator			end(void) const {return const_iterator(this->_array + this->_size);}
-			reverse_iterator		rbegin(void) {return reverse_iterator(this->end());}
-			const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(this->end());}
-			reverse_iterator		rend(void) {return reverse_iterator(this->begin());}
-			const_reverse_iterator	rend(void) const {return const_reverse_iterator(this->begin());}
+			iterator				begin(void);
+			iterator				end(void);
+			const_iterator			begin(void) const;
+			const_iterator			end(void) const;
+			reverse_iterator		rbegin(void);
+			const_reverse_iterator	rbegin(void) const;
+			reverse_iterator		rend(void);
+			const_reverse_iterator	rend(void) const;
 			// Capacity
-			bool			empty(void) const {return (this->_size > 0);}
-			size_type		size(void) const {return (this->_size);}
-			size_type		max_size(void) const {return (this->_allocator.max_size());}
+			bool			        empty(void) const;
+			size_type		        size(void) const;
+			size_type		        max_size(void) const;
 			// Modifiers
-			iterator		insert(iterator position, const value_type &val);
-			void 			insert(iterator position, size_type n, const value_type &val);
-			template< class InputIterator >
-		    void			insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
-			iterator		erase(iterator position);
-			iterator		erase(iterator first, iterator last);
-			void			swap(vector &x);
-			void			clear(void);
+            pair<iterator, bool>    insert(const value_type &val);
+            iterator                insert(iterator position, \
+                                           const value_type &val);
+            template<class InputIterator>
+            void                    insert(InputIterator first, \
+                                           InputIterator last); 
+            void                    erase(iterator position);
+            size_type               erase(const key_type &k);
+            void                    erase(iterator first, iterator last);
+            void			        swap(map &x);
+			void			        clear(void);
 			// Allocator
-			allocator_type	get_allocator(void) const {return allocator_type(this->_allocator);}
+			allocator_type	get_allocator(void) const
+            {return allocator_type(this->_allocator);}
             // Observers
             key_compare     key_comp(void) const;
             value_compare   value_comp(void) const;
             // Operations
-            iterator                            find(const key_type &k);
-            const_iterator                      find(const key_type &k) const;
-            size_type                           count(const key_type &k) const;
-            iterator                            lower_bound(const key_type &k);
-            const_iterator                      lower_bound(const key_type &k) const;
-            iterator                            upper_bound(const key_type &k);
-            const_iterator                      upper_bound(const key_type &k) const;
-            pair<const_iterator,const_iterator> equal_range(const key_type &k) const;
-            pair<iterator,iterator>             equal_range(const key_type &k);
+            iterator                    find(const key_type &k);
+            const_iterator              find(const key_type &k) const;
+            size_type                   count(const key_type &k) const;
+            iterator                    lower_bound(const key_type &k);
+            const_iterator              lower_bound(const key_type &k) const;
+            iterator                    upper_bound(const key_type &k);
+            const_iterator              upper_bound(const key_type &k) const;
+            pair<iterator, iterator>    equal_range(const key_type &k);
+            pair<const_iterator, const_iterator>    equal_range(\
+                                                    const key_type &k) const;
 
 		private:
 			// Attributes
-			pointer         _tree;
+			pointer         _tree; // arbre de pair
 			allocator_type	_allocator;
 			size_type		_size;
 			size_type		_capacity;
-
-			// Functions
-			pointer         _realloc(size_type n);
     }
 }
 

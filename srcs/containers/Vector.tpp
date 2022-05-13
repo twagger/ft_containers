@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 15:04:34 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 17:27:31 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,20 @@ ft::vector<T,A>::vector(const allocator_type &alloc)
 
 // Fill
 template < class T, class A > 
-ft::vector<T,A>::vector(size_type n, const value_type &val, const allocator_type &alloc)
+ft::vector<T,A>::vector(size_type n, const value_type &val, \
+const allocator_type &alloc)
 : _allocator(alloc), _size(n), _capacity(n)
 {
 	this->_array = this->_allocator.allocate(this->_capacity);
 	std::fill(this->begin(), this->end(), val);
 }
 
-// Range - Ajouter un enable if pour eviter de confondre avec le fill constructor
+// Range
 template < class T, class A > 
 template <class InputIterator>
-ft::vector<T,A>::vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,\
-InputIterator last, const allocator_type &alloc)
+ft::vector<T,A>::vector(\
+typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+InputIterator>::type first, InputIterator last, const allocator_type &alloc)
 : _allocator(alloc), _size(last - first), _capacity(last - first)
 {
 	this->_array = this->_allocator.allocate(this->_capacity);
@@ -85,7 +87,8 @@ T	&ft::vector<T,A>::operator[](std::size_t n)
 template < class T, class A > 
 ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 {
-	for (ft::vector<T,A>::const_iterator it = this->begin(); it < this->end(); ++it)
+	for(ft::vector<T,A>::const_iterator it = this->begin(); it < this->end(); \
+    ++it)
 	{
 		this->_allocator.destroy(it);
 	}
@@ -174,6 +177,17 @@ void	ft::vector<T,A>::push_back(const T &val)
 	++this->_size;
 }
 
+// Pop back
+template < class T, class A > 
+void    ft::vector<T,A>::pop_back(void)
+{
+    if (this->_size > 0)
+    {
+        this->get_allocator().destroy(&(*this)[this->size() - 1]);
+        --this->_size;
+    }
+}
+
 // Clear
 template < class T, class A > 
 void	ft::vector<T,A>::clear(void)
@@ -187,7 +201,9 @@ void	ft::vector<T,A>::clear(void)
 
 template < class T, class A >
 template < class InputIterator > 
-void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+void ft::vector<T,A>::assign(\
+typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+InputIterator>::type first, InputIterator last)
 {
     const size_type len = last - first;
     value_type      *newarr;
@@ -250,14 +266,16 @@ void ft::vector<T,A>::assign(size_type n, const value_type &val)
     else
     {   
         std::fill_n(this->begin(), this->size(), val);
-        std::uninitialized_fill_n(this->begin() + this->size() + 1, n - this->size(), val);
+        std::uninitialized_fill_n(\
+            this->begin() + this->size() + 1, n - this->size(), val);
         this->_size = n;
     }
 }
 
 // insert
 template < class T, class A >
-typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
+typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, \
+const value_type &val)
 {
     unsigned int    index;
 
@@ -272,7 +290,8 @@ typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, co
 }
 
 template < class T, class A >
-void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &val)
+void	ft::vector<T,A>::insert(iterator position, size_type n, \
+const value_type &val)
 {
     unsigned int    index;
 
@@ -287,7 +306,9 @@ void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &v
 
 template < class T, class A >
 template< class InputIterator >
-void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+void	ft::vector<T,A>::insert(iterator position, \
+typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+InputIterator>::type first, InputIterator last)
 {
     unsigned int    index;
     unsigned int    size;
@@ -316,7 +337,8 @@ typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator position)
 }
 
 template < class T, class A >
-typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator first, iterator last)
+typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(\
+iterator first, iterator last)
 {
     iterator    result(first);
 
