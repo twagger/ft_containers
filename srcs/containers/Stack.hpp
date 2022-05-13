@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:39:46 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 18:01:01 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "../iterators/iterator.hpp"
 # include "Vector.hpp"
 
-namespace	ft
+namespace   ft
 {
     // Stack
     template < class T, class Container = ft::vector<T> > 
@@ -41,12 +41,12 @@ namespace	ft
             ~stack(void) {}
             
             /* ************************************************************** */
-            /* 	OPERATOR OVERLOADS                                            */
+            /*  OPERATOR OVERLOADS                                            */
             /* ************************************************************** */
             stack   &operator=(const stack &x) {this->c = x.c;return (*this);};
             
             /* ************************************************************** */
-            /* 	MEMBER FUNCTIONS                                              */
+            /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
             // Element access
             reference       top(void) {return this->c.back();};

@@ -6,7 +6,7 @@
 /* ************************************************************************** */
 
 TEST(StackTest_Constructor, defaultConstructor) {
-	ft::stack<int> MyStack;
-	EXPECT_EQ(MyStack.size(), 0)
-		<< "Default vector should have a 0 size";
+    ft::stack<int> MyStack;
+    EXPECT_EQ(MyStack.size(), 0)
+        << "Default vector should have a 0 size";
 }

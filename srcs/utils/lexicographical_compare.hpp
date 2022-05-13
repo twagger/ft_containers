@@ -6,14 +6,14 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 13:18:16 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:41:33 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 18:06:52 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXICOGRAPHICAL_COMPARE_HPP
 # define LEXICOGRAPHICAL_COMPARE_HPP
 
-namespace ft
+namespace   ft
 {
     // Default
     template <class InputIterator1, class InputIterator2>

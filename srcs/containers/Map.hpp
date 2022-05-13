@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:40:00 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 17:57:49 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../iterators/iterator.hpp"
 # include "../utils/pair.hpp"
 
-namespace	ft
+namespace   ft
 {
     template < class Key, class T, class Compare = std::less<Key>, \
             class A = std::allocator<pair<const Key, T>> >
@@ -24,29 +24,29 @@ namespace	ft
     {
         public:
             /* ************************************************************** */
-            /* 	MEMBER TYPES & ALIASES                                        */
+            /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef Key											key_type;
-            typedef T											mapped_type;
-            pair<const key_type, mapped_type>					value_type;
+            typedef Key                                         key_type;
+            typedef T                                           mapped_type;
+            pair<const key_type, mapped_type>                   value_type;
             // Compare
             typedef Compare                                     key_compare;
             // Memory
-            typedef A											allocator_type;
+            typedef A                                           allocator_type;
             // Size
-            typedef	std::size_t									size_type;
+            typedef	std::size_t                                 size_type;
             // Difference
-            typedef	ptrdiff_t									difference_type;
+            typedef	ptrdiff_t                                   difference_type;
             // References and pointers
-            typedef typename allocator_type::reference			reference;
-            typedef typename allocator_type::const_reference	const_reference;
-            typedef typename allocator_type::pointer			pointer;
-            typedef typename allocator_type::const_pointer		const_pointer;
+            typedef typename allocator_type::reference          reference;
+            typedef typename allocator_type::const_reference    const_reference;
+            typedef typename allocator_type::pointer            pointer;
+            typedef typename allocator_type::const_pointer      const_pointer;
             // Iterators
-            typedef ft::iterator<T>								iterator;
-            typedef ft::const_iterator<T>						const_iterator;
-            typedef ft::reverse_iterator<iterator>			   reverse_iterator;
+            typedef ft::iterator<T>                             iterator;
+            typedef ft::const_iterator<T>                       const_iterator;
+            typedef ft::reverse_iterator<iterator>             reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             
             /* ************************************************************** */
@@ -66,27 +66,27 @@ namespace	ft
             ~map(void);
 
             /* ************************************************************** */
-            /* 	OPERATOR OVERLOADS                                            */
+            /*  OPERATOR OVERLOADS                                            */
             /* ************************************************************** */
             mapped_type &operator[](const key_type &k);
             map         &operator=(const map &x);
 
             /* ************************************************************** */
-            /* 	MEMBER FUNCTIONS                                              */
+            /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
             // Iterators
-            iterator				begin(void);
-            iterator				end(void);
-            const_iterator			begin(void) const;
-            const_iterator			end(void) const;
-            reverse_iterator		rbegin(void);
-            const_reverse_iterator	rbegin(void) const;
-            reverse_iterator		rend(void);
-            const_reverse_iterator	rend(void) const;
+            iterator                begin(void);
+            iterator                end(void);
+            const_iterator          begin(void) const;
+            const_iterator          end(void) const;
+            reverse_iterator        rbegin(void);
+            const_reverse_iterator  rbegin(void) const;
+            reverse_iterator        rend(void);
+            const_reverse_iterator  rend(void) const;
             // Capacity
-            bool			        empty(void) const;
-            size_type		        size(void) const;
-            size_type		        max_size(void) const;
+            bool                    empty(void) const;
+            size_type               size(void) const;
+            size_type               max_size(void) const;
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val);
             iterator                insert(iterator position, \
@@ -97,10 +97,10 @@ namespace	ft
             void                    erase(iterator position);
             size_type               erase(const key_type &k);
             void                    erase(iterator first, iterator last);
-            void			        swap(map &x);
-            void			        clear(void);
+            void                    swap(map &x);
+            void                    clear(void);
             // Allocator
-            allocator_type	get_allocator(void) const
+            allocator_type  get_allocator(void) const
             {return allocator_type(this->_allocator);}
             // Observers
             key_compare     key_comp(void) const;
@@ -120,9 +120,9 @@ namespace	ft
         private:
             // Attributes
             pointer         _tree; // arbre de pair
-            allocator_type	_allocator;
-            size_type		_size;
-            size_type		_capacity;
+            allocator_type  _allocator;
+            size_type       _size;
+            size_type       _capacity;
     }
 }
 

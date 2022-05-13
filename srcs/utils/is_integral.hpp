@@ -6,14 +6,14 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:52:59 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:41:21 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 18:06:42 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IS_INTEGRAL_HPP
 # define IS_INTEGRAL_HPP
 
-namespace ft
+namespace   ft
 {
     // Integral constant
     template <class T, T v>

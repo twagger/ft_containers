@@ -20,32 +20,32 @@
 # include "../utils/equal.hpp"
 # include "../utils/lexicographical_compare.hpp"
 
-namespace	ft
+namespace   ft
 {
     template < class T, class A = std::allocator<T> > 
     class vector
     {
         public:
             /* ************************************************************** */
-            /* 	MEMBER TYPES & ALIASES                                        */
+            /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef T											value_type;
-            // Memory
-            typedef A											allocator_type;
+            typedef T                                           value_type;
+            // Memory   
+            typedef A                                           allocator_type;
             // Size
-            typedef	std::size_t									size_type;
+            typedef std::size_t                                 size_type;
             // Difference
-            typedef	ptrdiff_t									difference_type;
+            typedef ptrdiff_t                                   difference_type;
             // References and pointers
-            typedef typename allocator_type::reference			reference;
-            typedef typename allocator_type::const_reference	const_reference;
-            typedef typename allocator_type::pointer			pointer;
-            typedef typename allocator_type::const_pointer		const_pointer;
+            typedef typename allocator_type::reference          reference;
+            typedef typename allocator_type::const_reference    const_reference;
+            typedef typename allocator_type::pointer            pointer;
+            typedef typename allocator_type::const_pointer      const_pointer;
             // Iterators
-            typedef ft::iterator<T>								iterator;
-            typedef ft::const_iterator<T>						const_iterator;
-            typedef ft::reverse_iterator<iterator>			   reverse_iterator;
+            typedef ft::iterator<T>                             iterator;
+            typedef ft::const_iterator<T>                       const_iterator;
+            typedef ft::reverse_iterator<iterator>             reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             
             /* ************************************************************** */
@@ -67,92 +67,93 @@ namespace	ft
             ~vector(void);
 
             /* ************************************************************** */
-            /* 	OPERATOR OVERLOADS                                            */
+            /*  OPERATOR OVERLOADS                                            */
             /* ************************************************************** */
             value_type  &operator[](size_type n);
             vector      &operator=(const vector& x);
 
             /* ************************************************************** */
-            /* 	MEMBER FUNCTIONS                                              */
+            /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
             // Iterators
-            iterator				begin(void)
+            iterator                begin(void)
             { return iterator(this->_array); }
 
-            iterator				end(void)
+            iterator                end(void)
             { return iterator(this->_array + this->_size); }
 
-            const_iterator			begin(void) const
+            const_iterator          begin(void) const
             { return const_iterator(this->_array); }
 
-            const_iterator			end(void) const
+            const_iterator          end(void) const
             { return const_iterator(this->_array + this->_size); }
 
-            reverse_iterator		rbegin(void)
+            reverse_iterator        rbegin(void)
             { return reverse_iterator(this->end()); }
 
-            const_reverse_iterator	rbegin(void) const
+            const_reverse_iterator  rbegin(void) const
             { return const_reverse_iterator(this->end()); }
 
-            reverse_iterator		rend(void)
+            reverse_iterator        rend(void)
             { return reverse_iterator(this->begin()); }
 
-            const_reverse_iterator	rend(void) const
+            const_reverse_iterator  rend(void) const
             { return const_reverse_iterator(this->begin()); }
 
             // Capacity
-            size_type		size(void) const {return (this->_size);}
-            size_type		max_size(void) const
+            size_type   size(void) const {return (this->_size);}
+            size_type   max_size(void) const
             { return (this->_allocator.max_size()); }
 
-            void			resize(size_type n, value_type val = value_type());
-            size_type		capacity(void) const {return (this->_capacity);}
-            bool			empty(void) const {return (this->_size > 0);}
-            void			reserve(size_type n);
+            void        resize(size_type n, value_type val = value_type());
+            size_type   capacity(void) const {return (this->_capacity);}
+            bool        empty(void) const {return (this->_size > 0);}
+            void        reserve(size_type n);
 
             // Access
-            reference		at(size_type n) {return ((*this)[n]);}
+            reference       at(size_type n) {return ((*this)[n]);}
             const_reference at(size_type n) const {return ((*this)[n]);}
-            reference 		front(void) {return ((*this)[0]);}
+            reference       front(void) {return ((*this)[0]);}
             const_reference front(void) const {return ((*this)[0]);}
-            reference 		back(void) {return ((*this)[this->size() - 1]);}
+            reference       back(void) {return ((*this)[this->size() - 1]);}
             const_reference back(void) const
             { return ((*this)[this->size() - 1]); }
 
             // Modifiers
-            void 			assign(size_type n, const value_type &val);
+            void        assign(size_type n, const value_type &val);
             template< class InputIterator >
-            void 			assign(\
+            void        assign(\
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
                 InputIterator>::type first, InputIterator last);
 
-            iterator		insert(iterator position, const value_type &val);
-            void 			insert(iterator position, size_type n, \
-                                const value_type &val);
+            iterator    insert(iterator position, const value_type &val);
+            void        insert(iterator position, size_type n, \
+                               const value_type &val);
             template< class InputIterator >
-            void			insert(iterator position, \
+            void        insert(iterator position, \
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
                 InputIterator>::type first, InputIterator last);
 
-            void			push_back(const T &val);
-            void			pop_back(void);
-            iterator		erase(iterator position);
-            iterator		erase(iterator first, iterator last);
-            void			swap(vector &x);
-            void			clear(void);
+            void        push_back(const T &val);
+            void        pop_back(void);
+            iterator    erase(iterator position);
+            iterator    erase(iterator first, iterator last);
+            void        swap(vector &x);
+            void        clear(void);
+
             // Allocator
-            allocator_type	get_allocator(void) const
+            allocator_type  get_allocator(void) const
             { return allocator_type(this->_allocator); }
 
         private:
             // Attributes
             pointer         _array;
-            allocator_type	_allocator;
-            size_type		_size;
-            size_type		_capacity;
+            allocator_type  _allocator;
+            size_type       _size;
+            size_type       _capacity;
 
             // Functions
-            pointer         _realloc(size_type n);
+            pointer _realloc(size_type n);
 
             // Non member function overloads
             friend bool operator==(\
