@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:57:49 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 18:10:40 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ namespace   ft
             // Memory
             typedef A                                           allocator_type;
             // Size
-            typedef	std::size_t                                 size_type;
+            typedef std::size_t                                 size_type;
             // Difference
-            typedef	ptrdiff_t                                   difference_type;
+            typedef ptrdiff_t                                   difference_type;
             // References and pointers
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
@@ -48,7 +48,7 @@ namespace   ft
             typedef ft::const_iterator<T>                       const_iterator;
             typedef ft::reverse_iterator<iterator>             reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-            
+
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
