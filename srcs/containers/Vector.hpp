@@ -110,13 +110,13 @@ namespace	ft
 
 		private:
 			// Attributes
-			value_type		*_array;
+			pointer         _array;
 			allocator_type	_allocator;
 			size_type		_size;
 			size_type		_capacity;
 
 			// Functions
-			void			_realloc(size_type n);
+			pointer         _realloc(size_type n);
 
         	// Non member function overloads
         	friend bool operator==(const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)

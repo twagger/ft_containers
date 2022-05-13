@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/07 12:36:17 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 12:16:19 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,17 +103,25 @@ ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 /* ************************************************************************** */
 // Realloc
 template< class T, class A >
-void	ft::vector<T,A>::_realloc(size_type n)
+typename ft::vector<T,A>::pointer    ft::vector<T,A>::_realloc(size_type n)
 {
-	pointer	p;
+    pointer newarr;
 
-	p = this->get_allocator().allocate(n);
-	std::copy(this->begin(), this->end(), p);
-	for (int i = n; i < this->size(); ++i)
-		this->get_allocator().destroy(this->_array + i);
-	this->_allocator.deallocate(this->_array, this->_capacity);
-	this->_capacity = n;
-	this->_array = p;
+    if (n > this->capacity())
+    {
+        if (n > this->max_size())
+            throw std::length_error("length error");
+        newarr = this->get_allocator().allocate(n);
+        std::copy(this->begin(), this->end(), newarr);
+        for (int i = 0; i < this->size(); ++i)
+		    this->get_allocator().destroy(this->_array + i);
+        this->get_allocator().deallocate(this->_array, this->capacity());
+        this->_array = newarr;
+        this->_capacity = n;
+        return (newarr);
+    }
+    else
+        return (this->_array);
 }
 
 /* ************************************************************************** */
@@ -123,18 +131,9 @@ void	ft::vector<T,A>::_realloc(size_type n)
 template < class T, class A > 
 void	ft::vector<T,A>::resize(size_type n, value_type val)
 {
-	pointer	tmp;
-
 	if (n > this->size())
 	{
-		if (n > this->capacity())
-		{
-			tmp = this->get_allocator().allocate(n);
-			std::copy(this->begin(), this->end(), tmp);
-			this->get_allocator().deallocate(this->_array, this->capacity());
-			this->_array = tmp;
-			this->_capacity = n;
-		}
+        this->_array = this->_realloc(n);
 		std::fill_n(this->end(), n - this->size(), val);
 	}
 	else if (n < this->size())
@@ -149,20 +148,7 @@ void	ft::vector<T,A>::resize(size_type n, value_type val)
 template < class T, class A > 
 void	ft::vector<T,A>::reserve(size_type n)
 {
-	pointer	tmp;
-
-	if (n > this->max_size())
-		throw std::length_error("lenght error");
-	if (n > this->capacity())
-	{
-		tmp = this->get_allocator().allocate(n);
-		std::copy(this->begin(), this->end(), tmp);
-		for (int i = 0; i < this->size(); ++i)
-			this->get_allocator().destroy(this->_array + i);
-		this->get_allocator().deallocate(this->_array, this->capacity());
-		this->_array = tmp;
-		this->_capacity = n;
-	}
+    this->_array = this->_realloc(n);
 }
 
 /* ************************************************************************** */
@@ -172,17 +158,15 @@ void	ft::vector<T,A>::reserve(size_type n)
 template < class T, class A > 
 void	ft::vector<T,A>::push_back(const T &val)
 {
-	pointer	tmp;
-	
+    size_type   n;
+
 	if (this->size() == this->capacity())
 	{
-		this->_capacity = this->capacity() * 2;
 		if (this->capacity() == 0)
-			this->_capacity = 1;
-		tmp = this->get_allocator().allocate(this->capacity());
-		std::copy(this->begin(), this->end(), tmp);
-		this->get_allocator().deallocate(this->_array, this->capacity());
-		this->_array = tmp;
+			n = 1;
+        else
+            n = this->capacity() * 2;
+        this->_array = this->_realloc(n);
 	}
 	this->_array[this->size()] = val;
 	++this->_size;
@@ -198,20 +182,6 @@ void	ft::vector<T,A>::clear(void)
 }
 
 // Assign
-/*template < class T, class A >
-template < class InputIterator > 
-void ft::vector<T,A>::assignv1(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
-{
-	this->clear();
-	if (last - first > this->capacity())
-	{
-		this->get_allocator().deallocate(this->_array, this->capacity());
-		this->_capacity = last - first;
-		this->get_allocator().allocate(this->capacity());
-	}
-	std::copy(first, last, this->begin());
-	this->_size = last - first;
-}*/
 
 template < class T, class A >
 template < class InputIterator > 
@@ -227,10 +197,9 @@ void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterat
             throw std::length_error("length error");
         newarr = this->get_allocator().allocate(len);
         std::copy(first, last, newarr);
-        this->get_allocator().deallocate(this->_array, this->capacity());
         for (int i = 0; i < this->size(); ++i)
 		    this->get_allocator().destroy(this->_array + i);
-		this->get_allocator().deallocate(this->_array, this->capacity()); // problem here
+        this->get_allocator().deallocate(this->_array, this->capacity());
         this->_array = newarr;
         this->_capacity = len;
         this->_size = len;
@@ -242,7 +211,7 @@ void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterat
 	        this->get_allocator().destroy(this->_array + i);
         this->_size = len;
     }
-    else // len > size()
+    else
     {   
         mid = first + this->size();
         std::copy(first, mid, this->begin());
@@ -252,41 +221,51 @@ void ft::vector<T,A>::assign(typename ft::enable_if<!ft::is_integral<InputIterat
 } 
 
 template < class T, class A > 
-void ft::vector<T,A>::assign (size_type n, const value_type &val)
+void ft::vector<T,A>::assign(size_type n, const value_type &val)
 {
-	this->clear();
+    value_type  *newarr;
+
 	if (n > this->capacity())
 	{
-		this->get_allocator().deallocate(this->_array, this->capacity());
-		this->_capacity = n;
-		this->get_allocator().allocate(this->capacity());
+        if (n > this->max_size())
+            throw std::length_error("length error");
+        newarr = this->get_allocator().allocate(n);
+    	std::fill_n(newarr, n, val);
+        for (int i = 0; i < this->size(); ++i)
+		    this->get_allocator().destroy(this->_array + i);
+        this->get_allocator().deallocate(this->_array, this->capacity());
+        this->_array = newarr;
+        this->_capacity = n;
+        this->_size = n;
 	}
-	std::fill(this->begin(), this->begin() + n, val);
-	this->_size = n;
+	else if (this->size() >= n)
+    {
+    	std::fill_n(this->begin(), n, val);
+        for (int i = n; i < this->size(); ++i)
+	        this->get_allocator().destroy(this->_array + i);
+        this->_size = n;
+    }
+    else
+    {   
+        std::fill_n(this->begin(), this->size(), val);
+        std::uninitialized_fill_n(this->begin() + this->size() + 1, n - this->size(), val);
+        this->_size = n;
+    }
 }
 
 // insert
 template < class T, class A >
 typename ft::vector<T,A>::iterator	ft::vector<T,A>::insert(iterator position, const value_type &val)
 {
-    int index;
+    unsigned int    index;
 
-    this->_size += 1;
-    if (this->size() > this->capacity())
-    {
-        index = this->size() - (this->end() - position);
-        this->_realloc(this->size());
-        position = this->begin() + index;
-    }
-    if (position == this->end())
-    {
-        (*this)[this->size() - 1] = val;
-    }
-    else
-    {
+    index = position - this->begin();
+    this->_array = this->_realloc(this->size() + 1);
+    position = this->begin() + index;
+    if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + 1);
-        (*this)[this->size() - (this->end() - position)] = val;
-    }
+    *position = val;
+    this->_size += 1;
     return (position);
 }
 
@@ -295,20 +274,13 @@ void	ft::vector<T,A>::insert(iterator position, size_type n, const value_type &v
 {
     unsigned int    index;
 
-    this->_size += n;
-    if (this->size() > this->capacity())
-    {
-        index = this->size() - (this->end() - position);
-        this->_realloc(this->size());
-        position = this->begin() + index;
-    }
-    if (position == this->end())
-        std::fill_n(this->end(), n, val);
-    else
-    {
+    index = position - this->begin();
+    this->_array = this->_realloc(this->size() + n);
+    position = this->begin() + index;
+    if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + n);
-        std::fill_n(position, n, val);
-    }
+    std::fill_n(position, n, val);
+    this->_size += n;
 }
 
 template < class T, class A >
@@ -319,19 +291,12 @@ void	ft::vector<T,A>::insert(iterator position, typename ft::enable_if<!ft::is_i
     unsigned int    size;
     
     size = last - first;
-    if (this->size() + size > this->capacity())
-    {
-        index = this->size() - (this->end() - position);
-        this->_realloc(this->size() + size);
-        position = this->begin() + index;
-    }
-    if (position == this->end())
-        std::copy(first, last, position);
-    else
-    {
+    index = position - this->begin();
+    this->_array = this->_realloc(this->size() + size);
+    position = this->begin() + index;
+    if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + size);
-        std::copy(first, last, position);
-    }
+    std::copy(first, last, position);
     this->_size += size;
 }
 
