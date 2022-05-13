@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:08:30 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 17:39:46 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,37 @@
 
 namespace	ft
 {
-	// Stack
-	template < class T, class Container = ft::vector<T> > 
-	class stack
-	{
-		public:
+    // Stack
+    template < class T, class Container = ft::vector<T> > 
+    class stack
+    {
+        public:
             /* ************************************************************** */
-			/* 	MEMBER TYPES & ALIASES                                        */
-			/* ************************************************************** */
+            /* 	MEMBER TYPES & ALIASES                                        */
+            /* ************************************************************** */
             typedef Container                               container_type;
-			typedef typename Container::value_type          value_type;
-			typedef typename Container::size_type           size_type;
-			typedef typename Container::reference           reference;
-			typedef typename Container::const_reference     const_reference;
-			
-			/* ************************************************************** */
-			/*  CONSTRUCTORS & DESTRUCTOR                                     */
-			/* ************************************************************** */
-			// Constructor
+            typedef typename Container::value_type          value_type;
+            typedef typename Container::size_type           size_type;
+            typedef typename Container::reference           reference;
+            typedef typename Container::const_reference     const_reference;
+            
+            /* ************************************************************** */
+            /*  CONSTRUCTORS & DESTRUCTOR                                     */
+            /* ************************************************************** */
+            // Constructor
             explicit stack(const container_type &cont = container_type())
             : c(cont) {}
-			// Destructor
+            // Destructor
             ~stack(void) {}
             
             /* ************************************************************** */
-			/* 	OPERATOR OVERLOADS                                            */
-			/* ************************************************************** */
-			stack   &operator=(const stack &x) {this->c = x.c;return (*this);};
+            /* 	OPERATOR OVERLOADS                                            */
+            /* ************************************************************** */
+            stack   &operator=(const stack &x) {this->c = x.c;return (*this);};
             
             /* ************************************************************** */
-			/* 	MEMBER FUNCTIONS                                              */
-			/* ************************************************************** */
+            /* 	MEMBER FUNCTIONS                                              */
+            /* ************************************************************** */
             // Element access
             reference       top(void) {return this->c.back();};
             const_reference top(void) const {return this->c.back();};
@@ -60,33 +60,33 @@ namespace	ft
             void            pop(void) {return this->c.pop_back();};
 
         protected:
-			// Member object
-			container_type  c;
+            // Member object
+            container_type  c;
         
         private:
-	        // Non member function overloads
-	        friend bool operator==(const ft::stack<T, Container> &lhs, \
-                                   const ft::stack<T, Container> &rhs)
+            // Non member function overloads
+            friend bool operator==(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c == rhs.c); }
 
-	        friend bool operator!=(const ft::stack<T, Container> &lhs, \
-                                   const ft::stack<T, Container> &rhs)
+            friend bool operator!=(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c != rhs.c); }
 
-	        friend bool operator<(const ft::stack<T, Container> &lhs, \
-                                  const ft::stack<T, Container> &rhs)
+            friend bool operator<(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c < rhs.c); }
 
-	        friend bool operator<=(const ft::stack<T, Container> &lhs, \
-                                   const ft::stack<T, Container> &rhs)
+            friend bool operator<=(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c <= rhs.c); }
 
-	        friend bool operator>(const ft::stack<T, Container> &lhs, \
-                                  const ft::stack<T, Container> &rhs)
+            friend bool operator>(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c > rhs.c); }
 
-	        friend bool operator>=(const ft::stack<T, Container> &lhs, \
-                                   const ft::stack<T, Container> &rhs)
+            friend bool operator>=(const ft::stack<T, Container> &lhs, \
+                                const ft::stack<T, Container> &rhs)
             { return (lhs.c >= rhs.c); }
     };
 }

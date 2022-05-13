@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 15:31:34 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 17:29:16 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 17:41:43 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ namespace   ft
         // Member variables
         T1  first;
         T2  second;
-       
+    
         // Constructors
         pair(void) : first(T1()), second(T2()) {}
         template<class U, class V>
         pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) {}
         pair(const first_type &a, const second_type &b) : first(a), second(b) {}
         ~pair(void) {}
-       
+    
         // Operator overload
         pair    &operator=(const pair &pr)
         {
