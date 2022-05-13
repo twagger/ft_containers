@@ -1,39 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.hpp                                          :+:      :+:    :+:   */
+/*   is_integral.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:52:59 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/06 17:24:41 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 13:22:04 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_HPP
-# define UTILS_HPP
+#ifndef IS_INTEGRAL_HPP
+# define IS_INTEGRAL_HPP
 
 namespace ft
 {
-    // Equal
-    template <class InputIterator1, class InputIterator2>
-    bool    equal(InputIterator1 first1, InputIterator1 last1,
-                  InputIterator2 first2);
-
-    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-    bool    equal(InputIterator1 first1, InputIterator1 last1,
-                  InputIterator2 first2, BinaryPredicate pred); 
-    
-    // Lexicographical compare
-    template <class InputIterator1, class InputIterator2>
-    bool    lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
-                                    InputIterator2 first2, InputIterator2 last2);
-
-    template <class InputIterator1, class InputIterator2, class Compare>
-    bool    lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
-                                    InputIterator2 first2, InputIterator2 last2,
-                                    Compare comp);
-
 	// Enable_if with SFINAE principle
 	template < bool, typename T = void > struct enable_if {};
 	template < typename T >	struct enable_if< true, T >	{typedef T type;};
@@ -67,7 +48,6 @@ namespace ft
     template <>         struct is_integral<unsigned int>            : public true_type{};
     template <>         struct is_integral<unsigned long int>       : public true_type{};
     template <>         struct is_integral<unsigned long long int>  : public true_type{};
-
     template <>         struct is_integral<const bool>                    : public true_type{};
     template <>         struct is_integral<const char>                    : public true_type{};
     template <>         struct is_integral<const char16_t>                : public true_type{};
@@ -84,9 +64,5 @@ namespace ft
     template <>         struct is_integral<const unsigned long int>       : public true_type{};
     template <>         struct is_integral<const unsigned long long int>  : public true_type{};
 }
-
-# include "equal.tpp"
-# include "lexicographical_compare.tpp"
-# include "is_integral.tpp"
 
 #endif

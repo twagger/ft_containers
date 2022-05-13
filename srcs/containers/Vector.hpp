@@ -15,7 +15,7 @@
 # include <memory>
 # include <cstddef>
 # include "../iterators/iterator.hpp"
-#include "../utils/utils.hpp"
+# include "../utils/utils.hpp"
 
 namespace	ft
 {
@@ -155,7 +155,7 @@ namespace	ft
 
         	friend void swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
             {
-                typename ft::vector<T,A>::value_type      *tmp_arr;
+                typename ft::vector<T,A>::pointer         tmp_arr;
                 typename ft::vector<T,A>::allocator_type  tmp_alloc;
                 typename ft::vector<T,A>::size_type       tmp_size;
                 typename ft::vector<T,A>::size_type       tmp_capacity;

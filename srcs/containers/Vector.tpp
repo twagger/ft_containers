@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 12:16:19 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/13 12:31:01 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ typename ft::vector<T,A>::iterator  ft::vector<T,A>::erase(iterator first, itera
 template < class T, class A >
 void    ft::vector<T,A>::swap(ft::vector<T,A> &x)
 {
-    value_type      *tmp_arr;
+    pointer         tmp_arr;
     allocator_type  tmp_alloc;
 	size_type       tmp_size;
 	size_type       tmp_capacity;
