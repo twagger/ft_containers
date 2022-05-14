@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/14 09:53:50 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/14 11:18:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <memory>
 # include "../iterators/iterator.hpp"
 # include "../utils/pair.hpp"
+# include "../utils/RBTree.hpp"
 
 namespace   ft
 {
