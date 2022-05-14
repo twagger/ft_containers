@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 18:10:40 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/14 09:53:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace   ft
             // Type
             typedef Key                                         key_type;
             typedef T                                           mapped_type;
-            pair<const key_type, mapped_type>                   value_type;
+            typedef pair<const key_type, mapped_type>           value_type;
             // Compare
             typedef Compare                                     key_compare;
             // Memory
@@ -104,7 +104,7 @@ namespace   ft
             {return allocator_type(this->_allocator);}
             // Observers
             key_compare     key_comp(void) const;
-            value_compare   value_comp(void) const;
+            //value_compare   value_comp(void) const;
             // Operations
             iterator                    find(const key_type &k);
             const_iterator              find(const key_type &k) const;
@@ -123,7 +123,7 @@ namespace   ft
             allocator_type  _allocator;
             size_type       _size;
             size_type       _capacity;
-    }
+    };
 }
 
 #endif
