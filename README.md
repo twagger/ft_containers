@@ -2,6 +2,7 @@
 
 ## Building instructions for tests
 ```sh
+git submodule update --init --recursive
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
 make all
