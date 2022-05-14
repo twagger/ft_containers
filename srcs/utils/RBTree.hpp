@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/14 12:20:21 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/14 13:35:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ namespace   ft
         public:
             // Constructor and destructor
             RBNode(void)
-            : parent(NULL), left(LEAF), right(LEAF), color(BLACK) {}
+            : parent(NULL), left(LEAF), right(LEAF), color(RED) {}
+            RBNode(T key)
+            : parent(NULL), left(LEAF), right(LEAF), color(RED), key(key) {}
             RBNode(const RBNode &src) { *this = src }
             ~RBNode(void) {}
 
             // Operator overload
             RBNode  &operator=(const RBNode &rhs)
             {
-                this->value = rhs.value;
+                this->key = rhs.key;
                 this->color = rhs.color;
                 this->left = rhs.left;
                 this->right = rhs.right;
@@ -40,7 +42,7 @@ namespace   ft
             }
             
             // Member variables
-            T           value;
+            T           key;
             char        color;
             RBNode<T>  *left;
             RBNode<T>  *right;
@@ -142,16 +144,57 @@ namespace   ft
             RBTree  &operator=(const RBTree &rhs);
 
             // Member functions
-            // insert
-            // delete
-            // search
-            // rot left
-            // rot right
+            // Insert
+            void    insert(RBNode *node)
+            {
+                // Recursive insertion
+                this->recursive_insert(this->_root, node);
+
+                // Repair the tree to respect r&b rules
+                this->repair(node);
+                
+                // Save the root
+                this->_root = n;
+                while (this->_root->parent() != NULL)
+                    this->_root = this->_root->parent();
+            }
+
+            void    recursive_insert(RBNode *root, RBNode *node)
+            {
+                if (root != NULL && this->comp(node->key, root->key))
+                {
+                    if (root->left != LEAF)
+                    {
+                        this->recursive_insert(root->left, node);
+                        return;
+                    }
+                    else
+                        root->left = node;
+                }
+                else if (root != NULL)
+                {
+                    if (root->right != LEAF)
+                    {
+                        this->recursive_insert(root->right, node);
+                        return;
+                    }
+                    else
+                        root->right = node;
+                }
+                node->parent = root;
+            }
+
+            // Delete
+
+            // Search
+
+            // Repair
 
             // Iterators
 
         private:
-            RBNode<T>   *_root;            
+            RBNode<T>   *_root;
+            Compare     comp;            
     };
 }
 
