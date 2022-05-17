@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/17 13:38:07 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/17 15:15:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,12 @@ namespace   ft
                 int dir;
 
                 if (node->parent == NULL)
-                    // Node is root and red : OK
                     node->color = BLACK;
                 else if (node->parent->color == BLACK)
-                    // Parent is black, node is red : OK
                     return ;
                 else if (node->uncle()->color == RED)
                 {
-                    // Parent is red, uncle is red, node is red : KO
-                    // SWITCH COLORS
+                    // Parent is red, uncle is red, node is red : SWITCH COLORS
                     node->parent->color = BLACK;
                     node->uncle()->color = BLACK;
                     node->grandparent()->color = RED;
@@ -99,8 +96,7 @@ namespace   ft
                 }
                 else
                 {
-                    // Parent is red but uncle is black : KO
-                    // ROTATE
+                    // Parent is red but uncle is black : ROTATE
                     if (node->parent->childdir() ^ node->childdir())
                     {
                         node->parent->rotate(node->parent->chiddir());
@@ -110,24 +106,63 @@ namespace   ft
                 }
             }
 
-            // Delete
+            // Remove
             RBNode<T>   *remove(key_type const &key, \
                                 RBNode<T> *node = this->_root)
             {
                 RBNode<T>   *to_remove;
+                RBNode<T>   *replacement;
 
                 to_remove = this->search(key);
                 if (to_remove == NULL)
                     return (NULL);
-                // Check the number of sons
-                if (to_remove->left && to_remove->right)
+                // Check the number of childs
+                if (to_remove->child[LEFT] && to_remove->child[RIGHT])
                 {
-                    // We swith the value to delete with the closest element
-                    // on its left or right tree (predecessor or successor)
+                    // 2 childs : switch it with predecessor or successor
+                    replacement = to_remove->replacement();
+                    to_remove->swapkeys(replacement);
+                    to_remove = replacement;
                 }
-                
+                if (to_remove->color == RED || 
+                    (to_remove->child[LEFT] || to_remove->child[RIGHT]))
+                    return (this->remove_simple_case(to_remove));
+                return (this->remove_complex_case(to_remove));
             }
 
+            RBNode  *remove_simple_case(RBNode<T> *node)
+            {
+                // All cases but the one where the node is black with no child
+                if (node->color == RED)
+                {
+                    // Node is RED : remove it
+                    node->parent->child[node->childdir()] = NULL;
+                    return (node);
+                }
+                else // Node is BLACK
+                {
+                    // One child, it is necessary RED. It replaces the node
+                    if (node->child[LEFT])
+                    {
+                        node->swapkeys(node->child[LEFT]);
+                        node->color = RED;
+                        return (node->child[LEFT]);
+                    }
+                    else if (node->child[RIGHT])
+                    {
+                        node->swapkeys(node->child[RIGHT]);
+                        node->color = RED;
+                        return (node->child[RIGHT]);
+                    }
+                    return (node);
+                }
+            }
+
+            RBNode  *remove_complex_case(RBNode<T> *node)
+            {
+                // Specific case : node is BLACK with no child
+            }
+            
             // Search
             RBNode<T>   *search(key_type const &key, \
                                 RBNode<T> *node = this->_root) const
@@ -141,6 +176,8 @@ namespace   ft
                             node->child[this->comp(node->key, key)], key);
                 return (node);
             }
+
+            // Successor
 
             // Iterators
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/17 12:59:10 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:13:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,34 @@ namespace   ft
                 // this is attached as left of p
                 p->child[dir] = this;
                 this->parent = p;
+            }
+
+            // Replacement node (predecessor or successor from left or right
+            //  subtree). RED node is returned if possible
+            RBNode<T>  *replacement(void)
+            {
+                RBNode<T>   *left;
+                RBNode<T>   *right;
+                
+                left = this->child[LEFT];
+                right = this->child[RIGHT];
+                while (left->child[RIGHT])
+                    left = left->child[RIGHT];
+                while (right->child[LEFT])
+                    right = right->child[LEFT];
+                if (left->color == RED)
+                    return (left);
+                return (right);
+            }
+
+            // Swap keys
+            void    swapkeys(RBNode<T> *other)
+            {
+                T   tmp;
+                
+                tmp = this->key;
+                this->key = other->key;
+                other->key = tmp;
             }
     };
 }
