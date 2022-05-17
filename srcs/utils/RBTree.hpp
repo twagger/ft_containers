@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/17 10:13:04 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/17 13:38:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,31 +52,27 @@ namespace   ft
                 
                 // Save the root
                 this->_root = n;
-                while (this->_root->parent() != NULL)
-                    this->_root = this->_root->parent();
+                while (this->_root->parent != NULL)
+                    this->_root = this->_root->parent;
             }
 
             void    recursive_insert(RBNode<T> *root, RBNode<T> *node)
             {
-                if (root != NULL && this->comp(node->key, root->key))
+                int dir;
+
+                if (root != NULL)
                 {
-                    if (root->left != LEAF)
+                    if (this->comp(node->key, root->key))
+                        dir = LEFT;
+                    else
+                        dir = RIGHT;
+                    if (root->child[dir] != LEAF)
                     {
-                        this->recursive_insert(root->left, node);
+                        this->recursive_insert(root->child[dir], node);
                         return;
                     }
                     else
-                        root->left = node;
-                }
-                else if (root != NULL)
-                {
-                    if (root->right != LEAF)
-                    {
-                        this->recursive_insert(root->right, node);
-                        return;
-                    }
-                    else
-                        root->right = node;
+                        root->child[dir] = node;
                 }
                 node->parent = root;
             }
@@ -84,17 +80,19 @@ namespace   ft
             // Repair
             void    repair(RBNode<T> *node)
             {
-                if (node->parent() == NULL)
+                int dir;
+
+                if (node->parent == NULL)
                     // Node is root and red : OK
                     node->color = BLACK;
-                else if (node->parent()->color == BLACK)
+                else if (node->parent->color == BLACK)
                     // Parent is black, node is red : OK
                     return ;
                 else if (node->uncle()->color == RED)
                 {
                     // Parent is red, uncle is red, node is red : KO
                     // SWITCH COLORS
-                    node->parent()->color = BLACK;
+                    node->parent->color = BLACK;
                     node->uncle()->color = BLACK;
                     node->grandparent()->color = RED;
                     repair(node->grandparent());
@@ -103,20 +101,12 @@ namespace   ft
                 {
                     // Parent is red but uncle is black : KO
                     // ROTATE
-                    if (node == node->grandparent()->left->right)
+                    if (node->parent->childdir() ^ node->childdir())
                     {
-                        node->parent()->rot_left();
-                        node = node->left;
+                        node->parent->rotate(node->parent->chiddir());
+                        node = node->child[node->parent->childdir()];
                     }
-                    else if (node == node->grandparent()->right->left)
-                    {
-                        node->parent()->rot_right();
-                        node = node->right;
-                    }
-                    if (node == node->parent()->left)
-                        node->grandparent()->rot_right();
-                    else
-                        node->grandparent()->rot_left;
+                    node->grandparent()->rotate(1 - node->childdir());
                 }
             }
 
@@ -133,7 +123,7 @@ namespace   ft
                 if (to_remove->left && to_remove->right)
                 {
                     // We swith the value to delete with the closest element
-                    // on its left or right tree with at most one non null child
+                    // on its left or right tree (predecessor or successor)
                 }
                 
             }
@@ -147,12 +137,8 @@ namespace   ft
                 if (node->key == key)
                     return (node);
                 else
-                {
-                    if (this->comp(node->key, key))
-                        node = this->search(node->right, key);
-                    else
-                        node = this->search(node->left, key);
-                }
+                    node = this->search(\
+                            node->child[this->comp(node->key, key)], key);
                 return (node);
             }
 
