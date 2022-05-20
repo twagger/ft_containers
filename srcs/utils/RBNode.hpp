@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/20 13:24:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:17:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,23 +99,26 @@ namespace   ft
             }
 
             // Rotations
-            void    rotate(int dir)
+            void    rotate(int dir) // this is bugged
             {
-                RBNode<T>  *p = this->child[1 - dir];
+                RBNode<T>  *x = this;
+                RBNode<T>  *y = x->child[1 - dir];
                 
                 // Right son of root (this) becomes left son of p
-                this->child[1 - dir] = p->child[dir];
-                if (p->child[dir] != NULL)
-                    p->child[dir]->parent = this;          
-                p->parent = this->parent;
+                x->child[1 - dir] = y->child[dir];
+                if (y->child[dir] != NULL)
+                    y->child[dir]->parent = this;          
+                y->parent = x->parent;
                 // We replace this by p in the tree
-                if (this == this->parent->child[dir])
-                    this->parent->child[dir] = p;
-                else if (this == this->parent->child[1 - dir])
-                    this->parent->child[1 - dir] = p;
+                if (x->parent == NULL)
+                    x->parent = y;
+                else if (x == x->parent->child[dir])
+                    x->parent->child[dir] = y;
+                else
+                    x->parent->child[1 - dir] = y;
                 // this is attached as child of p
-                p->child[dir] = this;
-                this->parent = p;
+                y->child[dir] = x;
+                x->parent = y;
             }
 
             // Replacement node (predecessor or successor from left or right

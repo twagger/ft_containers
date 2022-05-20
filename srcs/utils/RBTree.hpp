@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/20 13:24:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:00:43g by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,15 @@ namespace   ft
             // Repair
             void    repair(RBNode<T> *node)
             {
-                int dir;
-
+                int         dir;
+                RBNode<T>   *p;
+                RBNode<T>   *g;
+                
                 if (node->parent == NULL)
                     node->color = BLACK;
                 else if (node->parent->color == BLACK)
                     return ;
-                else if (node->uncle()->color == RED)
+                else if (node->uncle() && node->uncle()->color == RED)
                 {
                     // Parent is red, uncle is red, node is red : SWITCH COLORS
                     node->parent->color = BLACK;
@@ -108,7 +110,11 @@ namespace   ft
                         node->parent->rotate(node->parent->childdir());
                         node = node->child[node->parent->childdir()];
                     }
-                    node->grandparent()->rotate(1 - node->childdir());
+                    p = node->parent;
+                    g = node->grandparent();
+                    g->rotate(1 - node->childdir());
+                    p->color = BLACK;
+                    g->color = RED;
                 }
             }
 

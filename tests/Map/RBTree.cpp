@@ -35,4 +35,9 @@ TEST(MapTest_RBTree, treeIsAutoBalanced) {
     my_tree.insert(22);
     my_tree.insert(13);
     EXPECT_TRUE(my_tree.get_root()->key == 13);
+    EXPECT_TRUE(my_tree.get_root()->color == BLACK);
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->key == 17);
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->color == RED);
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->key == 8);
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->color == RED);
 }
