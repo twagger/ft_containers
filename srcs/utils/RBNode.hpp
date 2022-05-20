@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/17 14:13:26 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/20 13:24:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # define LEFT 0
 # define RIGHT 1
 # define LEAF NULL
+# include <exception>
+
 
 namespace   ft
 {
@@ -28,11 +30,10 @@ namespace   ft
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             RBNode(void)
-            : parent(NULL), child[LEFT](LEAF), child[RIGHT](LEAF), color(RED) {}
+            : parent(NULL), child{LEAF, LEAF}, color(RED) {}
             RBNode(T key)
-            : parent(NULL), child[LEFT](LEAF), child[RIGHT](LEAF), color(RED), \
-                key(key) {}
-            RBNode(const RBNode &src) { *this = src }
+            : parent(NULL), child{LEAF, LEAF}, color(RED), key(key) {}
+            RBNode(const RBNode &src) { *this = src; }
             ~RBNode(void) {}
 
             /* ************************************************************** */
@@ -64,7 +65,10 @@ namespace   ft
             {
                 if (this->parent && this == this->parent->child[LEFT])
                     return (LEFT);
-                return (RIGHT);
+                else if (this->parent && this == this->parent->child[RIGHT])
+                    return (RIGHT);
+                else
+                    throw std::runtime_error("the node is not a child of parent");
             }
             
             RBNode<T>  *brother(void) const
@@ -72,7 +76,7 @@ namespace   ft
                 RBNode<T>   *p = this->parent;
 
                 if (p == NULL)
-                    return (NULL)
+                    return (NULL);
                 return p->child[1 - this->childdir()];
             }
 
@@ -104,12 +108,12 @@ namespace   ft
                 if (p->child[dir] != NULL)
                     p->child[dir]->parent = this;          
                 p->parent = this->parent;
-                // If this is the tree root, p becomes root
-                // else, we replace this by p in the tree
-                if (this->parent == NULL)
-                    this = p;
-                this->parent->child[this->childdir()] = p;
-                // this is attached as left of p
+                // We replace this by p in the tree
+                if (this == this->parent->child[dir])
+                    this->parent->child[dir] = p;
+                else if (this == this->parent->child[1 - dir])
+                    this->parent->child[1 - dir] = p;
+                // this is attached as child of p
                 p->child[dir] = this;
                 this->parent = p;
             }

@@ -6,24 +6,25 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/17 15:15:20 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/20 13:24:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # include "RBNode.hpp"
+# include <exception>
 
 namespace   ft
 {
-    template< class T, class Compare >
+    template< class T, class Compare = std::less<T> >
     class RBTree
     {
         public:
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
-            RBTree(void) : root(NULL), comp(std::less<T>) {}
+            RBTree(void) : _root(NULL), _comp(std::less<T>()) {}
             RBTree(const RBTree &src);
             ~RBTree(void) {}
             
@@ -41,9 +42,14 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
+            // Access
+            RBNode<T>   *get_root(void) const { return (this->_root); }
+            
             // Insert
-            void    insert(RBNode<T> *node)
+            void    insert(key_type key)
             {
+                RBNode<T>   *node = new RBNode<T>(key);
+
                 // Recursive insertion
                 this->recursive_insert(this->_root, node);
 
@@ -51,7 +57,7 @@ namespace   ft
                 this->repair(node);
                 
                 // Save the root
-                this->_root = n;
+                this->_root = node;
                 while (this->_root->parent != NULL)
                     this->_root = this->_root->parent;
             }
@@ -62,7 +68,7 @@ namespace   ft
 
                 if (root != NULL)
                 {
-                    if (this->comp(node->key, root->key))
+                    if (this->_comp(node->key, root->key))
                         dir = LEFT;
                     else
                         dir = RIGHT;
@@ -99,7 +105,7 @@ namespace   ft
                     // Parent is red but uncle is black : ROTATE
                     if (node->parent->childdir() ^ node->childdir())
                     {
-                        node->parent->rotate(node->parent->chiddir());
+                        node->parent->rotate(node->parent->childdir());
                         node = node->child[node->parent->childdir()];
                     }
                     node->grandparent()->rotate(1 - node->childdir());
@@ -107,8 +113,7 @@ namespace   ft
             }
 
             // Remove
-            RBNode<T>   *remove(key_type const &key, \
-                                RBNode<T> *node = this->_root)
+            RBNode<T>   *remove(key_type const &key)
             {
                 RBNode<T>   *to_remove;
                 RBNode<T>   *replacement;
@@ -130,9 +135,10 @@ namespace   ft
                 return (this->remove_complex_case(to_remove));
             }
 
-            RBNode  *remove_simple_case(RBNode<T> *node)
+            RBNode<T>  *remove_simple_case(RBNode<T> *node)
             {
                 // All cases but the one where the node is black with no child
+                // With the simple cases we don't need to rebalance the tree
                 if (node->color == RED)
                 {
                     // Node is RED : remove it
@@ -158,32 +164,121 @@ namespace   ft
                 }
             }
 
-            RBNode  *remove_complex_case(RBNode<T> *node)
+            RBNode<T>  *remove_complex_case(RBNode<T> *node)
             {
                 // Specific case : node is BLACK with no child
-            }
-            
-            // Search
-            RBNode<T>   *search(key_type const &key, \
-                                RBNode<T> *node = this->_root) const
-            {
-                if (node == NULL)
+                RBNode<T>   *p = node->parent;
+                RBNode<T>   *b; // brother
+                RBNode<T>   *c; // close nephew
+                RBNode<T>   *d; // distant nephew
+                int         dir;
+
+                // 1. Replace node by NULL in its parent : 
+                //  the tree is now unbalanced !
+                dir = node->childdir();
+                p->child[dir] = NULL;
+                 
+                // 2. Rebalancing loop
+                while (p != NULL)
+                {
+                    try { dir = node->childdir(); }
+                    catch (const std::runtime_error &e) {} // first loop only
+                    b = p->child[1 - dir];
+                    d = b->child[1 - dir];
+                    c = b->child[dir];
+                    if (b->color == RED)
+                        this->remove_case_3(&p, &b, &c, &d, dir);
+                    else if (d != NULL && d->color == RED)
+                        this->remove_case_6(&p, &b, &c, &d, dir);
+                    else if (c != NULL && c->color == RED)
+                        this->remove_case_5(&p, &b, &c, &d, dir);
+                    else if (p->color == RED)
+                        return (NULL);
+                    else // remove_case_1
+                    {
+                        b->color = RED;
+                        node = p;
+                        p = node->parent;
+                        continue;
+                    }
                     return (NULL);
-                if (node->key == key)
-                    return (node);
-                else
-                    node = this->search(\
-                            node->child[this->comp(node->key, key)], key);
-                return (node);
+                }
+                return (NULL); // remove_case_2
             }
 
-            // Successor
+            void    remove_case_3(RBNode<T> **p, RBNode<T> **b, \
+                                  RBNode<T> **c, RBNode<T> **d, int dir)
+            {
+                // rotate
+                (*p)->rotate(dir);
+                // r&b rules repair
+                (*p)->color = RED;
+                (*b)->color = BLACK;
+                // update genealogy
+                *b = *c;
+                *d = (*b)->child[1 - dir];
+                if (*d != NULL && (*d)->color == RED)
+                {
+                    this->remove_case_6(*p, *b, *d, dir);
+                    return;
+                }
+                *c = (*b)->child[dir];
+                if (*c != NULL && (*c)->color == RED)
+                {
+                    this->remove_case_5(p, b, c, d, dir);
+                    return;
+                }
+                this->remove_case_4(*p, *b);
+            }
+
+            void    remove_case_4(RBNode<T> *p, RBNode<T> *b)
+            {
+                p->color = RED;
+                b->color = BLACK;
+            }
+
+            void    remove_case_5(RBNode<T> **p, RBNode<T> **b, \
+                                  RBNode<T> **c, RBNode<T> **d, int dir)
+            {
+                (*b)->rotate(1 - dir);
+                (*b)->color = RED;
+                (*c)->color = BLACK;
+                *d = *b;
+                *b = *c;
+                this->remove_case_6(*p, *b, *d, dir);
+            }
+            
+            void    remove_case_6(RBNode<T> *p, RBNode<T> *b, \
+                                  RBNode<T> *d, int dir)
+            {
+                p->rotate(dir);
+                b->color = p->color;
+                p->color = BLACK;
+                d->color = BLACK;
+            }
+
+            // Search
+            RBNode<T>   *search(key_type const &key) const
+            {
+                RBNode<T>   *ret = NULL;
+                int         comp_res;
+
+                if (this->key == key)
+                    return (this);
+                else 
+                {
+                    comp_res = this->_comp(this->key, key);
+                    if (this->child[comp_res])
+                        ret = this->child[comp_res].search(key);
+                }
+                return (ret);
+            }
 
             // Iterators
 
         private:
             RBNode<T>   *_root;
-            Compare     comp;            
+            Compare     _comp;            
     };
 }
 
