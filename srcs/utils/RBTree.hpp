@@ -55,7 +55,7 @@ namespace   ft
 
                 // Repair the tree to respect r&b rules
                 this->repair(node);
-                
+
                 // Save the root
                 this->_root = node;
                 while (this->_root->parent != NULL)
@@ -105,10 +105,11 @@ namespace   ft
                 else
                 {
                     // Parent is red but uncle is black : ROTATE
-                    if (node->parent->childdir() ^ node->childdir())
+                    dir = node->parent->childdir();
+                    if (dir ^ node->childdir())
                     {
-                        node->parent->rotate(node->parent->childdir());
-                        node = node->child[node->parent->childdir()];
+                        node->parent->rotate(dir);
+                        node = node->child[dir];
                     }
                     p = node->parent;
                     g = node->grandparent();

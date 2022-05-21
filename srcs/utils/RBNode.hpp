@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/20 14:17:57 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/21 08:11:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace   ft
                 else if (this->parent && this == this->parent->child[RIGHT])
                     return (RIGHT);
                 else
-                    throw std::runtime_error("the node is not a child of parent");
+                    throw std::runtime_error("the node is orphan");
             }
             
             RBNode<T>  *brother(void) const
