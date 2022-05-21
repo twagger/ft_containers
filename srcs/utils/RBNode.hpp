@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/21 08:11:58 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/21 12:19:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ namespace   ft
                     return (left);
                 return (right);
             }
-
+            
             // Swap keys
             void    swapkeys(RBNode<T> *other)
             {

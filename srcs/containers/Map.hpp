@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/14 11:18:38 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/21 11:56:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
 # include <memory>
-# include "../iterators/iterator.hpp"
+# include "../iterators/tree_iterator.hpp"
 # include "../utils/pair.hpp"
 # include "../utils/RBTree.hpp"
 
@@ -45,10 +45,11 @@ namespace   ft
             typedef typename allocator_type::pointer            pointer;
             typedef typename allocator_type::const_pointer      const_pointer;
             // Iterators
-            typedef ft::iterator<T>                             iterator;
-            typedef ft::const_iterator<T>                       const_iterator;
-            typedef ft::reverse_iterator<iterator>             reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+            typedef ft::t_iterator<T>                           iterator;
+            typedef ft::t_const_iterator<T>                     const_iterator;
+            typedef ft::t_reverse_iterator<iterator>           reverse_iterator;
+            typedef ft::t_reverse_iterator<const_iterator> \
+                                                        const_reverse_iterator;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */

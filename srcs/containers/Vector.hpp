@@ -14,7 +14,7 @@
 # define VECTOR_HPP
 # include <memory>
 # include <cstddef>
-# include "../iterators/iterator.hpp"
+# include "../iterators/array_iterator.hpp"
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
 # include "../utils/equal.hpp"
@@ -70,7 +70,7 @@ namespace   ft
             /*  OPERATOR OVERLOADS                                            */
             /* ************************************************************** */
             value_type  &operator[](size_type n);
-            vector      &operator=(const vector& x);
+            vector      &operator=(const vector &x);
 
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */

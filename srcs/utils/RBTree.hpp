@@ -22,17 +22,18 @@ namespace   ft
     {
         public:
             /* ************************************************************** */
-            /*  CONSTRUCTORS & DESTRUCTOR                                     */
-            /* ************************************************************** */
-            RBTree(void) : _root(NULL), _comp(std::less<T>()) {}
-            RBTree(const RBTree &src);
-            ~RBTree(void) {}
-            
-            /* ************************************************************** */
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
             typedef T   key_type;
+
+            /* ************************************************************** */
+            /*  CONSTRUCTORS & DESTRUCTOR                                     */
+            /* ************************************************************** */
+            RBTree(void) : _root(NULL), _comp(Compare()) {}
+            RBTree(const RBTree &src);
+            ~RBTree(void) {}
+            
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
@@ -44,6 +45,72 @@ namespace   ft
             /* ************************************************************** */
             // Access
             RBNode<T>   *get_root(void) const { return (this->_root); }
+
+            // Predecessor
+            RBNode<T>   *predecessor(RBNode<T> *node)
+            {
+                RBNode<T>   *found;
+
+                if (node->child[RIGHT])
+                {
+                    found = node->child[RIGHT];
+                    while (found->child[LEFT])
+                        found = found->child[LEFT];
+                    if (this->_comp(found->key, node->key))
+                        return (found);
+                }
+                if (node->child[LEFT])
+                {
+                    found = node->child[LEFT];
+                    while (found->child[RIGHT])
+                        found = found->child[RIGHT];
+                    if (this->_comp(found->key, node->key))
+                        return (found);
+                }
+                if (node->parent)
+                {
+                    found = node;
+                    while (found = found->parent)
+                    {
+                        if (this->_comp(found->key, node->key))
+                            return (found);
+                    }
+                }
+                return (NULL);
+            }
+
+            // Successor
+            RBNode<T>   *successor(RBNode<T> *node)
+            {
+                RBNode<T>   *found;
+
+                if (node->child[RIGHT])
+                {
+                    found = node->child[RIGHT];
+                    while (found->child[LEFT])
+                        found = found->child[LEFT];
+                    if (this->_comp(node->key, found->key))
+                        return (found);
+                }
+                if (node->child[LEFT])
+                {
+                    found = node->child[LEFT];
+                    while (found->child[RIGHT])
+                        found = found->child[RIGHT];
+                    if (this->_comp(node->key, found->key))
+                        return (found);
+                }
+                if (node->parent)
+                {
+                    found = node;
+                    while (found = found->parent)
+                    {
+                        if (this->_comp(node->key, found->key))
+                            return (found);
+                    }
+                }
+                return (NULL);
+            }
             
             // Insert
             void    insert(key_type key)
@@ -125,7 +192,7 @@ namespace   ft
                 RBNode<T>   *to_remove;
                 RBNode<T>   *replacement;
 
-                to_remove = this->search(key);
+                to_remove = this->search(this->_root, key);
                 if (to_remove == NULL)
                     return (NULL);
                 // Check the number of childs
@@ -196,11 +263,11 @@ namespace   ft
                     if (b->color == RED)
                         this->remove_case_3(&p, &b, &c, &d, dir);
                     else if (d != NULL && d->color == RED)
-                        this->remove_case_6(&p, &b, &c, &d, dir);
+                        this->remove_case_6(p, b, d, dir);
                     else if (c != NULL && c->color == RED)
                         this->remove_case_5(&p, &b, &c, &d, dir);
                     else if (p->color == RED)
-                        return (NULL);
+                        this->remove_case_4(p, b);
                     else // remove_case_1
                     {
                         b->color = RED;
@@ -240,8 +307,8 @@ namespace   ft
 
             void    remove_case_4(RBNode<T> *p, RBNode<T> *b)
             {
-                p->color = RED;
-                b->color = BLACK;
+                p->color = BLACK;
+                b->color = RED;
             }
 
             void    remove_case_5(RBNode<T> **p, RBNode<T> **b, \
@@ -265,23 +332,24 @@ namespace   ft
             }
 
             // Search
-            RBNode<T>   *search(key_type const &key) const
+            RBNode<T>   *search(RBNode<T> *node, key_type const &key) const
             {
                 RBNode<T>   *ret = NULL;
                 int         comp_res;
 
-                if (this->key == key)
-                    return (this);
+                if (node->key == key)
+                    return (node);
                 else 
                 {
-                    comp_res = this->_comp(this->key, key);
-                    if (this->child[comp_res])
-                        ret = this->child[comp_res].search(key);
+                    comp_res = this->_comp(node->key, key);
+                    if (node->child[comp_res])
+                        ret = this->search(node->child[comp_res], key);
                 }
                 return (ret);
             }
 
             // Iterators
+            
 
         private:
             RBNode<T>   *_root;

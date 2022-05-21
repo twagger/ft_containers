@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   iterator.hpp                                       :+:      :+:    :+:   */
+/*   array_iterator.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/14 09:44:45 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/21 13:01:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ITERATOR_HPP
-# define ITERATOR_HPP
+#ifndef ARRAY_ITERATOR_HPP
+# define ARRAY_ITERATOR_HPP
 # include "iterator_traits.hpp"
 
 namespace   ft
 {
     template < class T >
-    class iterator : public std::iterator<std::random_access_iterator_tag, T> 
+    class iterator 
     {
         public:
             // member types
@@ -39,6 +39,9 @@ namespace   ft
             ~iterator(void) {}
 
             // operators overload  
+            iterator        &operator=(iterator const &rhs)
+            { this->_p = rhs._p; return *this;}
+
             iterator        &operator++(void) {++this->_p;return *this;}
             iterator        operator++(int)
             { iterator tmp(*this); ++this->_p; return tmp; }
@@ -84,8 +87,7 @@ namespace   ft
     };
 
     template < class T >
-    class const_iterator : public std::iterator<std::random_access_iterator_tag,
-    T> 
+    class const_iterator
     {
         public:
             // member types
