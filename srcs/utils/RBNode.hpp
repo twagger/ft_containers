@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/21 12:19:19 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/22 10:02:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,43 @@
 # define RIGHT 1
 # define LEAF NULL
 # include <exception>
-
+# include "pair.hpp"
 
 namespace   ft
 {
-    template< class T >
+    template< class Key, class T >
     class RBNode
     {
         public:
+            
+            /* ************************************************************** */
+            /*  MEMBER TYPES & ALIASES                                        */
+            /* ************************************************************** */
+            // Type
+            typedef Key                                 key_type;
+            typedef T                                   value_type;
+            typedef pair<const key_type, value_type>    pair_type;
+            // Pointer & Ref
+            typedef RBNode<Key, T>                      *NodePtr;
+            typedef RBNode<Key, T>                      &NodeRef;
+
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             RBNode(void)
             : parent(NULL), child{LEAF, LEAF}, color(RED) {}
-            RBNode(T key)
-            : parent(NULL), child{LEAF, LEAF}, color(RED), key(key) {}
-            RBNode(const RBNode &src) { *this = src; }
+            RBNode(key_type key, value_type value)
+            : parent(NULL), child{LEAF, LEAF}, color(RED), \
+              pair(ft::pair<key_type, value_type>(key, value)){}
+            RBNode(const NodeRef src) { *this = src; }
             ~RBNode(void) {}
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            RBNode  &operator=(const RBNode &rhs)
+            NodeRef operator=(const NodeRef rhs)
             {
-                this->key = rhs.key;
+                this->pair = rhs.pair;
                 this->color = rhs.color;
                 this->child[LEFT] = rhs.child[LEFT];
                 this->child[RIGHT] = rhs.child[RIGHT];
@@ -52,10 +65,10 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER VARIABLES                                              */
             /* ************************************************************** */
-            T           key;
-            char        color;
-            RBNode<T>   *child[2];
-            RBNode<T>   *parent;
+            pair_type       pair;
+            char            color;
+            NodePtr         child[2];
+            NodePtr         parent;
             
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
@@ -71,27 +84,27 @@ namespace   ft
                     throw std::runtime_error("the node is orphan");
             }
             
-            RBNode<T>  *brother(void) const
+            NodePtr brother(void) const
             {
-                RBNode<T>   *p = this->parent;
+                NodePtr p = this->parent;
 
                 if (p == NULL)
                     return (NULL);
                 return p->child[1 - this->childdir()];
             }
 
-            RBNode<T>  *grandparent(void) const
+            NodePtr grandparent(void) const
             {
-                RBNode<T>  *p = this->parent;
+                NodePtr p = this->parent;
 
                 if (p == NULL)
                     return (NULL);
                 return (p->parent);
             }
             
-            RBNode<T>  *uncle(void) const
+            NodePtr uncle(void) const
             {
-                RBNode<T>  *p = this->parent;
+                NodePtr p = this->parent;
                 
                 if (p == NULL)
                     return (NULL);
@@ -101,8 +114,8 @@ namespace   ft
             // Rotations
             void    rotate(int dir) // this is bugged
             {
-                RBNode<T>  *x = this;
-                RBNode<T>  *y = x->child[1 - dir];
+                NodePtr x = this;
+                NodePtr y = x->child[1 - dir];
                 
                 // Right son of root (this) becomes left son of p
                 x->child[1 - dir] = y->child[dir];
@@ -123,10 +136,10 @@ namespace   ft
 
             // Replacement node (predecessor or successor from left or right
             //  subtree). RED node is returned if possible
-            RBNode<T>  *replacement(void)
+            NodePtr replacement(void)
             {
-                RBNode<T>   *left;
-                RBNode<T>   *right;
+                NodePtr left;
+                NodePtr right;
                 
                 left = this->child[LEFT];
                 right = this->child[RIGHT];
@@ -139,14 +152,14 @@ namespace   ft
                 return (right);
             }
             
-            // Swap keys
-            void    swapkeys(RBNode<T> *other)
+            // Swap pairs
+            void    swapkeys(NodePtr other)
             {
-                T   tmp;
+                pair_type   tmp;
                 
-                tmp = this->key;
-                this->key = other->key;
-                other->key = tmp;
+                tmp = this->pair;
+                this->pair = other->pair;
+                other->pair = tmp;
             }
     };
 }
