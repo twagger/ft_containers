@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/24 10:35:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 11:14:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "pair.hpp"
 
 enum { RED, BLACK };
-enum { RIGHT, LEFT };
+enum { LEFT, RIGHT };
 
 namespace   ft
 {

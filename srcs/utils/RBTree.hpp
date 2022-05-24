@@ -54,6 +54,53 @@ namespace   ft
             /* ************************************************************** */
             // Access
             NodePtr get_root(void) const { return (this->_root); }
+            NodePtr min(void) const
+            {
+                NodePtr left = this->_root->child[LEFT];
+                NodePtr right = this->_root->child[RIGHT];
+
+                if (!left && !right)
+                    return (_root);
+                if (left && this->_comp(left->comb.first, \
+                                        this->_root->comb.first))
+                {
+                    while (left->child[LEFT])
+                        left = left->child[LEFT];
+                    return (left);
+                }
+                if (right && this->_comp(right->comb.first, \
+                                         this->_root->comb.first))
+                {
+                    while (right->child[RIGHT])
+                        right = right->child[RIGHT];
+                    return (right);
+                }
+                return (NULL);
+            }
+
+            NodePtr max(void) const
+            {
+                NodePtr left = this->_root->child[LEFT];
+                NodePtr right = this->_root->child[RIGHT];
+
+                if (!left && !right)
+                    return (_root);
+                if (left && this->_comp(this->_root->comb.first, \
+                                        left->comb.first))
+                {
+                    while (left->child[LEFT])
+                        left = left->child[LEFT];
+                    return (left);
+                }
+                if (right && this->_comp(this->_root->comb.first, \
+                                         right->comb.first))
+                {
+                    while (right->child[RIGHT])
+                        right = right->child[RIGHT];
+                    return (right);
+                }
+                return (NULL);
+            }
 
             // Insert
             NodePtr insert(comb_type comb)
@@ -293,6 +340,8 @@ namespace   ft
                 NodePtr ret = NULL;
                 int     comp_res;
 
+                if (!node)
+                    return (NULL);
                 if (node->comb.first == key)
                     return (node);
                 else 

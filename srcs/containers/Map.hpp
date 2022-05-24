@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/24 10:49:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 11:27:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ namespace   ft
             // // Copy
             // map(const map &x);
             // Destructor
-            ~map(void);
+            ~map(void) {};
 
             /* ************************************************************** */
             /*  OPERATOR OVERLOADS                                            */
@@ -76,8 +76,9 @@ namespace   ft
             /* ************************************************************** */
             // Iterators
             iterator                begin(void)
-            { return iterator(this->_tree->get_root()); }
-            // iterator                end(void) {}
+            { return iterator(this->_tree->min()); }
+            iterator                end(void)
+            { return iterator(this->_tree->max()); }
             // const_iterator          begin(void) const;
             // const_iterator          end(void) const;
             // reverse_iterator        rbegin(void);
