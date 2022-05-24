@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/24 13:45:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 14:07:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ namespace   ft
             }
             
             // Predecessor
-            NodePtr predecessor(void)
+            NodePtr predecessor(void) // Should be reviewed to optimize it
             {
                 NodePtr found;
 
@@ -180,7 +180,7 @@ namespace   ft
                     if (this->_comp(found->comb.first, this->comb.first))
                         return (found);
                 }
-                if (this->parent)
+                if (this->parent) // optimization : browse to parent until we browse from right or left (depending on compare)
                 {
                     found = this;
                     while (found = found->parent)

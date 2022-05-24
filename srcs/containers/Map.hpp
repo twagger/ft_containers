@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/24 13:15:24 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 14:20:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ namespace   ft
             iterator                begin(void)
             { return iterator(this->_tree->min()); }
             iterator                end(void)
-            { return iterator(NULL); }
+            { return iterator(NULL); } // Lets use begin and end on tree to work on that : https://stackoverflow.com/questions/47982227/decrementing-iterator-from-end-iterator-in-binary-search-tree
             const_iterator          begin(void) const
             { return const_iterator(this->_tree->min()); }
             const_iterator          end(void) const

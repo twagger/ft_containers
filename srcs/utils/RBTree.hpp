@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/20 14:00:43g by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 14:18:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,8 @@ namespace   ft
 
         private:
             NodePtr _root;
+            NodePtr _min; // begin node
+            NodePtr _max; // pre-end node
             Compare _comp;            
     };
 }
