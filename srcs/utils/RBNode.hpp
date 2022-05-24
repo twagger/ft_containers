@@ -6,23 +6,21 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/22 10:02:11 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 10:35:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBNODE_HPP
 # define RBNODE_HPP
-# define RED 0
-# define BLACK 1
-# define LEFT 0
-# define RIGHT 1
 # define LEAF NULL
-# include <exception>
 # include "pair.hpp"
+
+enum { RED, BLACK };
+enum { RIGHT, LEFT };
 
 namespace   ft
 {
-    template< class Key, class T >
+    template< class Key, class T, class Compare >
     class RBNode
     {
         public:
@@ -31,21 +29,25 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef Key                                 key_type;
-            typedef T                                   value_type;
-            typedef pair<const key_type, value_type>    pair_type;
+            typedef Key                         key_type;
+            typedef T                           value_type;
+            typedef pair<key_type, value_type>  comb_type;
+            // Compare
+            typedef Compare                     key_compare;
             // Pointer & Ref
-            typedef RBNode<Key, T>                      *NodePtr;
-            typedef RBNode<Key, T>                      &NodeRef;
+            typedef RBNode<Key, T, Compare>     *NodePtr;
+            typedef RBNode<Key, T, Compare>     &NodeRef;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             RBNode(void)
-            : parent(NULL), child{LEAF, LEAF}, color(RED) {}
-            RBNode(key_type key, value_type value)
+            : parent(NULL), child{LEAF, LEAF}, color(RED), _comp(key_compare())
+            {}
+            RBNode(key_type key, value_type value, \
+                   const key_compare &_comp = key_compare())
             : parent(NULL), child{LEAF, LEAF}, color(RED), \
-              pair(ft::pair<key_type, value_type>(key, value)){}
+              comb(ft::pair<key_type, value_type>(key, value)){}
             RBNode(const NodeRef src) { *this = src; }
             ~RBNode(void) {}
 
@@ -54,7 +56,7 @@ namespace   ft
             /* ************************************************************** */
             NodeRef operator=(const NodeRef rhs)
             {
-                this->pair = rhs.pair;
+                this->comb = rhs.comb;
                 this->color = rhs.color;
                 this->child[LEFT] = rhs.child[LEFT];
                 this->child[RIGHT] = rhs.child[RIGHT];
@@ -65,7 +67,7 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER VARIABLES                                              */
             /* ************************************************************** */
-            pair_type       pair;
+            comb_type       comb;
             char            color;
             NodePtr         child[2];
             NodePtr         parent;
@@ -152,15 +154,83 @@ namespace   ft
                 return (right);
             }
             
+            // Predecessor
+            NodePtr predecessor(void)
+            {
+                NodePtr found;
+
+                if (this->child[RIGHT])
+                {
+                    found = this->child[RIGHT];
+                    while (found->child[LEFT])
+                        found = found->child[LEFT];
+                    if (this->_comp(found->comb.first, this->comb.first))
+                        return (found);
+                }
+                if (this->child[LEFT])
+                {
+                    found = this->child[LEFT];
+                    while (found->child[RIGHT])
+                        found = found->child[RIGHT];
+                    if (this->_comp(found->comb.first, this->comb.first))
+                        return (found);
+                }
+                if (this->parent)
+                {
+                    found = this;
+                    while (found = found->parent)
+                    {
+                        if (this->_comp(found->comb.first, this->comb.first))
+                            return (found);
+                    }
+                }
+                return (NULL);
+            }
+
+            // Successor
+            NodePtr successor(void)
+            {
+                NodePtr found;
+
+                if (this->child[RIGHT])
+                {
+                    found = this->child[RIGHT];
+                    while (found->child[LEFT])
+                        found = found->child[LEFT];
+                    if (this->_comp(this->comb.first, found->comb.first))
+                        return (found);
+                }
+                if (this->child[LEFT])
+                {
+                    found = this->child[LEFT];
+                    while (found->child[RIGHT])
+                        found = found->child[RIGHT];
+                    if (this->_comp(this->comb.first, found->comb.first))
+                        return (found);
+                }
+                if (this->parent)
+                {
+                    found = this;
+                    while (found = found->parent)
+                    {
+                        if (this->_comp(this->comb.first, found->comb.first))
+                            return (found);
+                    }
+                }
+                return (NULL);
+            }
+           
             // Swap pairs
             void    swapkeys(NodePtr other)
             {
-                pair_type   tmp;
+                comb_type   tmp(this->comb.first, this->comb.second);
                 
-                tmp = this->pair;
-                this->pair = other->pair;
-                other->pair = tmp;
+                this->comb = other->comb;
+                other->comb = tmp;
             }
+            
+        private:
+            key_compare _comp;
     };
 }
 

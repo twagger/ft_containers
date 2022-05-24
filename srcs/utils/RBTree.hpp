@@ -27,12 +27,12 @@ namespace   ft
             // Type
             typedef Key                                 key_type;
             typedef T                                   value_type;
-            typedef pair<const key_type, value_type>    pair_type;
+            typedef pair<key_type, value_type>          comb_type;
             // Compare
             typedef Compare                             key_compare;
             // Pointer & Ref
-            typedef RBNode<Key, T>                      *NodePtr;
-            typedef RBNode<Key, T>                      &NodeRef;
+            typedef RBNode<Key, T, Compare>             *NodePtr;
+            typedef RBNode<Key, T, Compare>             &NodeRef;
             typedef RBTree<Key, T, Compare>             *TreePtr;
             typedef RBTree<Key, T, Compare>             &TreeRef;
 
@@ -55,79 +55,22 @@ namespace   ft
             // Access
             NodePtr get_root(void) const { return (this->_root); }
 
-            // Predecessor
-            NodePtr predecessor(NodePtr node)
-            {
-                NodePtr found;
-
-                if (node->child[RIGHT])
-                {
-                    found = node->child[RIGHT];
-                    while (found->child[LEFT])
-                        found = found->child[LEFT];
-                    if (this->_comp(found->key, node->key))
-                        return (found);
-                }
-                if (node->child[LEFT])
-                {
-                    found = node->child[LEFT];
-                    while (found->child[RIGHT])
-                        found = found->child[RIGHT];
-                    if (this->_comp(found->key, node->key))
-                        return (found);
-                }
-                if (node->parent)
-                {
-                    found = node;
-                    while (found = found->parent)
-                    {
-                        if (this->_comp(found->key, node->key))
-                            return (found);
-                    }
-                }
-                return (NULL);
-            }
-
-            // Successor
-            NodePtr successor(NodePtr node)
-            {
-                NodePtr found;
-
-                if (node->child[RIGHT])
-                {
-                    found = node->child[RIGHT];
-                    while (found->child[LEFT])
-                        found = found->child[LEFT];
-                    if (this->_comp(node->key, found->key))
-                        return (found);
-                }
-                if (node->child[LEFT])
-                {
-                    found = node->child[LEFT];
-                    while (found->child[RIGHT])
-                        found = found->child[RIGHT];
-                    if (this->_comp(node->key, found->key))
-                        return (found);
-                }
-                if (node->parent)
-                {
-                    found = node;
-                    while (found = found->parent)
-                    {
-                        if (this->_comp(node->key, found->key))
-                            return (found);
-                    }
-                }
-                return (NULL);
-            }
-            
             // Insert
-            void    insert(pair_type pair)
+            NodePtr insert(comb_type comb)
             {
-                NodePtr node = new RBNode<Key, T>(pair->first, pair->second);
+                NodePtr result;
+                NodePtr node = \
+                    new RBNode<Key, T, Compare>(comb.first, comb.second);
 
                 // Recursive insertion
-                this->recursive_insert(this->_root, node);
+                result = this->recursive_insert(this->_root, node);
+
+                // Check if the node already exists
+                if (result != node)
+                {
+                    delete node;
+                    return (result);
+                }
 
                 // Repair the tree to respect r&b rules
                 this->repair(node);
@@ -136,27 +79,31 @@ namespace   ft
                 this->_root = node;
                 while (this->_root->parent != NULL)
                     this->_root = this->_root->parent;
+                return (node);
             }
 
-            void    recursive_insert(NodePtr root, NodePtr node)
+            NodePtr recursive_insert(NodePtr root, NodePtr node)
             {
                 int dir;
 
                 if (root != NULL)
                 {
-                    if (this->_comp(node->key, root->key))
+                    if (this->_comp(node->comb.first, root->comb.first))
                         dir = LEFT;
-                    else
+                    else if (root->comb.first != node->comb.first)
                         dir = RIGHT;
+                    else
+                        return (node);
                     if (root->child[dir] != LEAF)
                     {
-                        this->recursive_insert(root->child[dir], node);
-                        return;
+                        node = this->recursive_insert(root->child[dir], node);
+                        return (node);
                     }
                     else
                         root->child[dir] = node;
                 }
                 node->parent = root;
+                return (node);
             }
 
             // Repair
@@ -346,11 +293,11 @@ namespace   ft
                 NodePtr ret = NULL;
                 int     comp_res;
 
-                if (node->key == key)
+                if (node->comb.first == key)
                     return (node);
                 else 
                 {
-                    comp_res = this->_comp(node->key, key);
+                    comp_res = this->_comp(node->comb.first, key);
                     if (node->child[comp_res])
                         ret = this->search(node->child[comp_res], key);
                 }

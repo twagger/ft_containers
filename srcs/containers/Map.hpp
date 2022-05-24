@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/22 09:31:27 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 10:49:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace   ft
             typedef typename allocator_type::pointer            pointer;
             typedef typename allocator_type::const_pointer      const_pointer;
             // Iterators
-            typedef ft::t_iterator<value_type, Compare>         iterator;
+            typedef t_iterator<RBNode<Key, T, Compare>>         iterator;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -53,8 +53,8 @@ namespace   ft
             // Default
             explicit map(const key_compare &comp = key_compare(), \
                         const allocator_type &alloc = allocator_type())
-            : _tree(new RBTree<value_type>), _allocator(alloc), _size(0), \
-              _capacity(0) {}
+            : _tree(new RBTree<key_type, mapped_type, key_compare>()), \
+              _allocator(alloc), _size(0), _capacity(0), _compare(comp) {}
             // Range
             // template <class InputIterator>
             // map(InputIterator first, InputIterator last, \
@@ -96,7 +96,7 @@ namespace   ft
             {
                 iterator    it;
 
-                it = this->_tree->search(val);
+                it = this->_tree->search(this->_tree->get_root(), val.first);
                 if (it == NULL)
                 {
                     it = this->_tree->insert(val);
@@ -134,10 +134,11 @@ namespace   ft
 
         private:
             // Attributes
-            RBTree<value_type, Compare()>  *_tree;
-            allocator_type                  _allocator;
-            size_type                       _size;
-            size_type                       _capacity;
+            RBTree<key_type, mapped_type, Compare>  *_tree;
+            key_compare                             _compare;
+            allocator_type                          _allocator;
+            size_type                               _size;
+            size_type                               _capacity;
     };
 }
 
