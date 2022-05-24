@@ -58,7 +58,7 @@ namespace   ft
             
             template <class InputIterator>
             vector(\
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                typename enable_if<!is_integral<InputIterator>::value, \
                 InputIterator>::type first, InputIterator last, \
                 const allocator_type& alloc = allocator_type());
 
@@ -123,7 +123,7 @@ namespace   ft
             void        assign(size_type n, const value_type &val);
             template< class InputIterator >
             void        assign(\
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                typename enable_if<!is_integral<InputIterator>::value, \
                 InputIterator>::type first, InputIterator last);
 
             iterator    insert(iterator position, const value_type &val);
@@ -131,7 +131,7 @@ namespace   ft
                                const value_type &val);
             template< class InputIterator >
             void        insert(iterator position, \
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, \
+                typename enable_if<!is_integral<InputIterator>::value, \
                 InputIterator>::type first, InputIterator last);
 
             void        push_back(const T &val);
@@ -157,42 +157,42 @@ namespace   ft
 
             // Non member function overloads
             friend bool operator==(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
             {
                 if (lhs.size() == rhs.size())
                 {
-                    return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+                    return (equal(lhs.begin(), lhs.end(), rhs.begin()));
                 }
                 return (false);
             }
 
             friend bool operator!=(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
             { return (!(lhs == rhs)); }
 
             friend bool operator<(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
-            { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), \
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
+            { return (lexicographical_compare(lhs.begin(), lhs.end(), \
                                                 rhs.begin(), rhs.end())); } 
 
             friend bool operator<=(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
             { return (!(rhs < lhs)); }
 
             friend bool operator>(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
             { return (rhs < lhs); }
 
             friend bool operator>=(\
-            const ft::vector<T,A> &lhs, const ft::vector<T,A> &rhs)
+            const vector<T,A> &lhs, const vector<T,A> &rhs)
             { return (!(lhs < rhs)); }
 
-            friend void swap(ft::vector<T,A> &x, ft::vector<T,A> &y)
+            friend void swap(vector<T,A> &x, vector<T,A> &y)
             {
-                typename ft::vector<T,A>::pointer         tmp_arr;
-                typename ft::vector<T,A>::allocator_type  tmp_alloc;
-                typename ft::vector<T,A>::size_type       tmp_size;
-                typename ft::vector<T,A>::size_type       tmp_capacity;
+                typename vector<T,A>::pointer         tmp_arr;
+                typename vector<T,A>::allocator_type  tmp_alloc;
+                typename vector<T,A>::size_type       tmp_size;
+                typename vector<T,A>::size_type       tmp_capacity;
 
                 tmp_arr = x._array;
                 tmp_size = x.size();

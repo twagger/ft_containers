@@ -6,13 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/24 11:14:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 13:45:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBNODE_HPP
 # define RBNODE_HPP
-# define LEAF NULL
 # include "pair.hpp"
 
 enum { RED, BLACK };
@@ -23,30 +22,36 @@ namespace   ft
     template< class Key, class T, class Compare >
     class RBNode
     {
+        private:
+            /* ************************************************************** */
+            /*  PRIVATE MEMBER VARIABLES                                      */
+            /* ************************************************************** */
+            Compare _comp;
+
         public:
             
             /* ************************************************************** */
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef Key                         key_type;
-            typedef T                           value_type;
-            typedef pair<key_type, value_type>  comb_type;
+            typedef Key                                 key_type;
+            typedef T                                   value_type;
+            typedef pair<const key_type, value_type>    comb_type;
             // Compare
-            typedef Compare                     key_compare;
+            typedef Compare                             key_compare;
             // Pointer & Ref
-            typedef RBNode<Key, T, Compare>     *NodePtr;
-            typedef RBNode<Key, T, Compare>     &NodeRef;
+            typedef RBNode<Key, T, Compare>             *NodePtr;
+            typedef RBNode<Key, T, Compare>             &NodeRef;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             RBNode(void)
-            : parent(NULL), child{LEAF, LEAF}, color(RED), _comp(key_compare())
+            : parent(NULL), child{NULL, NULL}, color(RED), _comp(key_compare())
             {}
             RBNode(key_type key, value_type value, \
                    const key_compare &_comp = key_compare())
-            : parent(NULL), child{LEAF, LEAF}, color(RED), \
+            : parent(NULL), child{NULL, NULL}, color(RED), \
               comb(ft::pair<key_type, value_type>(key, value)){}
             RBNode(const NodeRef src) { *this = src; }
             ~RBNode(void) {}
@@ -220,17 +225,38 @@ namespace   ft
                 return (NULL);
             }
            
-            // Swap pairs
-            void    swapkeys(NodePtr other)
+            // Swap nodes
+            void    swap_nodes(NodePtr other)
             {
-                comb_type   tmp(this->comb.first, this->comb.second);
-                
-                this->comb = other->comb;
-                other->comb = tmp;
+                NodePtr swp_parent = this->parent;
+                NodePtr swp_left = this->child[LEFT];
+                NodePtr swp_right = this->child[RIGHT];
+                int     swp_color = this->color;
+
+                // put this in the place of other 
+                this->parent = other->parent;
+                this->child[LEFT] = other->child[LEFT];
+                this->child[RIGHT] = other->child[RIGHT];
+                if (this->parent)
+                    this->parent->child[this->childdir()] = this;
+                if (this->child[LEFT])
+                    this->child[LEFT]->parent = this;
+                if (this->child[RIGHT])
+                    this->child[RIGHT]->parent = this;
+                this->color = other->color;
+
+                // put other in the place of this 
+                other->parent = swp_parent;
+                other->child[LEFT] = swp_left;
+                other->child[RIGHT] = swp_right;
+                if (other->parent)
+                    other->parent->child[other->childdir()] = other;
+                if (swp_left)
+                    swp_left->parent = other;
+                if (swp_right)
+                    swp_right->parent = other;
+                other->color = swp_color;
             }
-            
-        private:
-            key_compare _comp;
     };
 }
 

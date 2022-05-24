@@ -13,7 +13,6 @@
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # include "RBNode.hpp"
-# include <exception>
 
 namespace   ft
 {
@@ -27,7 +26,7 @@ namespace   ft
             // Type
             typedef Key                                 key_type;
             typedef T                                   value_type;
-            typedef pair<key_type, value_type>          comb_type;
+            typedef pair<const key_type, value_type>    comb_type;
             // Compare
             typedef Compare                             key_compare;
             // Pointer & Ref
@@ -141,7 +140,7 @@ namespace   ft
                         dir = RIGHT;
                     else
                         return (node);
-                    if (root->child[dir] != LEAF)
+                    if (root->child[dir] != NULL)
                     {
                         node = this->recursive_insert(root->child[dir], node);
                         return (node);
@@ -203,8 +202,7 @@ namespace   ft
                 {
                     // 2 childs : switch it with predecessor or successor
                     replacement = to_remove->replacement();
-                    to_remove->swapkeys(replacement);
-                    to_remove = replacement;
+                    to_remove->swap_nodes(replacement);
                 }
                 if (to_remove->color == RED || 
                     (to_remove->child[LEFT] || to_remove->child[RIGHT]))
@@ -224,17 +222,19 @@ namespace   ft
                 }
                 else // Node is BLACK
                 {
-                    // One child, it is necessary RED. It replaces the node
+                    // One child, it is necessary RED. It replaces the node.
                     if (node->child[LEFT])
                     {
-                        node->swapkeys(node->child[LEFT]);
-                        node->color = RED;
-                        return (node->child[LEFT]);
+                        node->swap_nodes(node->child[LEFT]);
+                        node->parent->color = BLACK;
+                        node->parent->child[LEFT] = NULL;
+                        return (node);
                     }
                     else if (node->child[RIGHT])
                     {
-                        node->swapkeys(node->child[RIGHT]);
-                        node->color = RED;
+                        node->swap_nodes(node->child[RIGHT]);
+                        node->parent->color = BLACK;
+                        node->parent->child[RIGHT] = NULL;
                         return (node->child[RIGHT]);
                     }
                     return (node);

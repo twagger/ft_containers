@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/21 13:01:19 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:56:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ namespace   ft
             const_iterator  &operator-=(difference_type n)
             { this->_p -= n; return (*this); }
 
-            reference       operator*(void) const {return *(this->_p);}
+            const reference operator*(void) const {return *(this->_p);}
             pointer         operator->(void) const {return (this->_p);}
 
             reference       operator[](difference_type n) const

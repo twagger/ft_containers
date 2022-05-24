@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/24 11:27:05 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/24 13:15:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ namespace   ft
             typedef typename allocator_type::const_pointer      const_pointer;
             // Iterators
             typedef t_iterator<RBNode<Key, T, Compare>>         iterator;
+            typedef t_const_iterator<RBNode<Key, T, Compare>>   const_iterator;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -78,9 +79,11 @@ namespace   ft
             iterator                begin(void)
             { return iterator(this->_tree->min()); }
             iterator                end(void)
-            { return iterator(this->_tree->max()); }
-            // const_iterator          begin(void) const;
-            // const_iterator          end(void) const;
+            { return iterator(NULL); }
+            const_iterator          begin(void) const
+            { return const_iterator(this->_tree->min()); }
+            const_iterator          end(void) const
+            { return const_iterator(NULL); }
             // reverse_iterator        rbegin(void);
             // const_reverse_iterator  rbegin(void) const;
             // reverse_iterator        rend(void);
