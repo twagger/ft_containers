@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/24 14:20:46 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/26 13:15:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ namespace   ft
             /* ************************************************************** */
             // Iterators
             iterator                begin(void)
-            { return iterator(this->_tree->min()); }
+            { return iterator(this->_tree->get_min()); }
             iterator                end(void)
-            { return iterator(NULL); } // Lets use begin and end on tree to work on that : https://stackoverflow.com/questions/47982227/decrementing-iterator-from-end-iterator-in-binary-search-tree
+            { return iterator(NULL); }
             const_iterator          begin(void) const
-            { return const_iterator(this->_tree->min()); }
+            { return const_iterator(this->_tree->get_min()); }
             const_iterator          end(void) const
             { return const_iterator(NULL); }
             // reverse_iterator        rbegin(void);
@@ -99,11 +99,12 @@ namespace   ft
             pair<iterator, bool>    insert(const value_type &val)
             {
                 iterator    it;
-
-                it = this->_tree->search(this->_tree->get_root(), val.first);
+                
+                it = this->_tree->search(val.first);
                 if (it == NULL)
                 {
                     it = this->_tree->insert(val);
+                    ++this->_size;
                     return (pair<iterator, bool>(it, true));
                 }
                 return (pair<iterator, bool>(it, false));

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/24 14:07:45 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/26 12:53:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ namespace   ft
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(key_compare())
             {}
             RBNode(key_type key, value_type value, \
-                   const key_compare &_comp = key_compare())
-            : parent(NULL), child{NULL, NULL}, color(RED), \
+                   const key_compare &comp = key_compare())
+            : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
               comb(ft::pair<key_type, value_type>(key, value)){}
             RBNode(const NodeRef src) { *this = src; }
             ~RBNode(void) {}
@@ -61,6 +61,7 @@ namespace   ft
             /* ************************************************************** */
             NodeRef operator=(const NodeRef rhs)
             {
+                this->_comp = rhs.get_comp();
                 this->comb = rhs.comb;
                 this->color = rhs.color;
                 this->child[LEFT] = rhs.child[LEFT];
@@ -80,6 +81,9 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
+            // Getter
+            key_compare &get_comp(void) const { return (this->_comp); }
+
             // Genealogy
             int childdir(void) const
             {
@@ -160,71 +164,71 @@ namespace   ft
             }
             
             // Predecessor
-            NodePtr predecessor(void) // Should be reviewed to optimize it
+            /**
+             * @return  In-order predecessor node whose key compares less than 
+             *  the current node according to the key compare function.
+             */
+            NodePtr predecessor(void)
             {
                 NodePtr found;
 
-                if (this->child[RIGHT])
+                found = this->child[RIGHT];
+                if (found && this->_comp(found->comb.first, this->comb.first))
                 {
-                    found = this->child[RIGHT];
                     while (found->child[LEFT])
                         found = found->child[LEFT];
-                    if (this->_comp(found->comb.first, this->comb.first))
-                        return (found);
+                    return (found);
                 }
-                if (this->child[LEFT])
+                found = this->child[LEFT];
+                if (found && this->_comp(found->comb.first, this->comb.first))
                 {
-                    found = this->child[LEFT];
                     while (found->child[RIGHT])
                         found = found->child[RIGHT];
+                    return (found);
+                }
+                found = this->parent;
+                while (found)
+                {
                     if (this->_comp(found->comb.first, this->comb.first))
                         return (found);
-                }
-                if (this->parent) // optimization : browse to parent until we browse from right or left (depending on compare)
-                {
-                    found = this;
-                    while (found = found->parent)
-                    {
-                        if (this->_comp(found->comb.first, this->comb.first))
-                            return (found);
-                    }
+                    found = found->parent;
                 }
                 return (NULL);
             }
 
             // Successor
+            /**
+             * @return  In-order successor node whose key compares more than 
+             *  the current node according to the key compare function.
+             */
             NodePtr successor(void)
             {
                 NodePtr found;
 
-                if (this->child[RIGHT])
+                found = this->child[RIGHT];
+                if (found && this->_comp(this->comb.first, found->comb.first))
                 {
-                    found = this->child[RIGHT];
                     while (found->child[LEFT])
                         found = found->child[LEFT];
-                    if (this->_comp(this->comb.first, found->comb.first))
-                        return (found);
+                    return (found);
                 }
-                if (this->child[LEFT])
+                found = this->child[LEFT];
+                if (found && this->_comp(this->comb.first, found->comb.first))
                 {
-                    found = this->child[LEFT];
                     while (found->child[RIGHT])
                         found = found->child[RIGHT];
+                    return (found);
+                }
+                found = this->parent;
+                while (found)
+                {
                     if (this->_comp(this->comb.first, found->comb.first))
                         return (found);
-                }
-                if (this->parent)
-                {
-                    found = this;
-                    while (found = found->parent)
-                    {
-                        if (this->_comp(this->comb.first, found->comb.first))
-                            return (found);
-                    }
+                    found = found->parent;
                 }
                 return (NULL);
             }
-           
+
             // Swap nodes
             void    swap_nodes(NodePtr other)
             {

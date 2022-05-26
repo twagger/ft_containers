@@ -100,7 +100,7 @@ TEST(RBTree, searchExistingNode) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    my_node = my_tree.search(my_tree.get_root(), 13);
+    my_node = my_tree.search(13);
     EXPECT_EQ(my_node->parent->comb.first, 15);
 }
  
@@ -117,7 +117,7 @@ TEST(RBTree, searchNonExistingNode) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    my_node = my_tree.search(my_tree.get_root(), 42);
+    my_node = my_tree.search(42);
     EXPECT_TRUE(my_node == NULL);
 }
 
@@ -134,7 +134,7 @@ TEST(RBTree, searchRoot) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    my_node = my_tree.search(my_tree.get_root(), 17);
+    my_node = my_tree.search(17);
     EXPECT_EQ(my_node->comb.first, 17);
 }
 
@@ -169,7 +169,7 @@ TEST(RBTree, removeRedLeafDontModifyTheRestOfTheTree) {
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[RIGHT]->color == RED);
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[LEFT]->comb.first == 1);
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[LEFT]->color == RED);
-    EXPECT_TRUE(my_tree.search(my_tree.get_root(), 13) == NULL);
+    EXPECT_TRUE(my_tree.search(13) == NULL);
 } 
 
 TEST(RBTree, removeNonExistingKey) {
@@ -220,7 +220,7 @@ TEST(RBTree, removeBlackLeafWithNoChild_case4) {
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
     my_tree.remove(27);
-    EXPECT_TRUE(my_tree.search(my_tree.get_root(), 27) == NULL);
+    EXPECT_TRUE(my_tree.search(27) == NULL);
     EXPECT_TRUE(my_tree.get_root()->comb.first == 17);
     EXPECT_TRUE(my_tree.get_root()->color == BLACK);
     EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->comb.first == 25);
@@ -254,7 +254,7 @@ TEST(RBTree, removeBlackLeafWithNoChild_case1) {
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
     my_tree.remove(27);
-    EXPECT_TRUE(my_tree.search(my_tree.get_root(), 27) == NULL);
+    EXPECT_TRUE(my_tree.search(27) == NULL);
     EXPECT_TRUE(my_tree.get_root()->comb.first == 17);
     EXPECT_TRUE(my_tree.get_root()->color == BLACK);
     EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->comb.first == 25);
@@ -287,8 +287,7 @@ TEST(RBTree, predecessor) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    EXPECT_TRUE(\
-    my_tree.search(my_tree.get_root(), 15)->predecessor()->comb.first == 13);
+    EXPECT_TRUE(my_tree.search(15)->predecessor()->comb.first == 13);
 }
 
 TEST(RBTree, predecessorWithGreaterComp) {
@@ -303,8 +302,7 @@ TEST(RBTree, predecessorWithGreaterComp) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    EXPECT_TRUE(\
-    my_tree.search(my_tree.get_root(), 15)->predecessor()->comb.first == 17);
+    EXPECT_TRUE(my_tree.search(15)->predecessor()->comb.first == 17);
 }
 
 TEST(RBTree, successor) {
@@ -319,8 +317,7 @@ TEST(RBTree, successor) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    EXPECT_TRUE(\
-    my_tree.search(my_tree.get_root(), 17)->successor()->comb.first == 22);
+    EXPECT_TRUE(my_tree.search(17)->successor()->comb.first == 22);
 }
 
 TEST(RBTree, successorWithGreaterComp) {
@@ -335,6 +332,5 @@ TEST(RBTree, successorWithGreaterComp) {
     my_tree.insert(ft::make_pair<int, char>(8, 'y'));
     my_tree.insert(ft::make_pair<int, char>(22, 'l'));
     my_tree.insert(ft::make_pair<int, char>(13, 'i'));
-    EXPECT_TRUE(\
-    my_tree.search(my_tree.get_root(), 17)->successor()->comb.first == 15);
+    EXPECT_TRUE(my_tree.search(17)->successor()->comb.first == 15);
 }
