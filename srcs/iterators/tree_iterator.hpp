@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/24 12:57:47 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:51:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,18 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             typedef typename T::comb_type               comb_type;
-            typedef T                                   *pointer;
-            typedef T                                   &reference;
+            
+            typedef typename ft::iterator_traits<T*>::difference_type          \
+                             difference_type;
+            typedef typename ft::iterator_traits<T*>::value_type               \
+                             value_type;
+            typedef typename ft::iterator_traits<T*>::pointer                  \
+                             pointer;
+            typedef typename ft::iterator_traits<T*>::reference                \
+                             reference;
+            typedef typename ft::iterator_traits<T*>::iterator_category        \
+                             iterator_category;
+
             typedef std::bidirectional_iterator_tag     iterator_category;
             
             /* ************************************************************** */
@@ -74,9 +84,17 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             typedef typename T::comb_type               comb_type;
-            typedef T                                   *pointer;
-            typedef T                                   &reference;
-            typedef std::bidirectional_iterator_tag     iterator_category;
+            
+            typedef typename ft::iterator_traits<T*>::difference_type          \
+                             difference_type;
+            typedef typename ft::iterator_traits<T*>::value_type               \
+                             value_type;
+            typedef typename ft::iterator_traits<T*>::pointer                  \
+                             pointer;
+            typedef typename ft::iterator_traits<T*>::reference                \
+                             reference;
+            typedef typename ft::iterator_traits<T*>::iterator_category        \
+                             iterator_category;
             
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */

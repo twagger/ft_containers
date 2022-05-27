@@ -15,6 +15,7 @@
 # include <memory>
 # include <cstddef>
 # include "../iterators/array_iterator.hpp"
+# include "../iterators/reverse_iterator.hpp"
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
 # include "../utils/equal.hpp"

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 08:46:27 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:48:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MAP_HPP
 # include <memory>
 # include "../iterators/tree_iterator.hpp"
+# include "../iterators/reverse_iterator.hpp"
 # include "../utils/pair.hpp"
 # include "../utils/RBTree.hpp"
 
@@ -47,6 +48,8 @@ namespace   ft
             // Iterators
             typedef t_iterator<RBNode<Key, T, Compare>>         iterator;
             typedef t_const_iterator<RBNode<Key, T, Compare>>   const_iterator;
+            typedef ft::reverse_iterator<iterator>             reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -56,13 +59,16 @@ namespace   ft
                         const allocator_type &alloc = allocator_type())
             : _tree(new RBTree<key_type, mapped_type, key_compare>()), \
               _allocator(alloc), _size(0), _capacity(0), _compare(comp) {}
+              
             // Range
             // template <class InputIterator>
             // map(InputIterator first, InputIterator last, \
             //     const key_compare& comp = key_compare(), \
             //     const allocator_type& alloc = allocator_type());
-            // // Copy
+            
+            // Copy
             // map(const map &x);
+            
             // Destructor
             ~map(void) {};
 
@@ -78,23 +84,38 @@ namespace   ft
             // Iterators
             iterator                begin(void)
             { return iterator(this->_tree->get_min()); }
+
             iterator                end(void)
             { return iterator(this->_tree->get_end()); }
+
             const_iterator          begin(void) const
             { return const_iterator(this->_tree->get_min()); }
+
             const_iterator          end(void) const
             { return const_iterator(this->_tree->get_end()); }
-            // reverse_iterator        rbegin(void);
-            // const_reverse_iterator  rbegin(void) const;
-            // reverse_iterator        rend(void);
-            // const_reverse_iterator  rend(void) const;
+            
+            reverse_iterator        rbegin(void)
+            { return reverse_iterator(this->end()); }
+            
+            const_reverse_iterator  rbegin(void) const
+            { return const_reverse_iterator(this->end()); }
+
+            reverse_iterator        rend(void)
+            { return reverse_iterator(this->begin()); }
+
+            const_reverse_iterator  rend(void) const
+            { return const_reverse_iterator(this->begin()); }
+
             // Capacity
             bool                    empty(void) const
             { return (this->_size == 0); }
+            
             size_type               size(void) const
             { return (this->_size); }
+
             size_type               max_size(void) const
             { return (this->_allocator.max_size()); }
+            
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
             {
@@ -119,12 +140,15 @@ namespace   ft
             // void                    erase(iterator first, iterator last);
             // void                    swap(map &x);
             // void                    clear(void);
+            
             // Allocator
             allocator_type              get_allocator(void) const
             { return allocator_type(this->_allocator); }
+            
             // Observers
             // key_compare                 key_comp(void) const;
-            //value_compare   value_comp(void) const;
+            // value_compare               value_comp(void) const;
+            
             // Operations
             // iterator                    find(const key_type &k);
             // const_iterator              find(const key_type &k) const;

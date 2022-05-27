@@ -6,13 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/21 09:58:27 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 09:41:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 # define STACK_HPP
-# include "../iterators/array_iterator.hpp"
 # include "Vector.hpp"
 
 namespace   ft

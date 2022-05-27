@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_integral.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:52:59 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 18:06:42 by twagner          ###   ########.fr       */
+/*   Updated: 2022/05/27 10:39:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace   ft
     typedef integral_constant<bool, false>  false_type;
 
     // Is_integral
+    // First is the generic, others are full specializations for integral types
     template <class T>
     struct is_integral                                    : public false_type{};
     template <> struct is_integral<bool>                   : public true_type{};
