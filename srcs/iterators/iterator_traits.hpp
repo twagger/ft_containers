@@ -6,17 +6,22 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 14:11:29 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 13:43:16 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 14:44:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
 # include <cstddef>
-# include <iterator>
 
 namespace   ft
 {
+    struct input_iterator_tag { };
+    struct output_iterator_tag { };
+    struct forward_iterator_tag : public input_iterator_tag { };
+    struct bidirectional_iterator_tag : public forward_iterator_tag { };
+    struct random_access_iterator_tag : public bidirectional_iterator_tag { };
+
     // Iterator traits is a definition of member types for any iterator that
     // allow to get iterator types from a simple pointer to a certain type (T)
     // so it can be used properly with algorythms.
@@ -50,7 +55,7 @@ namespace   ft
         typedef T                               value_type;
         typedef T                               *pointer;
         typedef T                               &reference;
-        typedef std::random_access_iterator_tag iterator_category;
+        typedef random_access_iterator_tag      iterator_category;
     };
 
     // Partial specialization for const Pointers to T
@@ -66,15 +71,8 @@ namespace   ft
         typedef T                               value_type;
         typedef const T                         *pointer;
         typedef const T                         &reference;
-        typedef std::random_access_iterator_tag iterator_category;
+        typedef random_access_iterator_tag      iterator_category;
     };
-
-    template < class Iter >
-    typename iterator_traits<Iter>::iterator_category 
-    _iterator_category(const Iter &)
-    { 
-        return typename iterator_traits<_Iter>::iterator_category(); 
-    }
 }
 
 #endif

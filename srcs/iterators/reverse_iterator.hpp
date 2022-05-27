@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 09:39:13 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/27 13:50:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:01:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ namespace   ft
             : current(rev_it.current) {}
 
             // operators overload  
+            reverse_iterator    &operator=(reverse_iterator const &rhs)
+            { this->current = rhs.current; return (*this);}
+            
             reverse_iterator    &operator++(void)
             { --this->current;return *this; }
             reverse_iterator    operator++(int)
@@ -60,7 +63,7 @@ namespace   ft
             reference           operator*(void) const
             { iterator_type tmp = this->current; return (*--tmp); }
             pointer             operator->(void) const
-            { iterator_type tmp = this->current; return (--tmp); }
+            { return (&(this->operator*())); }
 
             reference           operator[](difference_type n) const
             { return *(*this + n); }
