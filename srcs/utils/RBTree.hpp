@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/26 13:13:28 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 08:38:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ namespace   ft
                 {
                     this->_max = node;
                     this->_end->child[LEFT] = this->_max;
+                    this->_end->child[RIGHT] = this->_max;
                 }
                 
                 // Recursive insertion
@@ -107,7 +108,11 @@ namespace   ft
                 if (key == this->_min->comb.first)
                     this->_min = to_remove->successor();
                 if (key == this->_max->comb.first)
-                    this->_min = to_remove->predecessor();
+                {
+                    this->_max = to_remove->predecessor();
+                    this->_end->child[LEFT] = this->_max;
+                    this->_end->child[RIGHT] = this->_max;
+                }
                 // Check the number of childs
                 if (to_remove->child[LEFT] && to_remove->child[RIGHT])
                 {
@@ -138,7 +143,7 @@ namespace   ft
             NodePtr _root;
             NodePtr _min; // begin node
             NodePtr _max; // pre-end node
-            NodePtr _end; // ghost node for end()
+            NodePtr _end; // ghost node for end(). Linked to _max node
             Compare _comp;
 
             /**

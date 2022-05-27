@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/26 13:15:46 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 08:46:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ namespace   ft
             iterator                begin(void)
             { return iterator(this->_tree->get_min()); }
             iterator                end(void)
-            { return iterator(NULL); }
+            { return iterator(this->_tree->get_end()); }
             const_iterator          begin(void) const
             { return const_iterator(this->_tree->get_min()); }
             const_iterator          end(void) const
-            { return const_iterator(NULL); }
+            { return const_iterator(this->_tree->get_end()); }
             // reverse_iterator        rbegin(void);
             // const_reverse_iterator  rbegin(void) const;
             // reverse_iterator        rend(void);

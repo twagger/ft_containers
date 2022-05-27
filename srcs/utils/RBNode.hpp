@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/26 12:53:37 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/27 08:44:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,10 @@ namespace   ft
                 NodePtr found;
 
                 found = this->child[RIGHT];
+                // Exception for end node
+                if (this->child[RIGHT] 
+                    && this->child[RIGHT] == this->child[LEFT])
+                    return (this->child[RIGHT]);
                 if (found && this->_comp(found->comb.first, this->comb.first))
                 {
                     while (found->child[LEFT])

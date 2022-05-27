@@ -22,22 +22,6 @@ TEST(MapTest_STDIterator, incrementIterator) {
     EXPECT_EQ(it->first, 'c');
 }
 
-TEST(MapTest_STDIterator, incrementIteratorWithGreater) {
-    std::map<char, int, std::greater<char>> my_map;
-    std::map<char, int>::iterator it;
-
-    my_map.insert(std::pair<char, int>('a', 100));
-    my_map.insert(std::pair<char, int>('b', 500));
-    my_map.insert(std::pair<char, int>('c', 1800));
-    my_map.insert(std::pair<char, int>('d', 20));
-
-    it = my_map.begin();
-    EXPECT_EQ(it->first, 'd');
-    ++it;
-    ++it;
-    EXPECT_EQ(it->first, 'b');
-}
-
 TEST(MapTest_Iterator, incrementIterator) {
     ft::map<char, int> my_map;
     ft::map<char, int>::iterator it;
@@ -54,6 +38,23 @@ TEST(MapTest_Iterator, incrementIterator) {
     EXPECT_EQ(it->first, 'c');
 }
 
+TEST(MapTest_STDIterator, incrementIteratorWithGreater) {
+    std::map<char, int, std::greater<char>> my_map;
+    std::map<char, int>::iterator it;
+
+    my_map.insert(std::pair<char, int>('a', 100));
+    my_map.insert(std::pair<char, int>('b', 500));
+    my_map.insert(std::pair<char, int>('c', 1800));
+    my_map.insert(std::pair<char, int>('d', 20));
+
+    it = my_map.begin();
+    EXPECT_EQ(it->first, 'd');
+    ++it;
+    ++it;
+    EXPECT_EQ(it->first, 'b');
+}
+
+
 TEST(MapTest_Iterator, incrementIteratorWithGreater) {
     ft::map<char, int, std::greater<char>> my_map;
     ft::map<char, int, std::greater<char>>::iterator it;
@@ -68,4 +69,61 @@ TEST(MapTest_Iterator, incrementIteratorWithGreater) {
     ++it;
     ++it;
     EXPECT_EQ(it->first, 'b');
+}
+
+TEST(MapTest_STDIterator, endIterator) {
+    std::map<char, int> my_map;
+    std::map<char, int>::iterator it;
+
+    my_map.insert(std::pair<char, int>('a', 100));
+    my_map.insert(std::pair<char, int>('b', 500));
+    my_map.insert(std::pair<char, int>('c', 1800));
+    my_map.insert(std::pair<char, int>('d', 20));
+
+    it = my_map.end();
+    --it;
+    EXPECT_EQ(it->first, 'd');
+}
+
+TEST(MapTest_Iterator, endIterator) {
+    ft::map<char, int> my_map;
+    ft::map<char, int>::iterator it;
+
+    my_map.insert(ft::pair<char, int>('a', 100));
+    my_map.insert(ft::pair<char, int>('b', 500));
+    my_map.insert(ft::pair<char, int>('c', 1800));
+    my_map.insert(ft::pair<char, int>('d', 20));
+
+    it = my_map.end();
+    --it;
+    EXPECT_EQ(it->first, 'd');
+}
+
+TEST(MapTest_STDIterator, endIteratorWithGreater) {
+    std::map<char, int, std::greater<char>> my_map;
+    std::map<char, int>::iterator it;
+
+    my_map.insert(std::pair<char, int>('a', 100));
+    my_map.insert(std::pair<char, int>('b', 500));
+    my_map.insert(std::pair<char, int>('c', 1800));
+    my_map.insert(std::pair<char, int>('d', 20));
+
+    it = my_map.end();
+    --it;
+    EXPECT_EQ(it->first, 'a');
+}
+
+
+TEST(MapTest_Iterator, endIteratorWithGreater) {
+    ft::map<char, int, std::greater<char>> my_map;
+    ft::map<char, int, std::greater<char>>::iterator it;
+
+    my_map.insert(ft::pair<char, int>('a', 100));
+    my_map.insert(ft::pair<char, int>('b', 500));
+    my_map.insert(ft::pair<char, int>('c', 1800));
+    my_map.insert(ft::pair<char, int>('d', 20));
+
+    it = my_map.end();
+    --it;
+    EXPECT_EQ(it->first, 'a');
 }
