@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/27 08:44:43 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 09:39:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ enum { LEFT, RIGHT };
 
 namespace   ft
 {
-    template< class Key, class T, class Compare >
+    template< class T, class Compare >
     class RBNode
     {
         private:
@@ -34,14 +34,13 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef Key                                 key_type;
             typedef T                                   value_type;
-            typedef pair<const key_type, value_type>    comb_type;
+            typedef RBNode<T, Compare>                  node_type;
             // Compare
             typedef Compare                             key_compare;
             // Pointer & Ref
-            typedef RBNode<Key, T, Compare>             *NodePtr;
-            typedef RBNode<Key, T, Compare>             &NodeRef;
+            typedef node_type                           *node_ptr;
+            typedef node_type                           &node_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -49,20 +48,19 @@ namespace   ft
             RBNode(void)
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(key_compare())
             {}
-            RBNode(key_type key, value_type value, \
-                   const key_compare &comp = key_compare())
+            RBNode(value_type value, const key_compare &comp = key_compare())
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
-              comb(ft::pair<key_type, value_type>(key, value)){}
-            RBNode(const NodeRef src) { *this = src; }
+              value(value){}
+            RBNode(const node_ref src) { *this = src; }
             ~RBNode(void) {}
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            NodeRef operator=(const NodeRef rhs)
+            node_ref operator=(const node_ref rhs)
             {
                 this->_comp = rhs.get_comp();
-                this->comb = rhs.comb;
+                this->value = rhs.value;
                 this->color = rhs.color;
                 this->child[LEFT] = rhs.child[LEFT];
                 this->child[RIGHT] = rhs.child[RIGHT];
@@ -73,10 +71,10 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER VARIABLES                                              */
             /* ************************************************************** */
-            comb_type       comb;
-            char            color;
-            NodePtr         child[2];
-            NodePtr         parent;
+            value_type  value;
+            char        color;
+            node_ptr    child[2];
+            node_ptr    parent;
             
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
@@ -95,27 +93,27 @@ namespace   ft
                     throw std::runtime_error("the node is orphan");
             }
             
-            NodePtr brother(void) const
+            node_ptr brother(void) const
             {
-                NodePtr p = this->parent;
+                node_ptr p = this->parent;
 
                 if (p == NULL)
                     return (NULL);
                 return p->child[1 - this->childdir()];
             }
 
-            NodePtr grandparent(void) const
+            node_ptr grandparent(void) const
             {
-                NodePtr p = this->parent;
+                node_ptr p = this->parent;
 
                 if (p == NULL)
                     return (NULL);
                 return (p->parent);
             }
             
-            NodePtr uncle(void) const
+            node_ptr uncle(void) const
             {
-                NodePtr p = this->parent;
+                node_ptr p = this->parent;
                 
                 if (p == NULL)
                     return (NULL);
@@ -125,8 +123,8 @@ namespace   ft
             // Rotations
             void    rotate(int dir) // this is bugged
             {
-                NodePtr x = this;
-                NodePtr y = x->child[1 - dir];
+                node_ptr x = this;
+                node_ptr y = x->child[1 - dir];
                 
                 // Right son of root (this) becomes left son of p
                 x->child[1 - dir] = y->child[dir];
@@ -147,10 +145,10 @@ namespace   ft
 
             // Replacement node (predecessor or successor from left or right
             //  subtree). RED node is returned if possible
-            NodePtr replacement(void)
+            node_ptr replacement(void)
             {
-                NodePtr left;
-                NodePtr right;
+                node_ptr left;
+                node_ptr right;
                 
                 left = this->child[LEFT];
                 right = this->child[RIGHT];
@@ -168,23 +166,23 @@ namespace   ft
              * @return  In-order predecessor node whose key compares less than 
              *  the current node according to the key compare function.
              */
-            NodePtr predecessor(void)
+            node_ptr predecessor(void)
             {
-                NodePtr found;
+                node_ptr found;
 
                 found = this->child[RIGHT];
                 // Exception for end node
                 if (this->child[RIGHT] 
                     && this->child[RIGHT] == this->child[LEFT])
                     return (this->child[RIGHT]);
-                if (found && this->_comp(found->comb.first, this->comb.first))
+                if (found && this->_comp(found->value.first, this->value.first))
                 {
                     while (found->child[LEFT])
                         found = found->child[LEFT];
                     return (found);
                 }
                 found = this->child[LEFT];
-                if (found && this->_comp(found->comb.first, this->comb.first))
+                if (found && this->_comp(found->value.first, this->value.first))
                 {
                     while (found->child[RIGHT])
                         found = found->child[RIGHT];
@@ -193,7 +191,7 @@ namespace   ft
                 found = this->parent;
                 while (found)
                 {
-                    if (this->_comp(found->comb.first, this->comb.first))
+                    if (this->_comp(found->value.first, this->value.first))
                         return (found);
                     found = found->parent;
                 }
@@ -205,19 +203,19 @@ namespace   ft
              * @return  In-order successor node whose key compares more than 
              *  the current node according to the key compare function.
              */
-            NodePtr successor(void)
+            node_ptr successor(void)
             {
-                NodePtr found;
+                node_ptr found;
 
                 found = this->child[RIGHT];
-                if (found && this->_comp(this->comb.first, found->comb.first))
+                if (found && this->_comp(this->value.first, found->value.first))
                 {
                     while (found->child[LEFT])
                         found = found->child[LEFT];
                     return (found);
                 }
                 found = this->child[LEFT];
-                if (found && this->_comp(this->comb.first, found->comb.first))
+                if (found && this->_comp(this->value.first, found->value.first))
                 {
                     while (found->child[RIGHT])
                         found = found->child[RIGHT];
@@ -226,7 +224,7 @@ namespace   ft
                 found = this->parent;
                 while (found)
                 {
-                    if (this->_comp(this->comb.first, found->comb.first))
+                    if (this->_comp(this->value.first, found->value.first))
                         return (found);
                     found = found->parent;
                 }
@@ -234,11 +232,11 @@ namespace   ft
             }
 
             // Swap nodes
-            void    swap_nodes(NodePtr other)
+            void    swap_nodes(node_ptr other)
             {
-                NodePtr swp_parent = this->parent;
-                NodePtr swp_left = this->child[LEFT];
-                NodePtr swp_right = this->child[RIGHT];
+                node_ptr swp_parent = this->parent;
+                node_ptr swp_left = this->child[LEFT];
+                node_ptr swp_right = this->child[RIGHT];
                 int     swp_color = this->color;
 
                 // put this in the place of other 

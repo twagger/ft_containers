@@ -6,17 +6,18 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 08:38:07 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 10:01:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
+# include <memory>
 # include "RBNode.hpp"
 
 namespace   ft
 {
-    template < class Key, class T, class Compare = std::less<Key> >
+    template < class T, class Compare, class A = std::allocator<T> >
     class RBTree
     {
         public:
@@ -24,58 +25,60 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef Key                                 key_type;
             typedef T                                   value_type;
-            typedef pair<const key_type, value_type>    comb_type;
+            typedef RBTree<T, Compare, A>               tree_type;
+            typedef RBNode<T, Compare>                  node_type;
+            typedef typename T::first_type              key_type;
             // Compare
             typedef Compare                             key_compare;
+            // Memory
+            typedef A                                   allocator_type;
             // Pointer & Ref
-            typedef RBNode<Key, T, Compare>             *NodePtr;
-            typedef RBNode<Key, T, Compare>             &NodeRef;
-            typedef RBTree<Key, T, Compare>             *TreePtr;
-            typedef RBTree<Key, T, Compare>             &TreeRef;
+            typedef node_type                           *node_ptr;
+            typedef node_type                           &node_ref;
+            typedef tree_type                           *tree_ptr;
+            typedef tree_type                           &tree_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             RBTree(void) : _root(NULL), _comp(key_compare()), _min(NULL), \
-                           _max(NULL), _end(new RBNode<Key, T, Compare>(\
-                                            key_type(), value_type())) {}
-            RBTree(const TreeRef src);
+                           _max(NULL), _end(new node_type(\
+                                            value_type(), key_compare())) {}
+            RBTree(const tree_ref src);
             ~RBTree(void) {}
             
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            TreeRef operator=(const TreeRef rhs);
+            tree_ref operator=(const tree_ref rhs);
 
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
             // Access
-            NodePtr get_root(void) const { return (this->_root); }
-            NodePtr get_min(void) const { return (this->_min); }
-            NodePtr get_max(void) const { return (this->_max); }
-            NodePtr get_end(void) const { return (this->_end); }
+            node_ptr get_root(void) const { return (this->_root); }
+            node_ptr get_min(void) const { return (this->_min); }
+            node_ptr get_max(void) const { return (this->_max); }
+            node_ptr get_end(void) const { return (this->_end); }
 
             // Insert 
             /**
              *  @brief  Insert a value in the tree.
-             *  @param  comb  A combination of key + value (pair).
+             *  @param  value  A combination of key + value (pair).
              */
-            NodePtr insert(comb_type comb)
+            node_ptr insert(value_type value)
             {
-                NodePtr result;
-                NodePtr node = \
-                    new RBNode<Key, T, Compare>(comb.first, comb.second);
+                node_ptr result;
+                node_ptr node = new node_type(value);
 
                 // Update min and max
                 if (!this->_min || (this->_min 
-                    && this->_comp(comb.first, this->_min->comb.first)))
+                    && this->_comp(value.first, this->_min->value.first)))
                     this->_min = node;
                 if (!this->_max || (this->_max 
-                    && this->_comp(this->_max->comb.first, comb.first)))
+                    && this->_comp(this->_max->value.first, value.first)))
                 {
                     this->_max = node;
                     this->_end->child[LEFT] = this->_max;
@@ -96,18 +99,18 @@ namespace   ft
             }
             
             // Remove
-            NodePtr remove(key_type const &key)
+            node_ptr remove(key_type const &key)
             {
-                NodePtr to_remove;
-                NodePtr replacement;
+                node_ptr to_remove;
+                node_ptr replacement;
 
                 to_remove = this->search(key);
                 if (to_remove == NULL)
                     return (NULL);
                 // Update min and max
-                if (key == this->_min->comb.first)
+                if (key == this->_min->value.first)
                     this->_min = to_remove->successor();
-                if (key == this->_max->comb.first)
+                if (key == this->_max->value.first)
                 {
                     this->_max = to_remove->predecessor();
                     this->_end->child[LEFT] = this->_max;
@@ -127,7 +130,7 @@ namespace   ft
             }
 
             // Search
-            NodePtr search(key_type const &key) const
+            node_ptr search(key_type const &key) const
             {
                 return (this->_recursive_search(this->_root, key));
             }
@@ -140,11 +143,11 @@ namespace   ft
             }
 
         private:
-            NodePtr _root;
-            NodePtr _min; // begin node
-            NodePtr _max; // pre-end node
-            NodePtr _end; // ghost node for end(). Linked to _max node
-            Compare _comp;
+            node_ptr    _root;
+            node_ptr    _min; // begin node
+            node_ptr    _max; // pre-end node
+            node_ptr    _end; // ghost node for end(). Linked to _max node
+            Compare     _comp;
 
             /**
              *  @brief  Tree traversal to insert the node at the right place.
@@ -156,15 +159,15 @@ namespace   ft
              *  with the current node.
              * 
              */
-            NodePtr _recursive_insert(NodePtr root, NodePtr node)
+            node_ptr _recursive_insert(node_ptr root, node_ptr node)
             {
                 int dir;
 
                 if (root != NULL)
                 {
-                    if (this->_comp(node->comb.first, root->comb.first))
+                    if (this->_comp(node->value.first, root->value.first))
                         dir = LEFT;
-                    else if (root->comb.first != node->comb.first)
+                    else if (root->value.first != node->value.first)
                         dir = RIGHT;
                     else
                         return (node);
@@ -181,11 +184,11 @@ namespace   ft
             }
             
             // Repair
-            void    _repair(NodePtr node)
+            void    _repair(node_ptr node)
             {
                 int     dir;
-                NodePtr p;
-                NodePtr g;
+                node_ptr p;
+                node_ptr g;
                 
                 if (node->parent == NULL)
                     node->color = BLACK;
@@ -217,7 +220,7 @@ namespace   ft
             }
 
             // Remove
-            NodePtr _remove_simple_case(NodePtr node)
+            node_ptr _remove_simple_case(node_ptr node)
             {
                 // All cases but the one where the node is black with no child
                 // With the simple cases we don't need to rebalance the tree
@@ -248,13 +251,13 @@ namespace   ft
                 }
             }
 
-            NodePtr _remove_complex_case(NodePtr node)
+            node_ptr _remove_complex_case(node_ptr node)
             {
                 // Specific case : node is BLACK with no child
-                NodePtr p = node->parent;
-                NodePtr b; // brother
-                NodePtr c; // close nephew
-                NodePtr d; // distant nephew
+                node_ptr p = node->parent;
+                node_ptr b; // brother
+                node_ptr c; // close nephew
+                node_ptr d; // distant nephew
                 int     dir;
 
                 // 1. Replace node by NULL in its parent : 
@@ -290,8 +293,8 @@ namespace   ft
                 return (NULL); // remove_case_2
             }
 
-            void    _remove_case_3(NodePtr *p, NodePtr *b, \
-                                  NodePtr *c, NodePtr *d, int dir)
+            void    _remove_case_3(node_ptr *p, node_ptr *b, \
+                                   node_ptr *c, node_ptr *d, int dir)
             {
                 // rotate
                 (*p)->rotate(dir);
@@ -315,14 +318,14 @@ namespace   ft
                 this->_remove_case_4(*p, *b);
             }
 
-            void    _remove_case_4(NodePtr p, NodePtr b)
+            void    _remove_case_4(node_ptr p, node_ptr b)
             {
                 p->color = BLACK;
                 b->color = RED;
             }
 
-            void    _remove_case_5(NodePtr *p, NodePtr *b, \
-                                  NodePtr *c, NodePtr *d, int dir)
+            void    _remove_case_5(node_ptr *p, node_ptr *b, \
+                                   node_ptr *c, node_ptr *d, int dir)
             {
                 (*b)->rotate(1 - dir);
                 (*b)->color = RED;
@@ -332,8 +335,8 @@ namespace   ft
                 this->_remove_case_6(*p, *b, *d, dir);
             }
             
-            void    _remove_case_6(NodePtr p, NodePtr b, \
-                                  NodePtr d, int dir)
+            void    _remove_case_6(node_ptr p, node_ptr b, \
+                                   node_ptr d, int dir)
             {
                 p->rotate(dir);
                 b->color = p->color;
@@ -342,18 +345,18 @@ namespace   ft
             }
             
             // Recursive search
-            NodePtr _recursive_search(NodePtr node, key_type const &key) const
+            node_ptr _recursive_search(node_ptr node, key_type const &key) const
             {
-                NodePtr ret = NULL;
+                node_ptr ret = NULL;
                 int     comp_res;
 
                 if (!node)
                     return (NULL);
-                if (node->comb.first == key)
+                if (node->value.first == key)
                     return (node);
                 else 
                 {
-                    comp_res = this->_comp(node->comb.first, key);
+                    comp_res = this->_comp(node->value.first, key);
                     if (node->child[comp_res])
                         ret = this->_recursive_search(\
                                         node->child[comp_res], key);
@@ -363,7 +366,7 @@ namespace   ft
 
             // Print tree
 	        void    _recursive_print(\
-                        NodePtr node, std::string indent, bool last) const
+                        node_ptr node, std::string indent, bool last) const
             {
                 if (node != NULL)
                 {
@@ -379,7 +382,7 @@ namespace   ft
                         indent += "|    ";
                     }
                     std::string sColor = node->color ? "BLACK" : "RED";
-                    std::cout << node->comb.first << "(" << sColor << ")" 
+                    std::cout << node->value.first << "(" << sColor << ")" 
                               << std::endl;
                     this->_recursive_print(node->child[LEFT], indent, false);
                     this->_recursive_print(node->child[RIGHT], indent, true);

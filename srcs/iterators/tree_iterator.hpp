@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 15:08:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 09:42:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ namespace   ft
             typedef typename ft::iterator_traits<T*>::value_type               \
                              value_type;
             typedef typename ft::iterator_traits<T*>::pointer                  \
-                             NodePtr;
+                             node_ptr;
                              
-            typedef typename T::comb_type           &reference;
-            typedef typename T::comb_type           *pointer;
+            typedef typename T::value_type           &reference;
+            typedef typename T::value_type           *pointer;
             typedef bidirectional_iterator_tag      iterator_category;
             
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             t_iterator(void) : _p(NULL) {}
-            t_iterator(NodePtr x) : _p(x) {}
+            t_iterator(node_ptr x) : _p(x) {}
             t_iterator(const t_iterator &it) : _p(it._p) {}
             ~t_iterator(void) {}
             
@@ -63,13 +63,13 @@ namespace   ft
             bool        operator!=(const t_iterator& rhs) const
             { return this->_p != rhs._p; }
 
-            reference       operator*(void) { return (this->_p->comb); }
-            const reference operator*(void) const { return (this->_p->comb); }
-            pointer         operator->(void) const { return (&this->_p->comb);}
+            reference       operator*(void) { return (this->_p->value); }
+            const reference operator*(void) const { return (this->_p->value); }
+            pointer         operator->(void) const { return (&this->_p->value);}
 
         private:
             // member attributes
-            NodePtr _p; // pointer to RBNode
+            node_ptr _p; // pointer to RBNode
     };
 
     template < class T >
@@ -84,16 +84,16 @@ namespace   ft
             typedef typename ft::iterator_traits<T*>::value_type               \
                              value_type;
             typedef typename ft::iterator_traits<T*>::pointer                  \
-                             NodePtr;
-            typedef typename T::comb_type           &reference;
-            typedef typename T::comb_type           *pointer;
+                             node_ptr;
+            typedef typename T::value_type           &reference;
+            typedef typename T::value_type           *pointer;
             typedef bidirectional_iterator_tag      iterator_category;
             
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             t_const_iterator(void) : _p(NULL) {}
-            t_const_iterator(NodePtr x) : _p(x) {}
+            t_const_iterator(node_ptr x) : _p(x) {}
             t_const_iterator(const t_const_iterator &it) : _p(it._p) {}
             ~t_const_iterator(void) {}
             
@@ -117,12 +117,12 @@ namespace   ft
             bool            operator!=(const t_const_iterator& rhs) const
             { return this->_p != rhs._p; }
 
-            const reference operator*(void) const { return (this->_p->comb); }
-            pointer         operator->(void) const { return (&this->_p->comb);}
+            const reference operator*(void) const { return (this->_p->value); }
+            pointer         operator->(void) const { return (&this->_p->value);}
 
         private:
             // member attributes
-            NodePtr _p; // pointer to RBNode
+            node_ptr _p; // pointer to RBNode
     };
 
 }
