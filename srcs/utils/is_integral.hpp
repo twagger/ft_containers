@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:52:59 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 10:39:29 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 14:54:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ namespace   ft
     // Integral constant
     template <class T, T v>
     struct integral_constant {
+        // member attribute
         static const T                  value = v;
+        // member types
         typedef T                       value_type;
         typedef integral_constant<T,v>  type;
     };

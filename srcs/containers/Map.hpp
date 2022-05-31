@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/31 09:46:46 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 15:51:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ namespace   ft
             : _allocator(alloc), _size(0), _compare(comp) {}
               
             // Range
-            // template <class InputIterator>
-            // map(InputIterator first, InputIterator last, \
-            //     const key_compare& comp = key_compare(), \
-            //     const allocator_type& alloc = allocator_type());
+            template <class InputIterator>
+            map(InputIterator first, InputIterator last, \
+                const key_compare& comp = key_compare(), \
+                const allocator_type& alloc = allocator_type())
+            : _allocator(alloc), _compare(comp)
+            { this->insert(first, last); }
             
             // Copy
             // map(const map &x);
@@ -121,7 +123,6 @@ namespace   ft
             pair<iterator, bool>    insert(const value_type &val)
             {
                 iterator    it;
-                
                 it = this->_tree.search(val.first);
                 if (it == NULL)
                 {
@@ -133,9 +134,17 @@ namespace   ft
             }
             // iterator                insert(iterator position, \
             //                             const value_type &val);
-            // template<class InputIterator>
-            // void                    insert(InputIterator first, \
-            //                             InputIterator last); 
+            template<class InputIterator>
+            void                    insert(InputIterator first, \
+                                           InputIterator last)
+            {
+                    while (first != last) // le last est un vrai noeud specifique et le dernier ++ est sense emmener a ce noeud et pas a null > MAJ le tree iterator
+                    {
+                    if (this->insert(*first).second == true)
+                        ++this->_size;
+                    ++first;
+                }
+            }
             // void                    erase(iterator position);
             // size_type               erase(const key_type &k);
             // void                    erase(iterator first, iterator last);
