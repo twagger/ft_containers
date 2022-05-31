@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 09:39:13 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/27 15:01:07 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 14:44:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
+# include "iterator_traits.hpp"
 
 namespace   ft
 {
