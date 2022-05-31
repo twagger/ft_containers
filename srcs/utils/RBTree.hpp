@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/31 10:01:56 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 13:49:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,39 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef T                                   value_type;
-            typedef RBTree<T, Compare, A>               tree_type;
-            typedef RBNode<T, Compare>                  node_type;
-            typedef typename T::first_type              key_type;
+            typedef T                                           value_type;
+            typedef RBTree<T, Compare, A>                       tree_type;
+            typedef RBNode<T, Compare>                          node_type;
+            typedef typename T::first_type                      key_type;
             // Compare
-            typedef Compare                             key_compare;
+            typedef Compare                                     key_compare;
             // Memory
-            typedef A                                   allocator_type;
+            typedef A                                           allocator_type;
+            typedef typename A::template rebind<node_type>::other
+                                                                node_allocator;
             // Pointer & Ref
-            typedef node_type                           *node_ptr;
-            typedef node_type                           &node_ref;
-            typedef tree_type                           *tree_ptr;
-            typedef tree_type                           &tree_ref;
+            typedef typename allocator_type::reference          reference;
+            typedef typename allocator_type::const_reference    const_reference;
+            typedef typename allocator_type::pointer            pointer;
+            typedef typename allocator_type::const_pointer      const_pointer;
+            typedef node_type                                   *node_ptr;
+            typedef node_type                                   &node_ref;
+            typedef tree_type                                   *tree_ptr;
+            typedef tree_type                                   &tree_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
+            // Default
             RBTree(void) : _root(NULL), _comp(key_compare()), _min(NULL), \
-                           _max(NULL), _end(new node_type(\
-                                            value_type(), key_compare())) {}
+                           _max(NULL), _allocator(node_allocator())
+            { this->_end = this->_allocator.allocate(1); }
+
+            // Copy
             RBTree(const tree_ref src);
-            ~RBTree(void) {}
-            
+
+            // Destructor
+            ~RBTree(void) { this->clear(); } 
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
@@ -68,10 +78,11 @@ namespace   ft
              *  @brief  Insert a value in the tree.
              *  @param  value  A combination of key + value (pair).
              */
-            node_ptr insert(value_type value)
+            node_ptr insert(const_reference value)
             {
                 node_ptr result;
-                node_ptr node = new node_type(value);
+                node_ptr node = this->_allocator.allocate(1);
+                this->_allocator.construct(node, value);
 
                 // Update min and max
                 if (!this->_min || (this->_min 
@@ -99,14 +110,14 @@ namespace   ft
             }
             
             // Remove
-            node_ptr remove(key_type const &key)
+            void remove(key_type const &key)
             {
                 node_ptr to_remove;
                 node_ptr replacement;
 
                 to_remove = this->search(key);
                 if (to_remove == NULL)
-                    return (NULL);
+                    return ;
                 // Update min and max
                 if (key == this->_min->value.first)
                     this->_min = to_remove->successor();
@@ -125,8 +136,9 @@ namespace   ft
                 }
                 if (to_remove->color == RED || 
                     (to_remove->child[LEFT] || to_remove->child[RIGHT]))
-                    return (this->_remove_simple_case(to_remove));
-                return (this->_remove_complex_case(to_remove));
+                    this->_remove_simple_case(to_remove);
+                else
+                    this->_remove_complex_case(to_remove);
             }
 
             // Search
@@ -142,12 +154,21 @@ namespace   ft
                     this->_recursive_print(this->_root, "", true);
             }
 
+            // Clear tree
+            void    clear(void) 
+            {
+                this->_recursive_clear(this->_root);
+                this->_clear_node(this->_end);
+            }
+
         private:
-            node_ptr    _root;
-            node_ptr    _min; // begin node
-            node_ptr    _max; // pre-end node
-            node_ptr    _end; // ghost node for end(). Linked to _max node
-            Compare     _comp;
+            node_ptr        _root;
+            node_ptr        _min; // begin node
+            node_ptr        _max; // pre-end node
+            node_ptr        _end; // ghost node for end(). Linked to _max node
+            Compare         _comp;
+            node_allocator  _allocator;
+
 
             /**
              *  @brief  Tree traversal to insert the node at the right place.
@@ -186,9 +207,9 @@ namespace   ft
             // Repair
             void    _repair(node_ptr node)
             {
-                int     dir;
-                node_ptr p;
-                node_ptr g;
+                int         dir;
+                node_ptr    p;
+                node_ptr    g;
                 
                 if (node->parent == NULL)
                     node->color = BLACK;
@@ -220,7 +241,7 @@ namespace   ft
             }
 
             // Remove
-            node_ptr _remove_simple_case(node_ptr node)
+            void    _remove_simple_case(node_ptr node)
             {
                 // All cases but the one where the node is black with no child
                 // With the simple cases we don't need to rebalance the tree
@@ -228,7 +249,6 @@ namespace   ft
                 {
                     // Node is RED : remove it
                     node->parent->child[node->childdir()] = NULL;
-                    return (node);
                 }
                 else // Node is BLACK
                 {
@@ -238,27 +258,25 @@ namespace   ft
                         node->swap_nodes(node->child[LEFT]);
                         node->parent->color = BLACK;
                         node->parent->child[LEFT] = NULL;
-                        return (node);
                     }
                     else if (node->child[RIGHT])
                     {
                         node->swap_nodes(node->child[RIGHT]);
                         node->parent->color = BLACK;
                         node->parent->child[RIGHT] = NULL;
-                        return (node->child[RIGHT]);
                     }
-                    return (node);
                 }
+                this->_clear_node(node);
             }
 
-            node_ptr _remove_complex_case(node_ptr node)
+            void    _remove_complex_case(node_ptr node)
             {
                 // Specific case : node is BLACK with no child
-                node_ptr p = node->parent;
-                node_ptr b; // brother
-                node_ptr c; // close nephew
-                node_ptr d; // distant nephew
-                int     dir;
+                node_ptr    p = node->parent;
+                node_ptr    b; // brother
+                node_ptr    c; // close nephew
+                node_ptr    d; // distant nephew
+                int         dir;
 
                 // 1. Replace node by NULL in its parent : 
                 //  the tree is now unbalanced !
@@ -288,9 +306,11 @@ namespace   ft
                         p = node->parent;
                         continue;
                     }
-                    return (NULL);
+                    this->_clear_node(node);
+                    return ;
                 }
-                return (NULL); // remove_case_2
+                this->_clear_node(node);
+                return ; // remove_case_2
             }
 
             void    _remove_case_3(node_ptr *p, node_ptr *b, \
@@ -347,8 +367,8 @@ namespace   ft
             // Recursive search
             node_ptr _recursive_search(node_ptr node, key_type const &key) const
             {
-                node_ptr ret = NULL;
-                int     comp_res;
+                node_ptr    ret = NULL;
+                int         comp_res;
 
                 if (!node)
                     return (NULL);
@@ -387,6 +407,24 @@ namespace   ft
                     this->_recursive_print(node->child[LEFT], indent, false);
                     this->_recursive_print(node->child[RIGHT], indent, true);
                 }
+            }
+
+            void    _clear_node(node_ptr node)
+            {
+                this->_allocator.destroy(node);
+                this->_allocator.deallocate(node, 1);
+            }
+
+            // Recursive clear
+            void    _recursive_clear(node_ptr node)
+            {
+                if (node == NULL)
+                    return ;
+                _recursive_clear(node->child[LEFT]);
+                _recursive_clear(node->child[RIGHT]);
+                this->_allocator.destroy(node);
+                this->_allocator.deallocate(node, 1);
+                return ;
             }
     };
 }

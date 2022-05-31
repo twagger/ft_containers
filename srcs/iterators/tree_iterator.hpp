@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/31 09:42:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 13:09:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ namespace   ft
                              value_type;
             typedef typename ft::iterator_traits<T*>::pointer                  \
                              node_ptr;
-                             
-            typedef typename T::value_type           &reference;
-            typedef typename T::value_type           *pointer;
+            typedef typename T::value_type          &reference;
+            typedef typename T::value_type          *pointer;
             typedef bidirectional_iterator_tag      iterator_category;
             
             /* ************************************************************** */
@@ -85,8 +84,8 @@ namespace   ft
                              value_type;
             typedef typename ft::iterator_traits<T*>::pointer                  \
                              node_ptr;
-            typedef typename T::value_type           &reference;
-            typedef typename T::value_type           *pointer;
+            typedef typename T::value_type          &reference;
+            typedef typename T::value_type          *pointer;
             typedef bidirectional_iterator_tag      iterator_category;
             
             /* ************************************************************** */

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/31 09:39:45 by marvin           ###   ########.fr       */
+/*   Updated: 2022/05/31 13:28:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ namespace   ft
             /*  PRIVATE MEMBER VARIABLES                                      */
             /* ************************************************************** */
             Compare _comp;
+            
+            // Default constructor
+            RBNode(void){}
 
         public:
             
@@ -34,24 +37,29 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef T                                   value_type;
-            typedef RBNode<T, Compare>                  node_type;
+            typedef T                   value_type;
+            typedef RBNode<T, Compare>  node_type;
             // Compare
-            typedef Compare                             key_compare;
+            typedef Compare             key_compare;
             // Pointer & Ref
-            typedef node_type                           *node_ptr;
-            typedef node_type                           &node_ref;
+            typedef T                   &reference;
+            typedef const T             &const_reference;
+            typedef T                   *pointer;
+            typedef const T             *const_pointer;
+            typedef node_type           *node_ptr;
+            typedef node_type           &node_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
-            RBNode(void)
-            : parent(NULL), child{NULL, NULL}, color(RED), _comp(key_compare())
-            {}
-            RBNode(value_type value, const key_compare &comp = key_compare())
+            // Param
+            RBNode(value_type value, \
+                   const key_compare &comp = key_compare())
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
               value(value){}
+            // Copy
             RBNode(const node_ref src) { *this = src; }
+            // Destructor
             ~RBNode(void) {}
 
             /* ************************************************************** */
@@ -64,7 +72,7 @@ namespace   ft
                 this->color = rhs.color;
                 this->child[LEFT] = rhs.child[LEFT];
                 this->child[RIGHT] = rhs.child[RIGHT];
-                this->parent = rhs.parent;    
+                this->parent = rhs.parent;
                 return (*this);
             }
             
