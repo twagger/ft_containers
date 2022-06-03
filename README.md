@@ -8,7 +8,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
 make all
 ./tests/ft_containers_tst
 ```
-## Lunch only some tests
+## Launch only some tests
 ```sh
 ./tests/ft_containers_tst --gtest_filter=Vector*
 ./tests/ft_containers_tst --gtest_filter=Map*
