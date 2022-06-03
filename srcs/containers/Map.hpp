@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/03 14:01:39 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/03 15:27:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,12 @@ namespace   ft
                 }
                 return (pair<iterator, bool>(it, false));
             }
-            // iterator                insert(iterator position, \
-            //                             const value_type &val);
+            
+            iterator                insert(iterator position, \
+                                           const value_type &val)
+            {
+            }
+
             template<class InputIterator>
             void                    insert(InputIterator first, \
                                            InputIterator last)

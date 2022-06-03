@@ -3,16 +3,16 @@
 #include "Map.hpp"
 #include "parameters.hpp"
 
-TYPED_TEST_SUITE_P(Map_constructor);
+TYPED_TEST_SUITE_P(Map_constructors);
 
 // Default constructor
-TYPED_TEST(Map_constructor, defaultConstructor) {
+TYPED_TEST(Map_constructors, defaultConstructor) {
     MAP my_map;
     EXPECT_EQ(my_map.size(), 0);
 }
 
 // Ranged constructor
-TYPED_TEST(Map_constructor, rangeConstructor) {
+TYPED_TEST(Map_constructors, rangeConstructor) {
     MAP my_map;
     my_map.insert(PAIR('a', 100));
     my_map.insert(PAIR('b', 500));
