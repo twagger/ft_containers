@@ -1,30 +1,9 @@
 #include "gtest/gtest.h"
 #include <map>
 #include "Map.hpp"
+#include "parameters.hpp"
 
-/* ************************************************************************** */
-/*  MAP CONSTRUCTOR TESTS                                                     */
-/* ************************************************************************** */
-
-#define MAP typename TestFixture::Types::first_type
-#define PAIR typename TestFixture::Types::second_type
-
-template<typename T>
-struct Map_iterators : public testing::Test
-{ using Types = T; };
-
-using ContTypes = testing::Types
-<
-    std::pair<std::map<char, int>, std::pair<char, int>>,
-    std::pair<ft::map<char, int>, ft::pair<char, int>>
-    //std::pair<std::map<char, int, std::greater<char>>, std::pair<char, int>>,
-    //std::pair<ft::map<char, int, std::greater<char>>, ft::pair<char, int>>
->;
-
-TYPED_TEST_CASE(Map_iterators, ContTypes);
 TYPED_TEST_SUITE_P(Map_iterators);
-
-/* ************************************************************************** */
 
 // Increment iterator
 TYPED_TEST(Map_iterators, incrementIterator) {
@@ -37,10 +16,17 @@ TYPED_TEST(Map_iterators, incrementIterator) {
     my_map.insert(PAIR('d', 20));
 
     it = my_map.begin();
-    EXPECT_EQ(it->first, 'a');
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+        EXPECT_EQ(it->first, 'a');
+    else
+        EXPECT_EQ(it->first, 'd');
     ++it;
     ++it;
-    EXPECT_EQ(it->first, 'c');
+    if (t_comp == t_less)
+        EXPECT_EQ(it->first, 'c');
+    else
+        EXPECT_EQ(it->first, 'b');
 }
 
 // End iterator
@@ -55,7 +41,11 @@ TYPED_TEST(Map_iterators, endIterator) {
 
     it = my_map.end();
     --it;
-    EXPECT_EQ(it->first, 'd');
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+        EXPECT_EQ(it->first, 'd');
+    else
+        EXPECT_EQ(it->first, 'a');
 }
 
 // Reverse iterator
@@ -69,7 +59,17 @@ TYPED_TEST(Map_iterators, reverseIterator) {
     my_map.insert(PAIR('d', 20));
     
     it = my_map.rbegin();
-    EXPECT_EQ(it->first, 'd');
-    ++it;
-    EXPECT_EQ(it->first, 'c');
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(it->first, 'd');
+        ++it;
+        EXPECT_EQ(it->first, 'c');
+    }
+    else
+    {
+        EXPECT_EQ(it->first, 'a');
+        ++it;
+        EXPECT_EQ(it->first, 'b');
+    }
 }
