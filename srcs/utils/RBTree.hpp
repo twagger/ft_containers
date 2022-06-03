@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/31 13:49:00 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/03 09:57:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ namespace   ft
             // Default
             RBTree(void) : _root(NULL), _comp(key_compare()), _min(NULL), \
                            _max(NULL), _allocator(node_allocator())
-            { this->_end = this->_allocator.allocate(1); }
+            {
+                this->_end = this->_allocator.allocate(1);
+                this->_allocator.construct(this->_end, value_type());
+                this->_end->color = WHITE;
+            }
 
             // Copy
             RBTree(const tree_ref src);
@@ -92,7 +96,7 @@ namespace   ft
                     && this->_comp(this->_max->value.first, value.first)))
                 {
                     this->_max = node;
-                    this->_end->child[LEFT] = this->_max;
+                    node->child[RIGHT] = this->_end;
                     this->_end->child[RIGHT] = this->_max;
                 }
                 
@@ -124,21 +128,23 @@ namespace   ft
                 if (key == this->_max->value.first)
                 {
                     this->_max = to_remove->predecessor();
-                    this->_end->child[LEFT] = this->_max;
                     this->_end->child[RIGHT] = this->_max;
                 }
                 // Check the number of childs
-                if (to_remove->child[LEFT] && to_remove->child[RIGHT])
+                if (!is_nil(to_remove->child[LEFT])
+                    && !is_nil(to_remove->child[RIGHT]))
                 {
                     // 2 childs : switch it with predecessor or successor
                     replacement = to_remove->replacement();
                     to_remove->swap_nodes(replacement);
                 }
                 if (to_remove->color == RED || 
-                    (to_remove->child[LEFT] || to_remove->child[RIGHT]))
+                    (!is_nil(to_remove->child[LEFT]) 
+                     || !is_nil(to_remove->child[RIGHT])))
                     this->_remove_simple_case(to_remove);
                 else
                     this->_remove_complex_case(to_remove);
+                this->_end->child[RIGHT]->child[RIGHT] = this->_end;
             }
 
             // Search
@@ -166,7 +172,7 @@ namespace   ft
             node_ptr        _min; // begin node
             node_ptr        _max; // pre-end node
             node_ptr        _end; // ghost node for end(). Linked to _max node
-            Compare         _comp;
+            key_compare     _comp;
             node_allocator  _allocator;
 
 
@@ -184,7 +190,7 @@ namespace   ft
             {
                 int dir;
 
-                if (root != NULL)
+                if (!is_nil(root))
                 {
                     if (this->_comp(node->value.first, root->value.first))
                         dir = LEFT;
@@ -192,7 +198,7 @@ namespace   ft
                         dir = RIGHT;
                     else
                         return (node);
-                    if (root->child[dir] != NULL)
+                    if (!is_nil(root->child[dir]))
                     {
                         node = this->_recursive_insert(root->child[dir], node);
                         return (node);
@@ -253,13 +259,13 @@ namespace   ft
                 else // Node is BLACK
                 {
                     // One child, it is necessary RED. It replaces the node.
-                    if (node->child[LEFT])
+                    if (!is_nil(node->child[LEFT]))
                     {
                         node->swap_nodes(node->child[LEFT]);
                         node->parent->color = BLACK;
                         node->parent->child[LEFT] = NULL;
                     }
-                    else if (node->child[RIGHT])
+                    else if (!is_nil(node->child[RIGHT]))
                     {
                         node->swap_nodes(node->child[RIGHT]);
                         node->parent->color = BLACK;
@@ -293,9 +299,9 @@ namespace   ft
                     c = b->child[dir];
                     if (b->color == RED)
                         this->_remove_case_3(&p, &b, &c, &d, dir);
-                    else if (d != NULL && d->color == RED)
+                    else if (!is_nil(d) && d->color == RED)
                         this->_remove_case_6(p, b, d, dir);
-                    else if (c != NULL && c->color == RED)
+                    else if (!is_nil(c) && c->color == RED)
                         this->_remove_case_5(&p, &b, &c, &d, dir);
                     else if (p->color == RED)
                         this->_remove_case_4(p, b);
@@ -324,13 +330,13 @@ namespace   ft
                 // update genealogy
                 *b = *c;
                 *d = (*b)->child[1 - dir];
-                if (*d != NULL && (*d)->color == RED)
+                if (!is_nil(*d) && (*d)->color == RED)
                 {
                     this->_remove_case_6(*p, *b, *d, dir);
                     return;
                 }
                 *c = (*b)->child[dir];
-                if (*c != NULL && (*c)->color == RED)
+                if (!is_nil(*c) && (*c)->color == RED)
                 {
                     this->_remove_case_5(p, b, c, d, dir);
                     return;
@@ -370,14 +376,14 @@ namespace   ft
                 node_ptr    ret = NULL;
                 int         comp_res;
 
-                if (!node)
+                if (is_nil(node))
                     return (NULL);
                 if (node->value.first == key)
                     return (node);
                 else 
                 {
                     comp_res = this->_comp(node->value.first, key);
-                    if (node->child[comp_res])
+                    if (!is_nil(node->child[comp_res]))
                         ret = this->_recursive_search(\
                                         node->child[comp_res], key);
                 }
@@ -388,7 +394,7 @@ namespace   ft
 	        void    _recursive_print(\
                         node_ptr node, std::string indent, bool last) const
             {
-                if (node != NULL)
+                if (!is_nil(node))
                 {
                     std::cout << indent;
                     if (last)
@@ -418,7 +424,7 @@ namespace   ft
             // Recursive clear
             void    _recursive_clear(node_ptr node)
             {
-                if (node == NULL)
+                if (is_nil(node))
                     return ;
                 _recursive_clear(node->child[LEFT]);
                 _recursive_clear(node->child[RIGHT]);

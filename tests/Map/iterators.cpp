@@ -143,6 +143,7 @@ TEST(MapTest_STDIterator, reverseIterator) {
     my_map.insert(std::pair<char, int>('d', 20));
 
     it = my_map.rbegin();
+    EXPECT_EQ(it->first, 'd');
     ++it;
     EXPECT_EQ(it->first, 'c');
 }
@@ -155,8 +156,9 @@ TEST(MapTest_Iterator, reverseIterator) {
     my_map.insert(ft::pair<char, int>('b', 500));
     my_map.insert(ft::pair<char, int>('c', 1800));
     my_map.insert(ft::pair<char, int>('d', 20));
-
+    
     it = my_map.rbegin();
+    EXPECT_EQ(it->first, 'd');
     ++it;
     EXPECT_EQ(it->first, 'c');
 }

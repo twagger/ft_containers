@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 09:39:13 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/31 14:44:49 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/03 10:40:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ namespace   ft
             { this->current = rhs.current; return (*this);}
             
             reverse_iterator    &operator++(void)
-            { --this->current;return *this; }
+            { --this->current; return *this; }
             reverse_iterator    operator++(int)
             { reverse_iterator tmp(*this); --this->current; return tmp; }
             reverse_iterator    &operator--(void)
-            { ++this->current;return *this; }
+            { ++this->current; return *this; }
             reverse_iterator    operator--(int)
             { reverse_iterator tmp(*this); ++this->current; return tmp; }
 

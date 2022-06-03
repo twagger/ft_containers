@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/05/31 15:49:42 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/03 10:48:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RBNODE_HPP
 # include "pair.hpp"
 
-enum { RED, BLACK };
+enum { RED, BLACK, WHITE };
 enum { LEFT, RIGHT };
 
 namespace   ft
@@ -30,6 +30,10 @@ namespace   ft
             
             // Default constructor
             RBNode(void){}
+
+            // Non member functions
+            friend bool is_nil(RBNode<T, Compare> *node)
+            { return (node == NULL || (node && node->color == WHITE) );}
 
         public:
             
@@ -160,9 +164,9 @@ namespace   ft
                 
                 left = this->child[LEFT];
                 right = this->child[RIGHT];
-                while (left->child[RIGHT])
+                while (!is_nil(left->child[RIGHT]))
                     left = left->child[RIGHT];
-                while (right->child[LEFT])
+                while (!is_nil(right->child[LEFT]))
                     right = right->child[LEFT];
                 if (left->color == RED)
                     return (left);
@@ -180,19 +184,20 @@ namespace   ft
 
                 found = this->child[RIGHT];
                 // Exception for end node
-                if (this->child[RIGHT] 
-                    && this->child[RIGHT] == this->child[LEFT])
-                    return (this->child[RIGHT]);
-                if (found && this->_comp(found->value.first, this->value.first))
+                if (this->color == WHITE)
+                    return (found);
+                if (!is_nil(found) 
+                    && this->_comp(found->value.first, this->value.first))
                 {
-                    while (found->child[LEFT])
+                    while (!is_nil(found->child[LEFT]))
                         found = found->child[LEFT];
                     return (found);
                 }
                 found = this->child[LEFT];
-                if (found && this->_comp(found->value.first, this->value.first))
+                if (!is_nil(found)
+                    && this->_comp(found->value.first, this->value.first))
                 {
-                    while (found->child[RIGHT])
+                    while (!is_nil(found->child[RIGHT]))
                         found = found->child[RIGHT];
                     return (found);
                 }
@@ -216,16 +221,21 @@ namespace   ft
                 node_ptr found;
 
                 found = this->child[RIGHT];
-                if (found && this->_comp(this->value.first, found->value.first))
+                // exception for end node
+                if (found && found->color == WHITE) 
+                    return (found);
+                if (!is_nil(found)
+                    && this->_comp(this->value.first, found->value.first))
                 {
-                    while (found->child[LEFT])
+                    while (!is_nil(found->child[LEFT]))
                         found = found->child[LEFT];
                     return (found);
                 }
                 found = this->child[LEFT];
-                if (found && this->_comp(this->value.first, found->value.first))
+                if (!is_nil(found)
+                    && this->_comp(this->value.first, found->value.first))
                 {
-                    while (found->child[RIGHT])
+                    while (!is_nil(found->child[RIGHT]))
                         found = found->child[RIGHT];
                     return (found);
                 }
