@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/03 15:40:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/04 07:38:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,9 @@ TYPED_TEST_CASE(Map_iterators, ContTypes);
 template<typename T>
 struct Map_constructors : public testing::Test { using Types = T; };
 TYPED_TEST_CASE(Map_constructors, ContTypes);
+
+template<typename T>
+struct Map_operators : public testing::Test { using Types = T; };
+TYPED_TEST_CASE(Map_operators, ContTypes);
 
 #endif

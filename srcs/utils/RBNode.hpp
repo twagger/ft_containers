@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/03 10:48:52 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:48:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,29 @@ namespace   ft
             RBNode(value_type value, \
                    const key_compare &comp = key_compare())
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
-              value(value){}
+              value(value) {}
+
             // Copy
-            RBNode(const node_ref src) { *this = src; }
+            RBNode(const node_ref src)
+            : parent(NULL), child{NULL, NULL}, color(src.color), \
+              _comp(src._comp), value(src.value) {}
+ 
             // Destructor
             ~RBNode(void) {}
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            node_ref operator=(const node_ref rhs)
+            node_ref operator=(const node_ref other)
             {
-                this->_comp = rhs.get_comp();
-                this->value = rhs.value;
-                this->color = rhs.color;
-                this->child[LEFT] = rhs.child[LEFT];
-                this->child[RIGHT] = rhs.child[RIGHT];
-                this->parent = rhs.parent;
+                node_ptr new_left = new node_type(*other.child[LEFT]);
+                node_ptr new_right = new node_type(*other.child[RIGHT]);
+
+                this->value = other.value;
+                std::swap(this->child[LEFT],  new_left);
+                std::swap(this->child[RIGHT], new_right);
+                delete new_left;
+                delete new_right;
                 return (*this);
             }
             
@@ -250,36 +256,43 @@ namespace   ft
             }
 
             // Swap nodes
-            void    swap_nodes(node_ptr other)
+            void    swap(node_ptr other)
             {
-                node_ptr swp_parent = this->parent;
-                node_ptr swp_left = this->child[LEFT];
-                node_ptr swp_right = this->child[RIGHT];
-                int     swp_color = this->color;
-
-                // put this in the place of other 
-                this->parent = other->parent;
-                this->child[LEFT] = other->child[LEFT];
-                this->child[RIGHT] = other->child[RIGHT];
-                if (this->parent)
-                    this->parent->child[this->childdir()] = this;
+                int t_dir;
+                int o_dir;
+                
+                // Save original node direction from its parent
+                try {   
+                    t_dir = this->childdir();
+                    o_dir = other->childdir();
+                }
+                catch (std::runtime_error &e)
+                {
+                    if (!this->parent)
+                        t_dir = -1;
+                    if (!other->parent)
+                        o_dir = -1;
+                }
+                // Swap pointers on the node
+                std::swap(this->parent, other->parent);
+                std::swap(this->child[LEFT], other->child[LEFT]);
+                std::swap(this->child[RIGHT], other->child[RIGHT]);
+                // Swap colors > to not impact the RBTree rules
+                std::swap(this->color, other->color);
+                // Change child pointer on parent node
+                if (t_dir != -1)
+                    other->parent->child[t_dir] = other;
+                if (o_dir != -1)
+                    this->parent->child[o_dir] = this;
+                // Change parent pointer on childs
                 if (this->child[LEFT])
                     this->child[LEFT]->parent = this;
                 if (this->child[RIGHT])
                     this->child[RIGHT]->parent = this;
-                this->color = other->color;
-
-                // put other in the place of this 
-                other->parent = swp_parent;
-                other->child[LEFT] = swp_left;
-                other->child[RIGHT] = swp_right;
-                if (other->parent)
-                    other->parent->child[other->childdir()] = other;
-                if (swp_left)
-                    swp_left->parent = other;
-                if (swp_right)
-                    swp_right->parent = other;
-                other->color = swp_color;
+                if (other->child[LEFT])
+                    other->child[LEFT]->parent = other;
+                if (other->child[RIGHT])
+                    other->child[RIGHT]->parent = other;
             }
     };
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/03 09:57:05 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/04 09:24:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ namespace   ft
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            tree_ref operator=(const tree_ref rhs);
+            tree_ref operator=(const tree_ref rhs)
+            {
+                
+            }
 
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
@@ -136,7 +139,7 @@ namespace   ft
                 {
                     // 2 childs : switch it with predecessor or successor
                     replacement = to_remove->replacement();
-                    to_remove->swap_nodes(replacement);
+                    to_remove->swap(replacement);
                 }
                 if (to_remove->color == RED || 
                     (!is_nil(to_remove->child[LEFT]) 
@@ -261,13 +264,13 @@ namespace   ft
                     // One child, it is necessary RED. It replaces the node.
                     if (!is_nil(node->child[LEFT]))
                     {
-                        node->swap_nodes(node->child[LEFT]);
+                        node->swap(node->child[LEFT]);
                         node->parent->color = BLACK;
                         node->parent->child[LEFT] = NULL;
                     }
                     else if (!is_nil(node->child[RIGHT]))
                     {
-                        node->swap_nodes(node->child[RIGHT]);
+                        node->swap(node->child[RIGHT]);
                         node->parent->color = BLACK;
                         node->parent->child[RIGHT] = NULL;
                     }

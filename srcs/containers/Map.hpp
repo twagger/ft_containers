@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/03 15:27:18 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/04 08:45:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,25 @@ namespace   ft
             /* ************************************************************** */
             /*  OPERATOR OVERLOADS                                            */
             /* ************************************************************** */
-            // mapped_type &operator[](const key_type &k);
-            // map         &operator=(const map &x);
+            mapped_type             &operator[](const key_type &k)
+            {
+                iterator    it;
+                
+                it = this->_tree.search(k);
+                if (it == NULL)
+                {
+                    it = this->_tree.insert(value_type(k, mapped_type()));
+                    ++this->_size;
+                }
+                return ((*it).second);    
+            }
+
+            map                     &operator=(const map &x)
+            {
+                this->_tree = x._tree;
+                this->_size = x.size();
+                return (*this);
+            }
 
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */

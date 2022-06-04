@@ -334,3 +334,41 @@ TEST(RBTree, successorWithGreaterComp) {
     my_tree.insert(ft::pair<int, char>(13, 'i'));
     EXPECT_TRUE(my_tree.search(17)->successor()->value.first == 15);
 }
+
+TEST(RBTree, swapNodes) {
+    ft::RBTree<ft::pair<int, char>, std::less<int>>  my_tree;
+    my_tree.insert(ft::pair<int, char>(17, 'a'));
+    my_tree.insert(ft::pair<int, char>(25, 'f'));
+    my_tree.insert(ft::pair<int, char>(27, 'c'));
+    my_tree.insert(ft::pair<int, char>(11, 'g'));
+    my_tree.insert(ft::pair<int, char>(1, 't'));
+    my_tree.insert(ft::pair<int, char>(6, 'u'));
+    my_tree.insert(ft::pair<int, char>(15, 'r'));
+    my_tree.insert(ft::pair<int, char>(8, 'y'));
+    my_tree.insert(ft::pair<int, char>(22, 'l'));
+    my_tree.insert(ft::pair<int, char>(13, 'i'));
+    my_tree.get_root()->child[LEFT]->swap(my_tree.get_root()->child[RIGHT]);
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->value.first == 25);
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->value.second == 'f');
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.first == 11);
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.second == 'g');
+}
+
+TEST(RBTree, assignmentNodes) {
+    ft::RBTree<ft::pair<int, char>, std::less<int>>  my_tree;
+    my_tree.insert(ft::pair<int, char>(17, 'a'));
+    my_tree.insert(ft::pair<int, char>(25, 'f'));
+    my_tree.insert(ft::pair<int, char>(27, 'c'));
+    my_tree.insert(ft::pair<int, char>(11, 'g'));
+    my_tree.insert(ft::pair<int, char>(1, 't'));
+    my_tree.insert(ft::pair<int, char>(6, 'u'));
+    my_tree.insert(ft::pair<int, char>(15, 'r'));
+    my_tree.insert(ft::pair<int, char>(8, 'y'));
+    my_tree.insert(ft::pair<int, char>(22, 'l'));
+    my_tree.insert(ft::pair<int, char>(13, 'i'));
+    *my_tree.get_root()->child[LEFT] = *my_tree.get_root()->child[RIGHT];
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->value.first == 25);
+    EXPECT_TRUE(my_tree.get_root()->child[LEFT]->value.second == 'f');
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.first == 25);
+    EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.second == 'f');
+}
