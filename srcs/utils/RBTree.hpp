@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/04 09:24:18 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/04 13:06:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ namespace   ft
             }
 
             // Copy
-            RBTree(const tree_ref src);
+            RBTree(const tree_ref src) : _root(NULL), _comp(src._comp), \
+                                         _allocator(node_allocator())
+            { *this = src; }
 
             // Destructor
             ~RBTree(void) { this->clear(); } 
@@ -67,8 +69,14 @@ namespace   ft
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
             tree_ref operator=(const tree_ref rhs)
-            {
-                
+            { 
+                // copy nodes and structure, root, min, max, end, ... 
+                // don't change allocator and compare function
+                if (this == &rhs)
+                    return (*this);
+                this->_allocator = rhs._allocator;
+                this->_comp = rhs._comp;
+                                
             }
 
             /* ************************************************************** */
