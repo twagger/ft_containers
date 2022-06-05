@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/04 13:06:59 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/05 09:40:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,23 @@ namespace   ft
             typedef node_type                                   &node_ref;
             typedef tree_type                                   *tree_ptr;
             typedef tree_type                                   &tree_ref;
-
+            // Node pool
+            struct  node_pool
+            {
+                // Constructor & destructor
+                node_pool(void) : pool(nullptr), nb(0) {}
+                ~node_pool(void)
+                {
+                    for (int i = 0; i < this->nb; ++i)
+                    {
+                        RBTree::_allocator.destroy(this->pool[i]);
+                        RBTree::_allocator.desallocate(this->pool[i], 1);
+                    }
+                }
+                // Attributes
+                node_ptr    *pool;
+                int         nb;
+            };
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
@@ -60,7 +76,12 @@ namespace   ft
             // Copy
             RBTree(const tree_ref src) : _root(NULL), _comp(src._comp), \
                                          _allocator(node_allocator())
-            { *this = src; }
+            {
+                this->_end = this->_allocator.allocate(1);
+                this->_allocator.construct(this->_end, value_type());
+                this->_end->color = WHITE;
+                *this = src;
+            }
 
             // Destructor
             ~RBTree(void) { this->clear(); } 
@@ -70,13 +91,19 @@ namespace   ft
             /* ************************************************************** */
             tree_ref operator=(const tree_ref rhs)
             { 
-                // copy nodes and structure, root, min, max, end, ... 
-                // don't change allocator and compare function
-                if (this == &rhs)
-                    return (*this);
-                this->_allocator = rhs._allocator;
-                this->_comp = rhs._comp;
-                                
+                node_pool   pool; // pool of recycled nodes from this
+                
+                if (this != &rhs)
+                {
+                    pool = this->_recycle(this->get_root());
+                    this->_allocator = rhs._allocator;
+                    this->_comp = rhs._comp;
+                    this->_root = this->copy(rhs.get_root(), pool);
+                    this->_max = //; < calculate max from root
+                    this->_min = //; < calculate min from root
+                    this->_end = //; < update end with max link and mx with end link
+                }
+                return (*this);
             }
 
             /* ************************************************************** */
@@ -87,6 +114,7 @@ namespace   ft
             node_ptr get_min(void) const { return (this->_min); }
             node_ptr get_max(void) const { return (this->_max); }
             node_ptr get_end(void) const { return (this->_end); }
+
 
             // Insert 
             /**
@@ -178,7 +206,7 @@ namespace   ft
                 this->_clear_node(this->_end);
             }
 
-        private:
+        protected:
             node_ptr        _root;
             node_ptr        _min; // begin node
             node_ptr        _max; // pre-end node
@@ -186,6 +214,17 @@ namespace   ft
             key_compare     _comp;
             node_allocator  _allocator;
 
+            // Recycle nodes using pool
+            node_pool   _recycle(node_ptr node)
+            {
+                // recursive
+            }
+            
+            // Copy
+            node_ptr    _copy(node_ptr node, node_pool &pool)
+            {
+                // recursive    
+            }
 
             /**
              *  @brief  Tree traversal to insert the node at the right place.
