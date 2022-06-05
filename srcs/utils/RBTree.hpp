@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/05 09:40:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:22:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # include <memory>
+# include "Vector.hpp"
 # include "RBNode.hpp"
 
 namespace   ft
@@ -58,8 +59,8 @@ namespace   ft
                     }
                 }
                 // Attributes
-                node_ptr    *pool;
-                int         nb;
+                vector<node_ptr>    nodes;
+                int                 nb;
             };
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -95,10 +96,11 @@ namespace   ft
                 
                 if (this != &rhs)
                 {
-                    pool = this->_recycle(this->get_root());
+                    this->_recycle(this->get_root(), &pool);
                     this->_allocator = rhs._allocator;
                     this->_comp = rhs._comp;
-                    this->_root = this->copy(rhs.get_root(), pool);
+                    this->_copy(rhs.get_root(), &pool);
+                    // we can do below 3 in the copy
                     this->_max = //; < calculate max from root
                     this->_min = //; < calculate min from root
                     this->_end = //; < update end with max link and mx with end link
@@ -215,15 +217,53 @@ namespace   ft
             node_allocator  _allocator;
 
             // Recycle nodes using pool
-            node_pool   _recycle(node_ptr node)
+            void    _recycle(node_ptr node, node_pool *pool)
             {
-                // recursive
+                // recursive recycling
+                if (!is_nil(node))
+                {
+                    if (node) // Reuse ghost '_end' node too
+                    {
+                        this->_allocator.destroy(node);
+                        pool->nodes.push_back(node);
+                        ++pool->nb;
+                    }   
+                    return ;
+                }
+                this->_recycle(node->child[LEFT], pool);
+                this->_recycle(node->child[RIGHT], pool);
+                // Destroy node
+                this->_allocator.destroy(node);
+                // Add node to the pool
+                pool->nodes.push_back(node);
+                ++pool->nb;
             }
             
             // Copy
-            node_ptr    _copy(node_ptr node, node_pool &pool)
+            void    _copy(node_ptr node, node_pool *pool)
             {
-                // recursive    
+                node_ptr    dest;
+                
+                // recursive
+                if (is_nil(node))
+                {
+                    if (node) // _end node
+                    {
+                        // copy using pool if available
+                    }
+                }
+                this->_copy(node->child[LEFT], pool);
+                this->_copy(node->child[RIGHT], pool);
+                // If pool is still available, use it
+                if (pool->nb)
+                {
+                    dest = pool->nodes[pool->nb - 1];
+                    --pool->nb;
+                }
+                else // allocate it
+                    dest = this->_allocator.allocate(1);
+                // Clone src node to dest node
+                // Connect dest node to this tree
             }
 
             /**
