@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/05 10:22:04 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 09:59:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,9 @@ namespace   ft
             typedef RBTree<T, Compare, A>                       tree_type;
             typedef RBNode<T, Compare>                          node_type;
             typedef typename T::first_type                      key_type;
+            typedef A                                           allocator_type;
             // Compare
             typedef Compare                                     key_compare;
-            // Memory
-            typedef A                                           allocator_type;
-            typedef typename A::template rebind<node_type>::other
-                                                                node_allocator;
             // Pointer & Ref
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
@@ -45,11 +42,14 @@ namespace   ft
             typedef node_type                                   &node_ref;
             typedef tree_type                                   *tree_ptr;
             typedef tree_type                                   &tree_ref;
+            // Memory
+            typedef typename A::template rebind<node_type>::other
+                                                                node_allocator;
             // Node pool
             struct  node_pool
             {
                 // Constructor & destructor
-                node_pool(void) : pool(nullptr), nb(0) {}
+                node_pool(void) : nodes(nullptr), nb(0) {}
                 ~node_pool(void)
                 {
                     for (int i = 0; i < this->nb; ++i)
@@ -99,11 +99,9 @@ namespace   ft
                     this->_recycle(this->get_root(), &pool);
                     this->_allocator = rhs._allocator;
                     this->_comp = rhs._comp;
-                    this->_copy(rhs.get_root(), &pool);
-                    // we can do below 3 in the copy
-                    this->_max = //; < calculate max from root
-                    this->_min = //; < calculate min from root
-                    this->_end = //; < update end with max link and mx with end link
+                    this->_root = this->_copy(rhs.get_root(), &pool);
+                    this->_max = this->_find_min();
+                    this->_min = this->_find_max();
                 }
                 return (*this);
             }
@@ -216,6 +214,56 @@ namespace   ft
             key_compare     _comp;
             node_allocator  _allocator;
 
+            // find min
+            node_ptr    _find_min(void)
+            {
+                node_ptr    result = this->_root;
+                bool        comp_res;
+                
+                if (is_nil(this->_root))
+                    return (nullptr);
+                if (result->child[LEFT]
+                    && this->_comp(result->child[LEFT]->value.first, \
+                                   result->value.first))
+                {
+                    while (result->child[LEFT])
+                    { result = result->child[LEFT]; }
+                }
+                else if (result->child[RIGHT]
+                         && this->_comp(result->child[RIGHT]->value.first, \
+                                   result->value.first))
+                {
+                    while (result->child[RIGHT])
+                    { result = result->child[RIGHT]; }
+                }
+                return (result);    
+            }
+            
+            // find max
+            node_ptr    _find_max(void)
+            {
+                node_ptr    result = this->_root;
+                bool        comp_res;
+                
+                if (is_nil(this->_root))
+                    return (nullptr);
+                if (result->child[LEFT]
+                    && this->_comp(result->value.first, \
+                                   result->child[LEFT]->value.first))
+                {
+                    while (result->child[LEFT])
+                    { result = result->child[LEFT]; }
+                }
+                else if (result->child[RIGHT]
+                         && this->_comp(result->value.first, \
+                                   result->child[RIGHT]->value.first))
+                {
+                    while (result->child[RIGHT])
+                    { result = result->child[RIGHT]; }
+                }
+                return (result);    
+            }
+            
             // Recycle nodes using pool
             void    _recycle(node_ptr node, node_pool *pool)
             {
@@ -240,30 +288,34 @@ namespace   ft
             }
             
             // Copy
-            void    _copy(node_ptr node, node_pool *pool)
+            node_ptr    _copy(node_ptr node, node_pool *pool)
             {
                 node_ptr    dest;
                 
-                // recursive
-                if (is_nil(node))
-                {
-                    if (node) // _end node
-                    {
-                        // copy using pool if available
-                    }
-                }
-                this->_copy(node->child[LEFT], pool);
-                this->_copy(node->child[RIGHT], pool);
-                // If pool is still available, use it
-                if (pool->nb)
+                if (!node)
+                    return (nullptr);
+                if (pool->nb) // If pool is still available, use it
                 {
                     dest = pool->nodes[pool->nb - 1];
                     --pool->nb;
                 }
                 else // allocate it
                     dest = this->_allocator.allocate(1);
-                // Clone src node to dest node
-                // Connect dest node to this tree
+                // Construct by value
+                this->_allocator.construct(dest, node->value);
+                // Copy simple attributes
+                dest->color = node->color;
+                if (dest->color == WHITE) // Ghost node
+                    this->_end = dest;
+                // Childrens
+                dest->child[LEFT] = this->_copy(node->child[LEFT], pool);
+                dest->child[RIGHT] = this->_copy(node->child[RIGHT], pool);
+                // Parent link
+                if (dest->child[LEFT])
+                    dest->child[LEFT]->parent = dest;
+                if (dest->child[RIGHT])
+                    dest->child[RIGHT]->parent = dest;
+                return (dest);
             }
 
             /**

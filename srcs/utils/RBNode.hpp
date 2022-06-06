@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/04 12:48:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 10:01:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,31 @@ namespace   ft
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef T                   value_type;
-            typedef RBNode<T, Compare>  node_type;
+            typedef T                       value_type;
+            typedef RBNode<T, Compare>      node_type;
             // Compare
-            typedef Compare             key_compare;
+            typedef Compare                 key_compare;
             // Pointer & Ref
-            typedef T                   &reference;
-            typedef const T             &const_reference;
-            typedef T                   *pointer;
-            typedef const T             *const_pointer;
-            typedef node_type           *node_ptr;
-            typedef node_type           &node_ref;
+            typedef T                       &reference;
+            typedef const T                 &const_reference;
+            typedef T                       *pointer;
+            typedef const T                 *const_pointer;
+            typedef node_type               *node_ptr;
+            typedef node_type               &node_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Param
-            RBNode(value_type value, \
-                   const key_compare &comp = key_compare())
+            RBNode(value_type value, const key_compare &comp = key_compare())
             : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
               value(value) {}
 
             // Copy
             RBNode(const node_ref src)
             : parent(NULL), child{NULL, NULL}, color(src.color), \
-              _comp(src._comp), value(src.value) {}
+              _comp(src._comp), value(src.value)
+            { *this = src; }
  
             // Destructor
             ~RBNode(void) {}
@@ -73,11 +73,15 @@ namespace   ft
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            node_ref operator=(const node_ref other)
+            node_ref operator=(const node_ref other) // not used for now
             {
-                node_ptr new_left = new node_type(*other.child[LEFT]);
-                node_ptr new_right = new node_type(*other.child[RIGHT]);
+                node_ptr new_left = nullptr;
+                node_ptr new_right = nullptr;
 
+                if (other.child[LEFT])
+                    new_left = new node_type(*other.child[LEFT]);
+                if (other.child[RIGHT])
+                    new_right = new node_type(*other.child[RIGHT]);
                 this->value = other.value;
                 std::swap(this->child[LEFT],  new_left);
                 std::swap(this->child[RIGHT], new_right);
