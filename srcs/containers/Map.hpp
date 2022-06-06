@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/06 12:06:59 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 13:33:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,22 @@ namespace   ft
                     ++first;
                 }
             }
-            // void                    erase(iterator position);
-            // size_type               erase(const key_type &k);
-            // void                    erase(iterator first, iterator last);
+           
+            void                    erase(iterator position)
+            { this->_tree.erase(position); }
+
+            size_type               erase(const key_type &k)
+            { return (this->_tree.erase(k)); }
+
+            void                    erase(iterator first, iterator last)
+            {
+                while (first != last)
+                {        
+                    this->_tree.erase(first);
+                    ++first;
+                }
+            }
+
             // void                    swap(map &x);
             // void                    clear(void);
             
@@ -182,7 +195,9 @@ namespace   ft
             // value_compare               value_comp(void) const;
             
             // Operations
-            // iterator                    find(const key_type &k);
+            iterator                    find(const key_type &k)
+            { return (iterator(this->_tree.search(k))); }
+
             // const_iterator              find(const key_type &k) const;
             // size_type                   count(const key_type &k) const;
             // iterator                    lower_bound(const key_type &k);

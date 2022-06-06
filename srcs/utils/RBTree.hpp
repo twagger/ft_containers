@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/06 12:19:56 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 13:27:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,39 +159,27 @@ namespace   ft
                     this->_root = this->_root->parent;
                 return (node);
             }
-            
-            // Remove
-            void remove(key_type const &key)
+
+            // Erase
+            size_t  erase(key_type const &key)
             {
                 node_ptr to_remove;
-                node_ptr replacement;
-
+                
                 to_remove = this->search(key);
-                if (to_remove == NULL)
-                    return ;
-                // Update min and max
-                if (key == this->_min->value.first)
-                    this->_min = to_remove->successor();
-                if (key == this->_max->value.first)
-                {
-                    this->_max = to_remove->predecessor();
-                    this->_end->child[RIGHT] = this->_max;
-                }
-                // Check the number of childs
-                if (!is_nil(to_remove->child[LEFT])
-                    && !is_nil(to_remove->child[RIGHT]))
-                {
-                    // 2 childs : switch it with predecessor or successor
-                    replacement = to_remove->replacement();
-                    to_remove->swap(replacement);
-                }
-                if (to_remove->color == RED || 
-                    (!is_nil(to_remove->child[LEFT]) 
-                     || !is_nil(to_remove->child[RIGHT])))
-                    this->_remove_simple_case(to_remove);
-                else
-                    this->_remove_complex_case(to_remove);
-                this->_end->child[RIGHT]->child[RIGHT] = this->_end;
+                if (to_remove == nullptr)
+                    return (0);
+                this->_remove(to_remove);
+                return (1);
+            }
+
+            template<class Iter>
+            void    erase(Iter position)
+            {
+                node_ptr    to_remove;
+                
+                to_remove = position;
+                if (to_remove != nullptr)
+                    this->_remove(to_remove);
             }
 
             // Search
@@ -244,7 +232,7 @@ namespace   ft
                     while (!is_nil(result->child[RIGHT]))
                     { result = result->child[RIGHT]; }
                 }
-                return (result);    
+                return (result);
             }
             
             // find max
@@ -404,6 +392,37 @@ namespace   ft
                     p->color = BLACK;
                     g->color = RED;
                 }
+            }
+
+            // Remove
+            void    _remove(node_ptr to_remove)
+            {
+                node_ptr    replacement;
+                key_type    key = to_remove->value.first;
+                
+                // Update min and max
+                if (key == this->_min->value.first)
+                    this->_min = to_remove->successor();
+                if (key == this->_max->value.first)
+                {
+                    this->_max = to_remove->predecessor();
+                    this->_end->child[RIGHT] = this->_max;
+                }
+                // Check the number of childs
+                if (!is_nil(to_remove->child[LEFT])
+                    && !is_nil(to_remove->child[RIGHT]))
+                {
+                    // 2 childs : switch it with predecessor or successor
+                    replacement = to_remove->replacement();
+                    to_remove->swap(replacement);
+                }
+                if (to_remove->color == RED || 
+                    (!is_nil(to_remove->child[LEFT]) 
+                     || !is_nil(to_remove->child[RIGHT])))
+                    this->_remove_simple_case(to_remove);
+                else
+                    this->_remove_complex_case(to_remove);
+                this->_end->child[RIGHT]->child[RIGHT] = this->_end;
             }
 
             // Remove
