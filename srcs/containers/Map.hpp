@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/06 10:12:15 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 12:06:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ namespace   ft
             
             // Copy
             map(const map &x)
-            : _tree(NULL), _compare(x._compare), _allocator(x._allocator), \
-              _size(0)
+            : _compare(x._compare), _allocator(x._allocator), _size(0)
             { *this = x; }
 
             // Destructor

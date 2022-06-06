@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/06 09:59:01 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/06 12:19:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,26 @@ namespace   ft
             struct  node_pool
             {
                 // Constructor & destructor
-                node_pool(void) : nodes(nullptr), nb(0) {}
+                node_pool(void)
+                {
+                    this->nodes = vector<node_ptr>(0);
+                    this->nb = 0;
+                    this->_allocator = node_allocator();
+                }
                 ~node_pool(void)
                 {
                     for (int i = 0; i < this->nb; ++i)
                     {
-                        RBTree::_allocator.destroy(this->pool[i]);
-                        RBTree::_allocator.desallocate(this->pool[i], 1);
+                        _allocator.destroy(this->nodes[i]);
+                        _allocator.deallocate(this->nodes[i], 1);
                     }
                 }
                 // Attributes
                 vector<node_ptr>    nodes;
+                node_allocator      _allocator;
                 int                 nb;
             };
+            
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
@@ -90,7 +97,7 @@ namespace   ft
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            tree_ref operator=(const tree_ref rhs)
+            tree_ref operator=(const tree_type &rhs)
             { 
                 node_pool   pool; // pool of recycled nodes from this
                 
@@ -102,6 +109,7 @@ namespace   ft
                     this->_root = this->_copy(rhs.get_root(), &pool);
                     this->_max = this->_find_min();
                     this->_min = this->_find_max();
+                    this->_end->child[RIGHT] = this->_max;
                 }
                 return (*this);
             }
@@ -222,18 +230,18 @@ namespace   ft
                 
                 if (is_nil(this->_root))
                     return (nullptr);
-                if (result->child[LEFT]
+                if (!is_nil(result->child[LEFT])
                     && this->_comp(result->child[LEFT]->value.first, \
                                    result->value.first))
                 {
-                    while (result->child[LEFT])
+                    while (!is_nil(result->child[LEFT]))
                     { result = result->child[LEFT]; }
                 }
-                else if (result->child[RIGHT]
+                else if (!is_nil(result->child[RIGHT])
                          && this->_comp(result->child[RIGHT]->value.first, \
                                    result->value.first))
                 {
-                    while (result->child[RIGHT])
+                    while (!is_nil(result->child[RIGHT]))
                     { result = result->child[RIGHT]; }
                 }
                 return (result);    
@@ -247,18 +255,18 @@ namespace   ft
                 
                 if (is_nil(this->_root))
                     return (nullptr);
-                if (result->child[LEFT]
+                if (!is_nil(result->child[LEFT])
                     && this->_comp(result->value.first, \
                                    result->child[LEFT]->value.first))
                 {
-                    while (result->child[LEFT])
+                    while (!is_nil(result->child[LEFT]))
                     { result = result->child[LEFT]; }
                 }
-                else if (result->child[RIGHT]
+                else if (!is_nil(result->child[RIGHT])
                          && this->_comp(result->value.first, \
                                    result->child[RIGHT]->value.first))
                 {
-                    while (result->child[RIGHT])
+                    while (!is_nil(result->child[RIGHT]))
                     { result = result->child[RIGHT]; }
                 }
                 return (result);    
@@ -268,14 +276,21 @@ namespace   ft
             void    _recycle(node_ptr node, node_pool *pool)
             {
                 // recursive recycling
-                if (!is_nil(node))
+                if (is_nil(node))
                 {
+                    if (this->_root == nullptr && this->_end)
+                    {
+                        this->_allocator.destroy(this->_end);
+                        pool->nodes.push_back(this->_end);
+                        ++pool->nb;
+                        return ; 
+                    }
                     if (node) // Reuse ghost '_end' node too
                     {
                         this->_allocator.destroy(node);
                         pool->nodes.push_back(node);
                         ++pool->nb;
-                    }   
+                    }
                     return ;
                 }
                 this->_recycle(node->child[LEFT], pool);
@@ -306,7 +321,10 @@ namespace   ft
                 // Copy simple attributes
                 dest->color = node->color;
                 if (dest->color == WHITE) // Ghost node
+                {
                     this->_end = dest;
+                    return (nullptr); // to avoid looping on RIGHT with _max node
+                }
                 // Childrens
                 dest->child[LEFT] = this->_copy(node->child[LEFT], pool);
                 dest->child[RIGHT] = this->_copy(node->child[RIGHT], pool);
