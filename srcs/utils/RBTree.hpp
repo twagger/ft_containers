@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 15:51:17 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 16:14:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ namespace   ft
              *  @brief  Insert a value in the tree.
              *  @param  value  A combination of key + value (pair).
              */
+            // Maybe create a sur function to insert by position (root by defult)
             node_ptr insert(const_reference value)
             {
                 node_ptr result;
