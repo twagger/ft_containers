@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/06 13:33:35 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 11:11:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,13 @@ namespace   ft
 
             void                    erase(iterator first, iterator last)
             {
+                iterator    next;
+                
                 while (first != last)
-                {        
+                {       
+                    next = first._p->successor();
                     this->_tree.erase(first);
-                    ++first;
+                    first = next;
                 }
             }
 
@@ -208,9 +211,9 @@ namespace   ft
             // pair<const_iterator, const_iterator>    equal_range(\
             //                                         const key_type &k) const;
 
+            tree_type       _tree;
         private:
             // Attributes
-            tree_type       _tree;
             key_compare     _compare;
             allocator_type  _allocator;
             size_type       _size;

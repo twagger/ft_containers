@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/06 10:01:54 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 09:59:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ namespace   ft
             }
 
             // Rotations
-            void    rotate(int dir) // this is bugged
+            void    rotate(int dir)
             {
                 node_ptr x = this;
                 node_ptr y = x->child[1 - dir];
@@ -266,23 +266,25 @@ namespace   ft
                 int o_dir;
                 
                 // Save original node direction from its parent
-                try {   
-                    t_dir = this->childdir();
-                    o_dir = other->childdir();
-                }
-                catch (std::runtime_error &e)
-                {
-                    if (!this->parent)
-                        t_dir = -1;
-                    if (!other->parent)
-                        o_dir = -1;
-                }
+                t_dir = this->parent ? this->childdir() : -1;
+                o_dir = other->parent ? other->childdir() : -1;
                 // Swap pointers on the node
                 std::swap(this->parent, other->parent);
                 std::swap(this->child[LEFT], other->child[LEFT]);
                 std::swap(this->child[RIGHT], other->child[RIGHT]);
                 // Swap colors > to not impact the RBTree rules
                 std::swap(this->color, other->color);
+                // Fix when one is the child of the other
+                if (this->parent == this)
+                {
+                    this->parent = other;
+                    other->child[o_dir] = this;
+                }
+                if (other->parent == other)
+                {
+                    other->parent = this;
+                    this->child[t_dir] = other;
+                }
                 // Change child pointer on parent node
                 if (t_dir != -1)
                     other->parent->child[t_dir] = other;

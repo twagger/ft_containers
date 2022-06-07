@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/03 09:29:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 07:32:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ namespace   ft
             const reference operator*(void) const { return (this->_p->value); }
             pointer         operator->(void) const { return (&this->_p->value);}
 
-        private:
             // member attributes
             node_ptr _p; // pointer to RBNode
     };
@@ -119,7 +118,6 @@ namespace   ft
             const reference operator*(void) const { return (this->_p->value); }
             pointer         operator->(void) const { return (&this->_p->value);}
 
-        private:
             // member attributes
             node_ptr _p; // pointer to RBNode
     };
