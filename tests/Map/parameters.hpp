@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 11:27:03 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 13:34:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ TYPED_TEST_CASE(Map_operators, GenericTypes);
 
 template<typename T>
 struct Map_modifiers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_modifiers, FtTypes);
+TYPED_TEST_CASE(Map_modifiers, GenericTypes);
 
 #endif

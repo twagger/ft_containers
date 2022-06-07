@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 11:27:26 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 13:41:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ TYPED_TEST(Map_modifiers, eraseByRangeNonIncludingRoot) {
     my_map['c'] = 44;
     my_map['d'] = 48;
     it = my_map.find('c');
-    my_map._tree.print();
     my_map.erase(it, my_map.end());
     const std::type_info &t_comp = typeid(MAP::key_compare);
     if (t_comp == t_less)
@@ -137,24 +136,54 @@ TYPED_TEST(Map_modifiers, eraseByRangeOneNode) {
     my_map.erase(it, my_map.end());
     EXPECT_EQ(my_map['a'], 0);
 }
-/*
+
 TYPED_TEST(Map_modifiers, eraseByRangeIncludingBegin) {
     MAP my_map;
+    ITERATOR it;
     my_map['a'] = 42;
-    my_map.erase('a');
-    EXPECT_EQ(my_map['a'], 0);
-}
-
-TYPED_TEST(Map_modifiers, eraseByRangeIncludingEnd) {
-    MAP my_map;
-    my_map['a'] = 42;
-    my_map.erase('a');
-    EXPECT_EQ(my_map['a'], 0);
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map['d'] = 48;
+    it = my_map.find('c');
+    my_map.erase(my_map.begin(), it);
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(my_map['a'], 0);
+        EXPECT_EQ(my_map['b'], 0);
+        EXPECT_EQ(my_map['c'], 44);
+        EXPECT_EQ(my_map['d'], 48);
+    }
+    else
+    {
+        EXPECT_EQ(my_map['a'], 42);
+        EXPECT_EQ(my_map['b'], 43);
+        EXPECT_EQ(my_map['c'], 44);
+        EXPECT_EQ(my_map['d'], 0);
+    }
 }
 
 TYPED_TEST(Map_modifiers, eraseByRangeAllTree) {
     MAP my_map;
+    ITERATOR it;
     my_map['a'] = 42;
-    my_map.erase('a');
-    EXPECT_EQ(my_map['a'], 0);
-}*/
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map['d'] = 48;
+    my_map.erase(my_map.begin(), my_map.end());
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(my_map['a'], 0);
+        EXPECT_EQ(my_map['b'], 0);
+        EXPECT_EQ(my_map['c'], 0);
+        EXPECT_EQ(my_map['d'], 0);
+    }
+    else
+    {
+        EXPECT_EQ(my_map['a'], 0);
+        EXPECT_EQ(my_map['b'], 0);
+        EXPECT_EQ(my_map['c'], 0);
+        EXPECT_EQ(my_map['d'], 0);
+    }
+}

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 10:46:14 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 14:03:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,6 +468,7 @@ namespace   ft
             {
                 // Specific case : node is BLACK with no child
                 node_ptr    p = node->parent;
+                node_ptr    saved = node;
                 node_ptr    b; // brother
                 node_ptr    c; // close nephew
                 node_ptr    d; // distant nephew
@@ -513,7 +514,7 @@ namespace   ft
                     this->_clear_node(node);
                     return ;
                 }
-                this->_clear_node(node);
+                this->_clear_node(saved);
                 return ; // remove_case_2
             }
 
