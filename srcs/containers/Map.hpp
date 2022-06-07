@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 14:51:13 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 14:56:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,9 @@ namespace   ft
             { return allocator_type(this->_allocator); }
             
             // Observers
-            // key_compare                 key_comp(void) const;
+            key_compare                 key_comp(void) const
+            { return this->_compare; }
+            
             // value_compare               value_comp(void) const;
             
             // Operations
@@ -228,6 +230,9 @@ namespace   ft
             key_compare     _compare;
             allocator_type  _allocator;
             size_type       _size;
+
+            // Value compare
+            
     };
 }
 

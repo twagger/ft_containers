@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 07:32:52 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 15:18:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ namespace   ft
             t_iterator  &operator++(void) 
             { this->_p = this->_p->successor(); return (*this); }
             t_iterator  operator++(int)
-            { t_iterator tmp(*this); ++this; return (tmp); }
+            { t_iterator tmp(*this); this->operator++(); return (tmp); }
             t_iterator  &operator--(void)
             { this->_p = this->_p->predecessor(); return (*this);}
             t_iterator  operator--(int)
-            { t_iterator tmp(*this); --this; return tmp; }
+            { t_iterator tmp(*this); this->operator--(); return tmp; }
 
             bool        operator==(const t_iterator& rhs) const
             { return this->_p == rhs._p; }
