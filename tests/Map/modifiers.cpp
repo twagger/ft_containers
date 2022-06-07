@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 13:41:10 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 14:36:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,4 +186,41 @@ TYPED_TEST(Map_modifiers, eraseByRangeAllTree) {
         EXPECT_EQ(my_map['c'], 0);
         EXPECT_EQ(my_map['d'], 0);
     }
+}
+
+// Clear
+TYPED_TEST(Map_modifiers, clear) {
+    MAP my_map;
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map.clear();
+    EXPECT_EQ(my_map.size(), 0);
+    EXPECT_EQ(my_map['a'], 0);
+    EXPECT_EQ(my_map['b'], 0);
+    EXPECT_EQ(my_map['c'], 0);
+}
+
+TYPED_TEST(Map_modifiers, swap) {
+    MAP my_map;
+    MAP my_map2;
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map2['a'] = 12;
+    my_map2['b'] = 13;
+    my_map2['c'] = 14;
+    my_map2['d'] = 15;
+    my_map2['e'] = 16;
+    my_map.swap(my_map2);
+    EXPECT_EQ(my_map.size(), 5);
+    EXPECT_EQ(my_map2.size(), 3);
+    EXPECT_EQ(my_map['a'], 12);
+    EXPECT_EQ(my_map['b'], 13);
+    EXPECT_EQ(my_map['c'], 14);
+    EXPECT_EQ(my_map['d'], 15);
+    EXPECT_EQ(my_map['e'], 16);
+    EXPECT_EQ(my_map2['a'], 42);
+    EXPECT_EQ(my_map2['b'], 43);
+    EXPECT_EQ(my_map2['c'], 44);
 }

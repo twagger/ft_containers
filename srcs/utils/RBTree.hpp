@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 14:03:09 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 14:50:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace   ft
             }
 
             // Destructor
-            ~RBTree(void) { this->clear(); } 
+            ~RBTree(void) { this->clear(); this->_clear_node(this->_end); } 
 
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
@@ -196,9 +196,20 @@ namespace   ft
 
             // Clear tree
             void    clear(void) 
-            {
+            { 
                 this->_recursive_clear(this->_root);
-                this->_clear_node(this->_end);
+                this->_root = nullptr;
+                this->_min = nullptr;
+                this->_max = nullptr;
+            }
+
+            // Swap tree
+            void    swap(tree_ref other)
+            {
+                std::swap(this->_root, other._root);
+                std::swap(this->_min, other._min);
+                std::swap(this->_max, other._max);
+                std::swap(this->_end, other._end);
             }
 
         protected:

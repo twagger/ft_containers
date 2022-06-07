@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 14:03:12 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 14:51:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,8 +186,17 @@ namespace   ft
                 }
             }
 
-            // void                    swap(map &x);
-            // void                    clear(void);
+            void                    swap(map &x)
+            {
+                this->_tree.swap(x._tree);
+                std::swap(this->_size, x._size);
+            }
+            
+            void                    clear(void)
+            {
+                this->_tree.clear();
+                this->_size = 0;
+            }
             
             // Allocator
             allocator_type              get_allocator(void) const
@@ -201,7 +210,9 @@ namespace   ft
             iterator                    find(const key_type &k)
             { return (iterator(this->_tree.search(k))); }
 
-            // const_iterator              find(const key_type &k) const;
+            const_iterator              find(const key_type &k) const
+            { return (const_iterator(this->_tree.search(k))); }
+            
             // size_type                   count(const key_type &k) const;
             // iterator                    lower_bound(const key_type &k);
             // const_iterator              lower_bound(const key_type &k) const;
@@ -211,9 +222,9 @@ namespace   ft
             // pair<const_iterator, const_iterator>    equal_range(\
             //                                         const key_type &k) const;
 
-            tree_type       _tree;
         private:
             // Attributes
+            tree_type       _tree;
             key_compare     _compare;
             allocator_type  _allocator;
             size_type       _size;
