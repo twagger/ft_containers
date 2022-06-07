@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 14:50:46 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 15:51:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ namespace   ft
                 node_ptr to_remove;
                 
                 to_remove = this->search(key);
-                if (to_remove == nullptr)
+                if (to_remove == this->get_end())
                     return (0);
                 this->_remove(to_remove);
                 return (1);
@@ -586,19 +586,17 @@ namespace   ft
             // Recursive search
             node_ptr _recursive_search(node_ptr node, key_type const &key) const
             {
-                node_ptr    ret = nullptr;
-                int         comp_res;
+                node_ptr    ret = this->_end;
+                int         dir;
 
                 if (is_nil(node))
-                    return (nullptr);
+                    return (this->_end);
                 if (node->value.first == key)
                     return (node);
                 else 
                 {
-                    comp_res = this->_comp(node->value.first, key);
-                    if (!is_nil(node->child[comp_res]))
-                        ret = this->_recursive_search(\
-                                        node->child[comp_res], key);
+                    dir = this->_comp(node->value.first, key);
+                    ret = this->_recursive_search(node->child[dir], key);
                 }
                 return (ret);
             }

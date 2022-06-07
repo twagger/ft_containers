@@ -118,7 +118,7 @@ TEST(RBTree, searchNonExistingNode) {
     my_tree.insert(ft::pair<int, char>(22, 'l'));
     my_tree.insert(ft::pair<int, char>(13, 'i'));
     my_node = my_tree.search(42);
-    EXPECT_TRUE(my_node == NULL);
+    EXPECT_TRUE(my_node == my_tree.get_end());
 }
 
 TEST(RBTree, searchRoot) {
@@ -169,7 +169,7 @@ TEST(RBTree, removeRedLeafDontModifyTheRestOfTheTree) {
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[RIGHT]->color == RED);
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[LEFT]->value.first == 1);
     EXPECT_TRUE(my_tree.get_root()->child[LEFT]->child[LEFT]->child[LEFT]->color == RED);
-    EXPECT_TRUE(my_tree.search(13) == NULL);
+    EXPECT_TRUE(my_tree.search(13) == my_tree.get_end());
 } 
 
 TEST(RBTree, removeNonExistingKey) {
@@ -220,7 +220,7 @@ TEST(RBTree, removeBlackLeafWithNoChild_case4) {
     my_tree.insert(ft::pair<int, char>(22, 'l'));
     my_tree.insert(ft::pair<int, char>(13, 'i'));
     my_tree.erase(27);
-    EXPECT_TRUE(my_tree.search(27) == NULL);
+    EXPECT_TRUE(my_tree.search(27) == my_tree.get_end());
     EXPECT_TRUE(my_tree.get_root()->value.first == 17);
     EXPECT_TRUE(my_tree.get_root()->color == BLACK);
     EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.first == 25);
@@ -254,7 +254,7 @@ TEST(RBTree, removeBlackLeafWithNoChild_case1) {
     my_tree.insert(ft::pair<int, char>(22, 'l'));
     my_tree.insert(ft::pair<int, char>(13, 'i'));
     my_tree.erase(27);
-    EXPECT_TRUE(my_tree.search(27) == NULL);
+    EXPECT_TRUE(my_tree.search(27) == my_tree.get_end());
     EXPECT_TRUE(my_tree.get_root()->value.first == 17);
     EXPECT_TRUE(my_tree.get_root()->color == BLACK);
     EXPECT_TRUE(my_tree.get_root()->child[RIGHT]->value.first == 25);

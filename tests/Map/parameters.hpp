@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 14:57:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 15:23:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,9 @@ TYPED_TEST_CASE(Map_modifiers, GenericTypes);
 template<typename T>
 struct Map_observers : public testing::Test { using Types = T; };
 TYPED_TEST_CASE(Map_observers, GenericTypes);
+
+template<typename T>
+struct Map_operations : public testing::Test { using Types = T; };
+TYPED_TEST_CASE(Map_operations, GenericTypes);
 
 #endif

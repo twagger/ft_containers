@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 14:56:52 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 15:48:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace   ft
                 iterator    it;
                 
                 it = this->_tree.search(k);
-                if (it == NULL)
+                if (it == this->_tree.get_end())
                 {
                     it = this->_tree.insert(value_type(k, mapped_type()));
                     ++this->_size;
@@ -143,7 +143,7 @@ namespace   ft
             {
                 iterator    it;
                 it = this->_tree.search(val.first);
-                if (it == NULL)
+                if (it == this->_tree.get_end())
                 {
                     it = this->_tree.insert(val);
                     ++this->_size;
@@ -155,6 +155,7 @@ namespace   ft
             iterator                insert(iterator position, \
                                            const value_type &val)
             {
+                // TO DO
             }
 
             template<class InputIterator>
@@ -231,7 +232,7 @@ namespace   ft
             allocator_type  _allocator;
             size_type       _size;
 
-            // Value compare
+            // Value compare subtype
             
     };
 }
