@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 15:48:11 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 16:11:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,10 @@ namespace   ft
             const_iterator              find(const key_type &k) const
             { return (const_iterator(this->_tree.search(k))); }
             
-            // size_type                   count(const key_type &k) const;
+            size_type                   count(const key_type &k) const
+            { return ((this->_tree.search(k) 
+                       == this->_tree.get_end()) ? 0 : 1); }
+            
             // iterator                    lower_bound(const key_type &k);
             // const_iterator              lower_bound(const key_type &k) const;
             // iterator                    upper_bound(const key_type &k);

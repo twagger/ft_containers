@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:24:08 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 16:05:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/07 16:10:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,16 @@ TYPED_TEST(Map_operations, findConst) {
     it = my_const_map.find('a');
     EXPECT_EQ((*it).first, 'a');
     EXPECT_EQ((*it).second, 42);
+}
+
+// Count
+TYPED_TEST(Map_operations, count) {
+    MAP my_map;
+    ITERATOR it;
+     
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    EXPECT_EQ(my_map.count('a'), 1);
+    EXPECT_EQ(my_map.count('z'), 0);
 }
