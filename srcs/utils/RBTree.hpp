@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 12:46:38 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 14:32:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,18 +128,76 @@ namespace   ft
             node_ptr get_max(void) const { return (this->_max); }
             node_ptr get_end(void) const { return (this->_end); }
 
-            
+            // Insert 2
+            /**
+             * @brief Insert a node in the right position in the tree
+             * 
+             * @param node Node_ptr to be inserted
+             * @param parent Parent node. It must be a leaf or null.
+             * @param dir Left of right to position the node.
+             */
+            // We must first search for the NIL node whose in-order predecessor’s key compares less than the new node’s key, which in turn compares less than the key of its in-order successor.
+            // node should be created only if the key don't exists yet
+            // Hint : Searching the parent should allow to find if the key exists or not
+            void    insert(node_ptr node, node_ptr parent, int dir)
+            {
+                node_ptr    grandpa;
+                node_ptr    uncle;
+
+                node->parent = parent;
+                if (parent == nullptr)
+                {
+                    this->_root = node;
+                    return ; // Insertion complete
+                }
+                parent->child[dir] = node;
+                while (parent)
+                {
+                    if (parent->color == BLACK)
+                        return ; // Insertion complete
+                    if ((grandpa = node->grandparent()) == nullptr)
+                    {
+                        parent->color = BLACK;
+                        return ; // Insertion complete
+                    }
+                    dir = parent->childdir();
+                    uncle = grandpa->child[1 - dir];
+                    if (is_nil(uncle) || uncle->color == BLACK)
+                    {
+                        if (node == parent->child[1 - dir])
+                        {
+                            parent->rotate(dir);
+                            node = parent;
+                            parent = grandpa->child[dir];
+                        }
+                        grandpa->rotate(1 - dir) ;
+                        parent->color = BLACK;
+                        grandpa->color = RED;
+                        // Save the root
+                        this->_root = grandpa;
+                        this->_save_root();
+                        return ; // Insertion complete
+                    }
+                    parent->color = BLACK;
+                    uncle->color = BLACK;
+                    grandpa->color = RED;
+                    node = grandpa;
+                    parent = node->parent;
+                }
+                return ; // Insertion complete
+            }
+
             // Insert 
             /**
              *  @brief  Insert a value in the tree.
              *  @param  value  A combination of key + value (pair).
              */
-            node_ptr insert(const_reference value)
+            pair<iterator, bool>    insert(const_reference value)
             {
-                node_ptr result;
-                node_ptr node = this->_allocator.allocate(1);
+                pair<iterator, bool>    result;
+                node_ptr                node = this->_allocator.allocate(1);
+                
                 this->_allocator.construct(node, value);
-
                 // Update min and max
                 if (!this->_min || (this->_min 
                     && this->_comp(value.first, this->_min->value.first)))
@@ -155,13 +213,16 @@ namespace   ft
                 // Recursive insertion
                 result = this->_recursive_insert(this->_root, node);
 
-                // Repair the tree to respect r&b rules
-                this->_repair(node);
+                if (result.second)
+                {
+                    // Repair the tree to respect r&b rules
+                    this->_repair(node);
 
-                // Save the root
-                this->_root = node;
-                this->_save_root();
-                return (node);
+                    // Save the root
+                    this->_root = node;
+                    this->_save_root();
+                }
+                return (result);
             }
 
             // Erase
@@ -377,7 +438,8 @@ namespace   ft
              *  with the current node.
              * 
              */
-            node_ptr   _recursive_insert(node_ptr root, node_ptr node)
+            pair<iterator, bool>    _recursive_insert(\
+                                            node_ptr root, node_ptr node)
             {
                 int dir;
 

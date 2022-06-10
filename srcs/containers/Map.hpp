@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 12:37:15 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 13:43:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,22 +140,28 @@ namespace   ft
             
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
-            {
-                iterator    it;
-                it = this->_tree.search(val.first);
-                if (it == this->_tree.get_end())
-                {
-                    it = this->_tree.insert(val);
+            { 
+                pair<iterator, bool> ret;
+                
+                ret = this->_tree.insert(val);
+                if (ret.second)
                     ++this->_size;
-                    return (pair<iterator, bool>(it, true));
-                }
-                return (pair<iterator, bool>(it, false));
+                return (ret);
             }
             
             iterator                insert(iterator position, \
                                            const value_type &val)
             {
-                // TO DO
+                // Compare the value with hint and prev(hint)
+                if (Compare()((*position).first, val)
+                    && Compare()(val, (*++position)))
+                {
+                    node_type *node = this->_allocator.allocate(1);
+                    this->_allocator.construct(node, val);
+                    
+                }
+                // Insert the val
+                return (this->insert(val).first);
             }
 
             template<class InputIterator>
