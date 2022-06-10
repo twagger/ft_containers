@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 16:13:43 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 12:18:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ namespace   ft
                     ++first;
                 }
             }
-           
+ 
             void                    erase(iterator position)
             { this->_tree.erase(position); }
 
@@ -220,10 +220,18 @@ namespace   ft
             { return ((this->_tree.search(k) 
                        == this->_tree.get_end()) ? 0 : 1); }
             
-            // iterator                    lower_bound(const key_type &k);
-            // const_iterator              lower_bound(const key_type &k) const;
-            // iterator                    upper_bound(const key_type &k);
-            // const_iterator              upper_bound(const key_type &k) const;
+            iterator                    lower_bound(const key_type &k)
+            { return (this->_tree.get_lower_bound(k)); }
+            
+            const_iterator              lower_bound(const key_type &k) const
+            { return (const_cast<iterator>(this->_tree.get_lower_bound(k))); }
+
+            iterator                    upper_bound(const key_type &k)
+            { return (this->_tree.get_upper_bound(k)); }
+            
+            const_iterator              upper_bound(const key_type &k) const
+            { return (const_cast<iterator>(this->_tree.get_upper_bound(k))); }
+
             // pair<iterator, iterator>    equal_range(const key_type &k);
             // pair<const_iterator, const_iterator>    equal_range(\
             //                                         const key_type &k) const;

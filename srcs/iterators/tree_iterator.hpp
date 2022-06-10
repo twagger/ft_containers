@@ -6,14 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 15:18:09 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 09:46:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_ITERATOR_HPP
 # define TREE_ITERATOR_HPP
 # include "iterator_traits.hpp"
-# include "RBTree.hpp"
 
 namespace   ft
 {
@@ -37,7 +36,7 @@ namespace   ft
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
-            t_iterator(void) : _p(NULL) {}
+            t_iterator(void) : _p(nullptr) {}
             t_iterator(node_ptr x) : _p(x) {}
             t_iterator(const t_iterator &it) : _p(it._p) {}
             ~t_iterator(void) {}

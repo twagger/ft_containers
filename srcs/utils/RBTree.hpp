@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/07 16:14:59 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 10:42:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # include <memory>
+# include "../iterators/tree_iterator.hpp"
 # include "Vector.hpp"
 # include "RBNode.hpp"
 
@@ -45,6 +46,9 @@ namespace   ft
             // Memory
             typedef typename A::template rebind<node_type>::other
                                                                 node_allocator;
+            // Iterators
+            typedef t_iterator<node_type>                       iterator;
+            typedef t_const_iterator<node_type>                 const_iterator;
             // Node pool
             struct  node_pool
             {
@@ -124,13 +128,12 @@ namespace   ft
             node_ptr get_max(void) const { return (this->_max); }
             node_ptr get_end(void) const { return (this->_end); }
 
-
+            
             // Insert 
             /**
              *  @brief  Insert a value in the tree.
              *  @param  value  A combination of key + value (pair).
              */
-            // Maybe create a sur function to insert by position (root by defult)
             node_ptr insert(const_reference value)
             {
                 node_ptr result;
@@ -177,7 +180,7 @@ namespace   ft
             void    erase(Iter position)
             {
                 node_ptr    to_remove;
-                to_remove = static_cast<node_ptr>(position._p);
+                to_remove = position._p;
                 if (!is_nil(to_remove))
                     this->_remove(to_remove);
             }
@@ -211,6 +214,31 @@ namespace   ft
                 std::swap(this->_min, other._min);
                 std::swap(this->_max, other._max);
                 std::swap(this->_end, other._end);
+            }
+
+            // Lower bound
+            iterator    get_lower_bound(key_type &k)
+            {
+                iterator    it = iterator(this->_min);
+
+                while (it._p != this->_end 
+                       && key_compare()((*it).first, k) == true) 
+                    ++it;
+                return (it);
+            }
+            
+            // Upper bound
+            iterator    get_upper_bound(key_type &k)
+            {
+                iterator    it = iterator(this->_min);
+
+                while (it._p != this->_end
+                       && key_compare()(k, (*it).first) == false)
+                {
+                    std::cout << "CURRENT : " << (*it).first  << std::endl;
+                    ++it;
+                }
+                return (it);
             }
 
         protected:
@@ -352,7 +380,7 @@ namespace   ft
              *  with the current node.
              * 
              */
-            node_ptr _recursive_insert(node_ptr root, node_ptr node)
+            node_ptr   _recursive_insert(node_ptr root, node_ptr node)
             {
                 int dir;
 
