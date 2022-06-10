@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 12:18:16 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 12:37:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,9 +232,18 @@ namespace   ft
             const_iterator              upper_bound(const key_type &k) const
             { return (const_cast<iterator>(this->_tree.get_upper_bound(k))); }
 
-            // pair<iterator, iterator>    equal_range(const key_type &k);
-            // pair<const_iterator, const_iterator>    equal_range(\
-            //                                         const key_type &k) const;
+            pair<iterator, iterator>    equal_range(const key_type &k)
+            {
+               return (pair<iterator, iterator>(this->lower_bound(k), \
+                                                this->upper_bound(k)));
+            }
+
+            pair<const_iterator, const_iterator>    equal_range(\
+                                                     const key_type &k) const
+            {
+               return (pair<const_iterator, const_iterator>(\
+                       this->lower_bound(k), this->upper_bound(k)));
+            }
 
         private:
             // Attributes

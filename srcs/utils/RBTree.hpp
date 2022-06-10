@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 10:42:49 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 12:46:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,10 +234,7 @@ namespace   ft
 
                 while (it._p != this->_end
                        && key_compare()(k, (*it).first) == false)
-                {
-                    std::cout << "CURRENT : " << (*it).first  << std::endl;
                     ++it;
-                }
                 return (it);
             }
 

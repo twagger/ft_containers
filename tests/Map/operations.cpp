@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:24:08 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/10 12:28:36 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 13:19:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,42 @@ TYPED_TEST(Map_operations, upperBound) {
     }
     else
     {
+        EXPECT_EQ(my_map.upper_bound('a'), my_map.end());
         EXPECT_EQ((*(my_map.upper_bound('e'))).first, 'd');
         EXPECT_EQ((*(my_map.upper_bound('h'))).first, 'g');
         EXPECT_EQ((*(my_map.upper_bound('i'))).first, 'h');
+    }
+}
+
+// Equal range
+TYPED_TEST(Map_operations, equalRange) {
+    MAP                         my_map;
+    ITERATOR                    it;
+     
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['d'] = 44;
+    my_map['e'] = 45;
+    my_map['f'] = 46;
+    my_map['g'] = 47;
+    my_map['h'] = 48;
+    my_map['i'] = 49;
+    const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ((*(my_map.equal_range('a').first)).first, 'a');
+        EXPECT_EQ((*(my_map.equal_range('a').second)).first, 'b');
+        EXPECT_EQ((*(my_map.equal_range('e').first)).first, 'e');
+        EXPECT_EQ((*(my_map.equal_range('e').second)).first, 'f');
+        EXPECT_EQ(my_map.equal_range('p').first, my_map.end());
+        EXPECT_EQ(my_map.equal_range('p').second, my_map.end());
+    }
+    else
+    {
+        EXPECT_EQ((*(my_map.equal_range('a').first)).first, 'a');
+        EXPECT_EQ((*(my_map.equal_range('e').first)).first, 'e');
+        EXPECT_EQ((*(my_map.equal_range('e').second)).first, 'd');
+        EXPECT_EQ((*(my_map.equal_range('p').first)).first, 'i');
+        EXPECT_EQ((*(my_map.equal_range('p').second)).first, 'i');
     }
 }

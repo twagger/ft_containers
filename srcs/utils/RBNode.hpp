@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/07 09:59:51 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/10 13:07:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ namespace   ft
                         return (found);
                     found = found->parent;
                 }
-                return (NULL);
+                return (nullptr);
             }
 
             // Successor
@@ -230,6 +230,7 @@ namespace   ft
             {
                 node_ptr found;
 
+                std::cout << "VAL : " << this->value.first << std::endl;
                 found = this->child[RIGHT];
                 // exception for end node
                 if (found && found->color == WHITE) 
@@ -256,7 +257,7 @@ namespace   ft
                         return (found);
                     found = found->parent;
                 }
-                return (NULL);
+                return (nullptr);
             }
 
             // Swap nodes
