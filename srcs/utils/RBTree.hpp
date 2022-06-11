@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 14:32:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 10:36:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,12 @@ namespace   ft
             /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
             // Access
-            node_ptr get_root(void) const { return (this->_root); }
-            node_ptr get_min(void) const { return (this->_min); }
-            node_ptr get_max(void) const { return (this->_max); }
-            node_ptr get_end(void) const { return (this->_end); }
+            node_ptr        get_root(void) const { return (this->_root); }
+            node_ptr        get_min(void) const { return (this->_min); }
+            node_ptr        get_max(void) const { return (this->_max); }
+            node_ptr        get_end(void) const { return (this->_end); }
+            node_allocator  get_allocator(void) const 
+            { return (this->_allocator); }
 
             // Insert 2
             /**
@@ -136,28 +138,32 @@ namespace   ft
              * @param parent Parent node. It must be a leaf or null.
              * @param dir Left of right to position the node.
              */
-            // We must first search for the NIL node whose in-order predecessor’s key compares less than the new node’s key, which in turn compares less than the key of its in-order successor.
-            // node should be created only if the key don't exists yet
-            // Hint : Searching the parent should allow to find if the key exists or not
             void    insert(node_ptr node, node_ptr parent, int dir)
             {
                 node_ptr    grandpa;
                 node_ptr    uncle;
+                node_ptr    inserted = node;
 
                 node->parent = parent;
                 if (parent == nullptr)
                 {
                     this->_root = node;
+                    node->color = BLACK;
+                    _update_min_max_end(inserted);
                     return ; // Insertion complete
                 }
                 parent->child[dir] = node;
                 while (parent)
                 {
                     if (parent->color == BLACK)
+                    {
+                        _update_min_max_end(inserted);
                         return ; // Insertion complete
+                    }
                     if ((grandpa = node->grandparent()) == nullptr)
                     {
                         parent->color = BLACK;
+                        _update_min_max_end(inserted);
                         return ; // Insertion complete
                     }
                     dir = parent->childdir();
@@ -176,6 +182,7 @@ namespace   ft
                         // Save the root
                         this->_root = grandpa;
                         this->_save_root();
+                        _update_min_max_end(inserted);
                         return ; // Insertion complete
                     }
                     parent->color = BLACK;
@@ -184,45 +191,8 @@ namespace   ft
                     node = grandpa;
                     parent = node->parent;
                 }
+                _update_min_max_end(inserted);
                 return ; // Insertion complete
-            }
-
-            // Insert 
-            /**
-             *  @brief  Insert a value in the tree.
-             *  @param  value  A combination of key + value (pair).
-             */
-            pair<iterator, bool>    insert(const_reference value)
-            {
-                pair<iterator, bool>    result;
-                node_ptr                node = this->_allocator.allocate(1);
-                
-                this->_allocator.construct(node, value);
-                // Update min and max
-                if (!this->_min || (this->_min 
-                    && this->_comp(value.first, this->_min->value.first)))
-                    this->_min = node;
-                if (!this->_max || (this->_max 
-                    && this->_comp(this->_max->value.first, value.first)))
-                {
-                    this->_max = node;
-                    node->child[RIGHT] = this->_end;
-                    this->_end->child[RIGHT] = this->_max;
-                }
-                
-                // Recursive insertion
-                result = this->_recursive_insert(this->_root, node);
-
-                if (result.second)
-                {
-                    // Repair the tree to respect r&b rules
-                    this->_repair(node);
-
-                    // Save the root
-                    this->_root = node;
-                    this->_save_root();
-                }
-                return (result);
             }
 
             // Erase
@@ -250,6 +220,12 @@ namespace   ft
             node_ptr search(key_type const &key) const
             {
                 return (this->_recursive_search(this->_root, key));
+            }
+            
+            // Find insert pos
+            node_ptr find_insert_pos(key_type const &key) const
+            {
+                return (this->_recursive_find_pos(this->_root, key));
             }
 
             // Print
@@ -314,6 +290,23 @@ namespace   ft
                     this->_root = this->_root->parent;
             }
 
+            // Update min and max
+            void    _update_min_max_end(node_ptr node)
+            {
+                if (node == nullptr)
+                    return ;
+                if (!this->_min || (this->_min 
+                    && this->_comp(node->value.first, this->_min->value.first)))
+                    this->_min = node;
+                if (!this->_max || (this->_max 
+                    && this->_comp(this->_max->value.first, node->value.first)))
+                {
+                    this->_max = node;
+                    node->child[RIGHT] = this->_end;
+                    this->_end->child[RIGHT] = this->_max;
+                }
+            }
+            
             // find min
             node_ptr    _find_min(void)
             {
@@ -428,41 +421,6 @@ namespace   ft
                 return (dest);
             }
 
-            /**
-             *  @brief  Tree traversal to insert the node at the right place.
-             *  @param  root  The current node.
-             *  @param  node  The new node to insert.
-             *  @return  a combination of key + value (pair).
-             * 
-             *  Insert the node at the right position by comparing its pair key
-             *  with the current node.
-             * 
-             */
-            pair<iterator, bool>    _recursive_insert(\
-                                            node_ptr root, node_ptr node)
-            {
-                int dir;
-
-                if (!is_nil(root))
-                {
-                    if (this->_comp(node->value.first, root->value.first))
-                        dir = LEFT;
-                    else if (root->value.first != node->value.first)
-                        dir = RIGHT;
-                    else
-                        return (node);
-                    if (!is_nil(root->child[dir]))
-                    {
-                        node = this->_recursive_insert(root->child[dir], node);
-                        return (node);
-                    }
-                    else
-                        root->child[dir] = node;
-                }
-                node->parent = root;
-                return (node);
-            }
-            
             // Repair
             void    _repair(node_ptr node)
             {
@@ -689,6 +647,26 @@ namespace   ft
                 return (ret);
             }
 
+            // Recursive search
+            node_ptr _recursive_find_pos(node_ptr node, key_type const &key) const
+            {
+                int dir;
+
+                if (node == nullptr)
+                    return (nullptr);
+                if (node->value.first == key)
+                    return (node);
+                else 
+                {
+                    dir = this->_comp(node->value.first, key);
+                    if (is_nil(node->child[dir]))
+                        return (node);
+                    else
+                        node = this->_recursive_find_pos(node->child[dir], key);
+                }
+                return (node);
+            }
+            
             // Print tree
 	        void    _recursive_print(\
                         node_ptr node, std::string indent, bool last) const

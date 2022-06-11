@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:24:08 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/10 13:19:11 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 10:39:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ TYPED_TEST_SUITE_P(Map_operations);
 
 // Find
 TYPED_TEST(Map_operations, findExisting) {
-    MAP my_map;
-    ITERATOR it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;
@@ -31,8 +31,8 @@ TYPED_TEST(Map_operations, findExisting) {
 }
 
 TYPED_TEST(Map_operations, findNonExisting) {
-    MAP my_map;
-    ITERATOR it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;
@@ -42,7 +42,7 @@ TYPED_TEST(Map_operations, findNonExisting) {
 }
 
 TYPED_TEST(Map_operations, findConst) {
-    MAP my_map;
+    MAP                 my_map;
     MAP::const_iterator it;
      
     my_map['a'] = 42;
@@ -56,8 +56,8 @@ TYPED_TEST(Map_operations, findConst) {
 
 // Count
 TYPED_TEST(Map_operations, count) {
-    MAP my_map;
-    ITERATOR it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;
@@ -68,27 +68,40 @@ TYPED_TEST(Map_operations, count) {
  
 // Lower bound
 TYPED_TEST(Map_operations, lowerBound) {
-    MAP my_map;
-    ITERATOR it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;
     my_map['d'] = 44;
     my_map['e'] = 45;
-    my_map['f'] = 46;
+    my_map['p'] = 46;
     my_map['g'] = 47;
     my_map['h'] = 48;
     my_map['i'] = 49;
-    EXPECT_EQ((*(my_map.lower_bound('a'))).first, 'a');
-    EXPECT_EQ((*(my_map.lower_bound('e'))).first, 'e');
-    EXPECT_EQ((*(my_map.lower_bound('h'))).first, 'h');
-    EXPECT_EQ((*(my_map.lower_bound('i'))).first, 'i');
+     const std::type_info &t_comp = typeid(MAP::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ((*(my_map.lower_bound('a'))).first, 'a');
+        EXPECT_EQ((*(my_map.lower_bound('e'))).first, 'e');
+        EXPECT_EQ((*(my_map.lower_bound('h'))).first, 'h');
+        EXPECT_EQ((*(my_map.lower_bound('i'))).first, 'i');
+        EXPECT_EQ((*(my_map.lower_bound('f'))).first, 'g');
+    }
+    else
+    {
+        EXPECT_EQ((*(my_map.lower_bound('a'))).first, 'a');
+        EXPECT_EQ((*(my_map.lower_bound('e'))).first, 'e');
+        EXPECT_EQ((*(my_map.lower_bound('h'))).first, 'h');
+        EXPECT_EQ((*(my_map.lower_bound('i'))).first, 'i');
+        EXPECT_EQ((*(my_map.lower_bound('f'))).first, 'e');
+    }
 }
 
 // Upper bound
 TYPED_TEST(Map_operations, upperBound) {
-    MAP my_map;
-    ITERATOR it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;
@@ -117,8 +130,8 @@ TYPED_TEST(Map_operations, upperBound) {
 
 // Equal range
 TYPED_TEST(Map_operations, equalRange) {
-    MAP                         my_map;
-    ITERATOR                    it;
+    MAP         my_map;
+    ITERATOR    it;
      
     my_map['a'] = 42;
     my_map['b'] = 43;

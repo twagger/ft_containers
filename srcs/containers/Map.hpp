@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 13:43:21 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 10:38:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ namespace   ft
                 
                 it = this->_tree.search(k);
                 if (it == this->_tree.get_end())
-                {
-                    it = this->_tree.insert(value_type(k, mapped_type()));
-                    ++this->_size;
-                }
+                    it = this->insert(value_type(k, mapped_type())).first;
                 return ((*it).second);    
             }
 
@@ -140,27 +137,50 @@ namespace   ft
             
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
-            { 
-                pair<iterator, bool> ret;
+            {
+                node_type   *ret;
+                node_type   *node;
+                int         dir;
                 
-                ret = this->_tree.insert(val);
-                if (ret.second)
+                ret = this->_tree.find_insert_pos(val.first);
+                if (ret == nullptr) // Insert first node
+                {
+                    node = this->_tree.get_allocator().allocate(1);
+                    this->_tree.get_allocator().construct(node, val);
+                    this->_tree.insert(node, ret, LEFT);
                     ++this->_size;
-                return (ret);
+                }
+                else if (ret->value.first == val.first) // Key already exists
+                    return (pair<iterator, bool>(ret, false));
+                else // New node
+                {
+                    dir = Compare()(ret->value.first, val.first);
+                    node = this->_tree.get_allocator().allocate(1);
+                    this->_tree.get_allocator().construct(node, val);
+                    this->_tree.insert(node, ret, dir);
+                    ++this->_size;
+                }
+                return (pair<iterator, bool>(node, true));
             }
             
             iterator                insert(iterator position, \
                                            const value_type &val)
             {
+                node_type   *node;
+                int         dir;
+                
                 // Compare the value with hint and prev(hint)
                 if (Compare()((*position).first, val)
                     && Compare()(val, (*++position)))
                 {
-                    node_type *node = this->_allocator.allocate(1);
-                    this->_allocator.construct(node, val);
-                    
+                    dir = Compare()((*position).first, val.first);
+                    node = this->_tree.get_allocator().allocate(1);
+                    this->_tree.get_allocator().construct(node, val);
+                    this->_tree.insert(node, position._p, dir);
+                    ++this->_size;
+                    return (iterator(node));
                 }
-                // Insert the val
+                // Insert as usual
                 return (this->insert(val).first);
             }
 

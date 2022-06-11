@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/10 14:12:37 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 09:07:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,6 @@ namespace   ft
             {
                 node_ptr found;
 
-                std::cout << "VAL : " << this->value.first << std::endl;
                 found = this->child[RIGHT];
                 // exception for end node
                 if (found && found->color == WHITE) 
