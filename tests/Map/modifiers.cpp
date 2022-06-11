@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 10:31:10 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 13:35:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,76 @@
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_modifiers);
+
+// Insert
+// By val
+TYPED_TEST(Map_modifiers, insertByVal) {
+    MAP my_map;
+    my_map.insert(PAIR('a', 42));
+    my_map.insert(PAIR('b', 43));
+    my_map.insert(PAIR('c', 44));
+    EXPECT_EQ(my_map['a'], 42);
+    EXPECT_EQ(my_map['b'], 43);
+    EXPECT_EQ(my_map['c'], 44);
+    EXPECT_EQ(my_map.size(), 3);
+}
+
+// By Range
+TYPED_TEST(Map_modifiers, insertByRange) {
+    MAP my_map;
+    MAP my_map2;
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map['d'] = 45;
+    my_map['e'] = 46;
+    my_map['f'] = 47;
+    my_map2.insert(my_map.begin(), my_map.end());
+    EXPECT_EQ(my_map2['a'], 42);
+    EXPECT_EQ(my_map2['b'], 43);
+    EXPECT_EQ(my_map2['c'], 44);
+    EXPECT_EQ(my_map2['d'], 45);
+    EXPECT_EQ(my_map2['e'], 46);
+    EXPECT_EQ(my_map2['f'], 47);
+    EXPECT_EQ(my_map2.size(), 6);
+}
+
+TYPED_TEST(Map_modifiers, insertByRangeWithDoubleKey) {
+    MAP my_map;
+    MAP my_map2;
+    my_map['a'] = 42;
+    my_map['b'] = 43;
+    my_map['c'] = 44;
+    my_map['d'] = 45;
+    my_map['e'] = 46;
+    my_map['f'] = 47;
+    my_map2['f'] = 55;
+    my_map2['a'] = 11;
+    my_map2.insert(my_map.begin(), my_map.end());
+    EXPECT_EQ(my_map2['a'], 11);
+    EXPECT_EQ(my_map2['b'], 43);
+    EXPECT_EQ(my_map2['c'], 44);
+    EXPECT_EQ(my_map2['d'], 45);
+    EXPECT_EQ(my_map2['e'], 46);
+    EXPECT_EQ(my_map2['f'], 55);
+    EXPECT_EQ(my_map2.size(), 6);
+}
+
+// By val with hint
+TYPED_TEST(Map_modifiers, insertByValWithHint) {
+    MAP my_map;
+    ITERATOR it;
+    my_map['a'] = 42;
+    my_map['t'] = 43;
+    my_map['g'] = 44;
+    my_map['p'] = 45;
+    my_map['b'] = 46;
+    my_map['y'] = 47;
+    it = my_map.lower_bound('h');
+    my_map.insert(it, PAIR('h', 88));
+    EXPECT_EQ(my_map['h'], 88);
+    EXPECT_EQ(my_map.size(), 7);
+}
 
 // Erase
 // By position

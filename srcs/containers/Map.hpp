@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/11 12:59:30 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 14:07:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,10 +221,23 @@ namespace   ft
             }
  
             void                    erase(iterator position)
-            { this->_tree.erase(position); }
+            {
+                if (position._p != nullptr)
+                {
+                    this->_tree.erase(position);
+                    --this->_size;
+                }
+            }
 
             size_type               erase(const key_type &k)
-            { return (this->_tree.erase(k)); }
+            {
+                if (this->_tree.erase(k) == 1)
+                {
+                    --this->_size;
+                    return (1);
+                }
+                return (0);
+            }
 
             void                    erase(iterator first, iterator last)
             {

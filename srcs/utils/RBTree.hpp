@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/11 10:36:41 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 14:16:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -632,7 +632,7 @@ namespace   ft
             // Recursive search
             node_ptr _recursive_search(node_ptr node, key_type const &key) const
             {
-                node_ptr    ret = this->_end;
+                node_ptr    ret;
                 int         dir;
 
                 if (is_nil(node))

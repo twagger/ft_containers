@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 12:35:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 13:47:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ using GenericTypes = testing::Types
     std::pair<std::map<char, int>, std::pair<char, int>>,
     std::pair<ft::map<char, int>, ft::pair<char, int>>,
     std::pair<std::map<char, int, std::greater<char>>, std::pair<char, int>>,
-    std::pair<ft::map<char, int, std::greater<char>>, ft::pair<char, int>>/*,
-    std::pair<std::map<char, int, Mod97Cmp>, std::pair<char, int>>,
-    std::pair<ft::map<char, int, Mod97Cmp>, ft::pair<char, int>>*/
+    std::pair<ft::map<char, int, std::greater<char>>, ft::pair<char, int>>
 >;
 
 // Test test sets
@@ -41,12 +39,15 @@ using StdTypes = testing::Types
     std::pair<std::map<char, int>, std::pair<char, int>>,
     std::pair<std::map<char, int, std::greater<char>>, std::pair<char, int>>
 >;
+using PerfTypes = testing::Types
+<
+    std::pair<std::map<int, char>, std::pair<int, char>>,
+    std::pair<ft::map<int, char>, ft::pair<int, char>>,
+    std::pair<std::map<int, char, std::greater<int>>, std::pair<int, char>>,
+    std::pair<ft::map<int, char, std::greater<int>>, ft::pair<int, char>>
+>;
 
 // Compare functions
-struct Mod97Cmp {
-    bool operator()(const int lhs, const int rhs) const
-    { return (lhs % 97) < (rhs % 97); }
-};
 static const std::type_info  &t_less = typeid(std::less<char>);
 static const std::type_info  &t_more = typeid(std::greater<char>);
 
@@ -74,5 +75,9 @@ TYPED_TEST_CASE(Map_observers, GenericTypes);
 template<typename T>
 struct Map_operations : public testing::Test { using Types = T; };
 TYPED_TEST_CASE(Map_operations, GenericTypes);
+
+template<typename T>
+struct Map_performance : public testing::Test { using Types = T; };
+TYPED_TEST_CASE(Map_performance, PerfTypes);
 
 #endif
