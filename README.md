@@ -12,6 +12,7 @@ make all
 ```sh
 ./tests/ft_containers_tst --gtest_filter=Vector*
 ./tests/ft_containers_tst --gtest_filter=Map*
+./tests/ft_containers_tst --gtest_filter=Map_observers*
 ```
 
 ## Author
