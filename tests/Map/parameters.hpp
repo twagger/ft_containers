@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 10:38:15 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 12:35:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ using GenericTypes = testing::Types
     std::pair<std::map<char, int>, std::pair<char, int>>,
     std::pair<ft::map<char, int>, ft::pair<char, int>>,
     std::pair<std::map<char, int, std::greater<char>>, std::pair<char, int>>,
-    std::pair<ft::map<char, int, std::greater<char>>, ft::pair<char, int>>
+    std::pair<ft::map<char, int, std::greater<char>>, ft::pair<char, int>>/*,
+    std::pair<std::map<char, int, Mod97Cmp>, std::pair<char, int>>,
+    std::pair<ft::map<char, int, Mod97Cmp>, ft::pair<char, int>>*/
 >;
+
 // Test test sets
 using FtTypes = testing::Types
 <
@@ -40,6 +43,10 @@ using StdTypes = testing::Types
 >;
 
 // Compare functions
+struct Mod97Cmp {
+    bool operator()(const int lhs, const int rhs) const
+    { return (lhs % 97) < (rhs % 97); }
+};
 static const std::type_info  &t_less = typeid(std::less<char>);
 static const std::type_info  &t_more = typeid(std::greater<char>);
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/11 10:38:20 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/11 12:59:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ namespace   ft
             class A = std::allocator<pair<const Key, T>> >
     class map
     {
+        
         public:
             /* ************************************************************** */
             /*  MEMBER TYPES & ALIASES                                        */
@@ -36,6 +37,28 @@ namespace   ft
             typedef RBNode<value_type, Compare>                 node_type;
             // Compare
             typedef Compare                                     key_compare;
+            
+        private:
+            class pair_compare
+            {   
+                friend class map;
+                
+                protected:
+                    Compare _comp;
+                    pair_compare(Compare c) : _comp(c) {}
+
+                public:
+                    typedef bool        result_type;
+                    typedef value_type  first_argument_type;
+                    typedef value_type  second_argument_type;
+                    
+                    bool operator()(const value_type &x, const value_type &y) \
+                    const
+                    { return _comp(x.first, y.first); }
+            };
+
+        public:
+            typedef pair_compare                                value_compare;
             // Memory
             typedef A                                           allocator_type;
             // Size
@@ -52,6 +75,7 @@ namespace   ft
             typedef t_const_iterator<node_type>                 const_iterator;
             typedef ft::reverse_iterator<iterator>             reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+            
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
@@ -138,9 +162,10 @@ namespace   ft
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
             {
-                node_type   *ret;
-                node_type   *node;
-                int         dir;
+                node_type       *ret;
+                node_type       *node;
+                value_compare   comp = this->value_comp();
+                int             dir;
                 
                 ret = this->_tree.find_insert_pos(val.first);
                 if (ret == nullptr) // Insert first node
@@ -154,7 +179,7 @@ namespace   ft
                     return (pair<iterator, bool>(ret, false));
                 else // New node
                 {
-                    dir = Compare()(ret->value.first, val.first);
+                    dir = comp(ret->value, val);
                     node = this->_tree.get_allocator().allocate(1);
                     this->_tree.get_allocator().construct(node, val);
                     this->_tree.insert(node, ret, dir);
@@ -166,14 +191,14 @@ namespace   ft
             iterator                insert(iterator position, \
                                            const value_type &val)
             {
-                node_type   *node;
-                int         dir;
+                node_type       *node;
+                value_compare   comp = this->value_comp();
+                int             dir;
                 
                 // Compare the value with hint and prev(hint)
-                if (Compare()((*position).first, val)
-                    && Compare()(val, (*++position)))
+                if (comp(*position, val) && comp(val, *(++position)))
                 {
-                    dir = Compare()((*position).first, val.first);
+                    dir = comp(*position, val);
                     node = this->_tree.get_allocator().allocate(1);
                     this->_tree.get_allocator().construct(node, val);
                     this->_tree.insert(node, position._p, dir);
@@ -232,8 +257,9 @@ namespace   ft
             // Observers
             key_compare                 key_comp(void) const
             { return this->_compare; }
-            
-            // value_compare               value_comp(void) const;
+
+            value_compare               value_comp(void) const
+            { return value_compare(key_compare()); }
             
             // Operations
             iterator                    find(const key_type &k)
@@ -277,9 +303,6 @@ namespace   ft
             key_compare     _compare;
             allocator_type  _allocator;
             size_type       _size;
-
-            // Value compare subtype
-            
     };
 }
 
