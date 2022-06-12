@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:36:12 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 14:21:30 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/12 07:12:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_performance);
-
+/*
 // Insert 1000000 
 TYPED_TEST(Map_performance, insert1000000) {
     MAP my_map;

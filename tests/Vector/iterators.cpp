@@ -1,19 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iterators.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 08:20:24 by marvin            #+#    #+#             */
+/*   Updated: 2022/06/12 08:23:18 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "gtest/gtest.h"
+#include <vector>
 #include "Vector.hpp"
-#include "fixtures.hpp"
+#include "parameters.hpp"
 
-/* ************************************************************************** */
-/*  ITERATOR TESTS                                                            */
-/* ************************************************************************** */
+TYPED_TEST_SUITE_P(Vector_iterators);
 
-TEST_F(VectorTest, iteratorBasic) {
-    MyVector.push_back(42);
-    MyVector.push_back(42);
-    MyVector.push_back(42);
-    MyVector.push_back(42);
-    MyVector.push_back(42);
-    ft::vector<int>::iterator	it = MyVector.begin();
+// Iterators
+TYPED_TEST(Vector_iterators, iteratorBasic) {
+    VECTOR      my_vector;
+    ITERATOR    it;
+    my_vector.push_back(42);
+    my_vector.push_back(42);
+    my_vector.push_back(42);
+    my_vector.push_back(42);
+    my_vector.push_back(42);
+    it = my_vector.begin();
     it++;
     it--;
-    EXPECT_EQ(it, MyVector.begin());
+    EXPECT_EQ(it, my_vector.begin());
 }

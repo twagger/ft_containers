@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.tpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/13 18:00:55 by twagner          ###   ########.fr       */
+/*   Updated: 2022/06/12 08:54:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,7 @@ ft::vector<T,A>::~vector(void)
 // Operator []
 template < class T, class A > 
 T   &ft::vector<T,A>::operator[](std::size_t n)
-{
-    if (n >= this->_size)
-    {
-        throw std::out_of_range("Out of range");
-    }
-    else
-    {
-        return (this->_array[n]);
-    }
-}
+{ return (*(this->_array + n)); }
 
 // Operator =
 template < class T, class A > 
@@ -128,6 +119,37 @@ typename ft::vector<T,A>::pointer    ft::vector<T,A>::_realloc(size_type n)
     else
         return (this->_array);
 }
+
+// Realloc double
+template< class T, class A >
+typename ft::vector<T,A>::pointer    \
+    ft::vector<T,A>::_realloc_double(size_type n)
+{
+    size_type   len;
+    
+    if (this->capacity() - this->size() < n)
+    {
+        len = this->_check_len(n);
+        this->_array = this->_realloc(len);
+    }
+    return (this->_array);
+}
+
+// Check len
+template< class T, class A >
+typename ft::vector<T,A>::size_type ft::vector<T,A>::_check_len(size_type n)
+{
+    size_type   len;
+    
+    if (this->max_size() - this->size() < n)
+        throw std::length_error("length error");
+    len = this->size() + std::max(this->size(), n);
+    if (len < this->size() || len > this->max_size())
+        return (this->max_size());
+    else
+        return (len);
+}
+
 
 /* ************************************************************************** */
 /*  CAPACITY                                                                  */
@@ -198,7 +220,6 @@ void	ft::vector<T,A>::clear(void)
 }
 
 // Assign
-
 template < class T, class A >
 template < class InputIterator > 
 void ft::vector<T,A>::assign(\
@@ -280,7 +301,7 @@ const value_type &val)
     unsigned int    index;
 
     index = position - this->begin();
-    this->_array = this->_realloc(this->size() + 1);
+    this->_array = this->_realloc_double(1);
     position = this->begin() + index;
     if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + 1);
@@ -296,7 +317,7 @@ const value_type &val)
     unsigned int    index;
 
     index = position - this->begin();
-    this->_array = this->_realloc(this->size() + n);
+    this->_array = this->_realloc_double(n);
     position = this->begin() + index;
     if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + n);
@@ -315,7 +336,7 @@ InputIterator>::type first, InputIterator last)
     
     size = last - first;
     index = position - this->begin();
-    this->_array = this->_realloc(this->size() + size);
+    this->_array = this->_realloc_double(size);
     position = this->begin() + index;
     if (position != this->end())
         std::copy_backward(position, this->end(), this->end() + size);

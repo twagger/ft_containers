@@ -113,8 +113,18 @@ namespace   ft
             void        reserve(size_type n);
 
             // Access
-            reference       at(size_type n) {return ((*this)[n]);}
-            const_reference at(size_type n) const {return ((*this)[n]);}
+            reference       at(size_type n)
+            {
+                if (n >= this->size())
+                    throw std::out_of_range("out of range");
+                return ((*this)[n]);
+            }
+            const_reference at(size_type n) const
+            {
+                if (n >= this->size())
+                    throw std::out_of_range("out of range");
+                return ((*this)[n]);
+            }
             reference       front(void) {return ((*this)[0]);}
             const_reference front(void) const {return ((*this)[0]);}
             reference       back(void) {return ((*this)[this->size() - 1]);}
@@ -156,6 +166,10 @@ namespace   ft
 
             // Functions
             pointer _realloc(size_type n);
+
+            pointer _realloc_double(size_type n);
+
+            size_type   _check_len(size_type n);
 
             // Non member function overloads
             friend bool operator==(\
