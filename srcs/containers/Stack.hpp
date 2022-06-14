@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:36:12 by twagner           #+#    #+#             */
-/*   Updated: 2022/05/27 09:41:30 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 07:31:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace   ft
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
-            // Constructor
+            // Constructor (copy constructor and also default)
             explicit stack(const container_type &cont = container_type())
             : c(cont) {}
             // Destructor

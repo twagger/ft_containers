@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   constructor.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/14 07:28:23 by marvin            #+#    #+#             */
+/*   Updated: 2022/06/14 07:29:27 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "gtest/gtest.h"
+#include <stack>
 #include "Stack.hpp"
+#include "parameters.hpp"
 
-/* ************************************************************************** */
-/*  STACK CONSTRUCTOR TESTS                                                   */
-/* ************************************************************************** */
+TYPED_TEST_SUITE_P(Stack_constructors);
 
-TEST(StackTest_Constructor, defaultConstructor) {
-    ft::stack<int> MyStack;
-    EXPECT_EQ(MyStack.size(), 0)
-        << "Default vector should have a 0 size";
+// Default constructor
+TYPED_TEST(Stack_constructors, defaultConstructor) {
+    STACK my_stack;
+    EXPECT_EQ(my_stack.size(), 0);
 }

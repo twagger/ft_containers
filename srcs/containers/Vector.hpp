@@ -109,7 +109,7 @@ namespace   ft
 
             void        resize(size_type n, value_type val = value_type());
             size_type   capacity(void) const {return (this->_capacity);}
-            bool        empty(void) const {return (this->_size > 0);}
+            bool        empty(void) const {return (this->_size == 0);}
             void        reserve(size_type n);
 
             // Access
