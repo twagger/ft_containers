@@ -8,6 +8,7 @@
 tester
 build
 42tester
+containers_test
 
 # Debug files
 *.dSYM/
