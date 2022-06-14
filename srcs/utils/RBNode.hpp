@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 09:07:29 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 09:45:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,20 @@ namespace   ft
             /* ************************************************************** */
             // Param
             RBNode(value_type value, const key_compare &comp = key_compare())
-            : parent(NULL), child{NULL, NULL}, color(RED), _comp(comp), \
-              value(value) {}
+            : _comp(comp), value(value), color(RED), parent(NULL)
+            {
+                this->child[LEFT] = NULL;
+                this->child[RIGHT] = NULL;
+            }
 
             // Copy
-            RBNode(const node_ref src)
-            : parent(NULL), child{NULL, NULL}, color(src.color), \
-              _comp(src._comp), value(src.value)
-            { *this = src; }
+            RBNode(const node_type &src)
+            : _comp(src._comp), value(src.value), color(src.color), parent(NULL)
+            { 
+                this->child[LEFT] = NULL;
+                this->child[RIGHT] = NULL;
+                *this = src;
+            }
  
             // Destructor
             ~RBNode(void) {}
@@ -73,10 +79,10 @@ namespace   ft
             /* ************************************************************** */
             /*  OPERATORS OVERLOAD                                            */
             /* ************************************************************** */
-            node_ref operator=(const node_ref other) // not used for now
+            node_ref operator=(const node_type &other) // not used for now
             {
-                node_ptr new_left = nullptr;
-                node_ptr new_right = nullptr;
+                node_ptr new_left = NULL;
+                node_ptr new_right = NULL;
 
                 if (other.child[LEFT])
                     new_left = new node_type(*other.child[LEFT]);
@@ -218,7 +224,7 @@ namespace   ft
                         return (found);
                     found = found->parent;
                 }
-                return (nullptr);
+                return (NULL);
             }
 
             // Successor
@@ -256,7 +262,7 @@ namespace   ft
                         return (found);
                     found = found->parent;
                 }
-                return (nullptr);
+                return (NULL);
             }
 
             // Swap nodes

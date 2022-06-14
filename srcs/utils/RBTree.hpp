@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/11 14:16:12 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 09:32:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RBTREE_HPP
 # include <memory>
 # include "../iterators/tree_iterator.hpp"
-# include "Vector.hpp"
+# include "../containers/Vector.hpp"
 # include "RBNode.hpp"
 
 namespace   ft
@@ -77,9 +77,8 @@ namespace   ft
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Default
-            RBTree(void) : _root(nullptr), _comp(key_compare()), \
-                           _min(nullptr), _max(nullptr), \
-                           _allocator(node_allocator())
+            RBTree(void) : _root(NULL), _min(NULL), _max(NULL), \
+                           _comp(key_compare()), _allocator(node_allocator())
             {
                 this->_end = this->_allocator.allocate(1);
                 this->_allocator.construct(this->_end, value_type());
@@ -87,7 +86,7 @@ namespace   ft
             }
 
             // Copy
-            RBTree(const tree_ref src) : _root(nullptr), _comp(src._comp), \
+            RBTree(const tree_ref src) : _root(NULL), _comp(src._comp), \
                                          _allocator(node_allocator())
             {
                 this->_end = this->_allocator.allocate(1);
@@ -145,7 +144,7 @@ namespace   ft
                 node_ptr    inserted = node;
 
                 node->parent = parent;
-                if (parent == nullptr)
+                if (parent == NULL)
                 {
                     this->_root = node;
                     node->color = BLACK;
@@ -160,7 +159,7 @@ namespace   ft
                         _update_min_max_end(inserted);
                         return ; // Insertion complete
                     }
-                    if ((grandpa = node->grandparent()) == nullptr)
+                    if ((grandpa = node->grandparent()) == NULL)
                     {
                         parent->color = BLACK;
                         _update_min_max_end(inserted);
@@ -239,9 +238,9 @@ namespace   ft
             void    clear(void) 
             { 
                 this->_recursive_clear(this->_root);
-                this->_root = nullptr;
-                this->_min = nullptr;
-                this->_max = nullptr;
+                this->_root = NULL;
+                this->_min = NULL;
+                this->_max = NULL;
             }
 
             // Swap tree
@@ -286,14 +285,14 @@ namespace   ft
             // save the root
             void    _save_root(void)
             {
-                while (this->_root->parent != nullptr)
+                while (this->_root->parent != NULL)
                     this->_root = this->_root->parent;
             }
 
             // Update min and max
             void    _update_min_max_end(node_ptr node)
             {
-                if (node == nullptr)
+                if (node == NULL)
                     return ;
                 if (!this->_min || (this->_min 
                     && this->_comp(node->value.first, this->_min->value.first)))
@@ -311,10 +310,9 @@ namespace   ft
             node_ptr    _find_min(void)
             {
                 node_ptr    result = this->_root;
-                bool        comp_res;
                 
                 if (is_nil(this->_root))
-                    return (nullptr);
+                    return (NULL);
                 if (!is_nil(result->child[LEFT])
                     && this->_comp(result->child[LEFT]->value.first, \
                                    result->value.first))
@@ -336,10 +334,9 @@ namespace   ft
             node_ptr    _find_max(void)
             {
                 node_ptr    result = this->_root;
-                bool        comp_res;
                 
                 if (is_nil(this->_root))
-                    return (nullptr);
+                    return (NULL);
                 if (!is_nil(result->child[LEFT])
                     && this->_comp(result->value.first, \
                                    result->child[LEFT]->value.first))
@@ -363,7 +360,7 @@ namespace   ft
                 // recursive recycling
                 if (is_nil(node))
                 {
-                    if (this->_root == nullptr && this->_end)
+                    if (this->_root == NULL && this->_end)
                     {
                         this->_allocator.destroy(this->_end);
                         pool->nodes.push_back(this->_end);
@@ -393,7 +390,7 @@ namespace   ft
                 node_ptr    dest;
                 
                 if (!node)
-                    return (nullptr);
+                    return (NULL);
                 if (pool->nb) // If pool is still available, use it
                 {
                     dest = pool->nodes[pool->nb - 1];
@@ -408,7 +405,7 @@ namespace   ft
                 if (dest->color == WHITE) // Ghost node
                 {
                     this->_end = dest;
-                    return (nullptr); // to avoid looping on RIGHT with _max node
+                    return (NULL); // to avoid looping on RIGHT with _max node
                 }
                 // Childrens
                 dest->child[LEFT] = this->_copy(node->child[LEFT], pool);
@@ -498,7 +495,7 @@ namespace   ft
                 {
                     // Node is RED : remove it
                     this->_save_root();
-                    node->parent->child[node->childdir()] = nullptr;
+                    node->parent->child[node->childdir()] = NULL;
                 }
                 else // Node is BLACK
                 {
@@ -508,14 +505,14 @@ namespace   ft
                         node->swap(node->child[LEFT]);
                         this->_save_root();
                         node->parent->color = BLACK;
-                        node->parent->child[LEFT] = nullptr;
+                        node->parent->child[LEFT] = NULL;
                     }
                     else if (!is_nil(node->child[RIGHT]))
                     {
                         node->swap(node->child[RIGHT]);
                         this->_save_root();
                         node->parent->color = BLACK;
-                        node->parent->child[RIGHT] = nullptr;
+                        node->parent->child[RIGHT] = NULL;
                     }
                 }
                 this->_clear_node(node);
@@ -538,15 +535,15 @@ namespace   ft
                 catch (std::runtime_error &e) // tree with only root
                 {
                     this->_clear_node(node);
-                    this->_root = nullptr;
-                    this->_end->child[RIGHT] = nullptr;
+                    this->_root = NULL;
+                    this->_end->child[RIGHT] = NULL;
                     return ;
                 }
                 this->_save_root();
-                p->child[dir] = nullptr;
+                p->child[dir] = NULL;
                  
                 // 2. Rebalancing loop
-                while (p != nullptr)
+                while (p != NULL)
                 {
                     try { dir = node->childdir(); }
                     catch (const std::runtime_error &e) {} // first loop only
@@ -652,8 +649,8 @@ namespace   ft
             {
                 int dir;
 
-                if (node == nullptr)
-                    return (nullptr);
+                if (node == NULL)
+                    return (NULL);
                 if (node->value.first == key)
                     return (node);
                 else 

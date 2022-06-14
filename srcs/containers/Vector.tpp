@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:27:48 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/12 08:54:40 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 09:37:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ ft::vector<T,A>::vector(const vector &x)
 template < class T, class A > 
 ft::vector<T,A>::~vector(void)
 {
-    for (int i = 0; i < this->size(); ++i)
+    for (long unsigned int i = 0; i < this->size(); ++i)
         this->get_allocator().destroy(this->_array + i);
     this->_allocator.deallocate(this->_array, this->capacity());
 }
@@ -78,10 +78,10 @@ T   &ft::vector<T,A>::operator[](std::size_t n)
 template < class T, class A > 
 ft::vector<T,A>	&ft::vector<T,A>::operator=(const ft::vector<T,A> &x)
 {
-    for(ft::vector<T,A>::const_iterator it = this->begin(); it < this->end(); \
+    for(ft::vector<T,A>::iterator it = this->begin(); it < this->end(); \
     ++it)
     {
-        this->_allocator.destroy(it);
+        this->_allocator.destroy(&*it);
     }
     this->_allocator.deallocate(this->_array, this->_capacity);
     this->_capacity = x.capacity();
@@ -109,7 +109,7 @@ typename ft::vector<T,A>::pointer    ft::vector<T,A>::_realloc(size_type n)
             throw std::length_error("length error");
         newarr = this->get_allocator().allocate(n);
         std::copy(this->begin(), this->end(), newarr);
-        for (int i = 0; i < this->size(); ++i)
+        for (long unsigned int i = 0; i < this->size(); ++i)
             this->get_allocator().destroy(this->_array + i);
         this->get_allocator().deallocate(this->_array, this->capacity());
         this->_array = newarr;

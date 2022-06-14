@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 06:50:19 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/12 09:35:01 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 08:33:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,9 @@ TYPED_TEST_CASE(Vector_element_access, GenericTypes);
 template<typename T>
 struct Vector_constructors : public testing::Test { using Types = T; };
 TYPED_TEST_CASE(Vector_constructors, GenericTypes);
+
+template<typename T>
+struct Vector_performance : public testing::Test { using Types = T; };
+TYPED_TEST_CASE(Vector_performance, GenericTypes);
 
 #endif

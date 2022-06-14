@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/11 14:07:37 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 09:22:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 namespace   ft
 {
     template < class Key, class T, class Compare = std::less<Key>, \
-            class A = std::allocator<pair<const Key, T>> >
+            class A = std::allocator<pair<const Key, T> > >
     class map
     {
         
@@ -83,7 +83,7 @@ namespace   ft
             // Empty
             explicit map(const key_compare &comp = key_compare(), \
                         const allocator_type &alloc = allocator_type())
-            : _allocator(alloc), _size(0), _compare(comp) {}
+            : _allocator(alloc), _compare(comp), _size(0) {}
               
             // Range
             template <class InputIterator>
@@ -95,7 +95,7 @@ namespace   ft
             
             // Copy
             map(const map &x)
-            : _compare(x._compare), _allocator(x._allocator), _size(0)
+            : _allocator(x._allocator), _compare(x._compare), _size(0)
             { *this = x; }
 
             // Destructor
@@ -168,7 +168,7 @@ namespace   ft
                 int             dir;
                 
                 ret = this->_tree.find_insert_pos(val.first);
-                if (ret == nullptr) // Insert first node
+                if (ret == NULL) // Insert first node
                 {
                     node = this->_tree.get_allocator().allocate(1);
                     this->_tree.get_allocator().construct(node, val);
@@ -222,7 +222,7 @@ namespace   ft
  
             void                    erase(iterator position)
             {
-                if (position._p != nullptr)
+                if (position._p != NULL)
                 {
                     this->_tree.erase(position);
                     --this->_size;
@@ -313,8 +313,8 @@ namespace   ft
         private:
             // Attributes
             tree_type       _tree;
-            key_compare     _compare;
             allocator_type  _allocator;
+            key_compare     _compare;
             size_type       _size;
     };
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 15:31:34 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/04 11:56:30 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 10:35:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ namespace   ft
         // Operator overload
         pair    &operator=(const pair &pr)
         {
-            this->first = pr.first;
-            this->second = pr.second;
+            if (this != &pr)
+            {
+                //this->first = pr.first;
+                this->second = pr.second;
+            }
             return (*this);
         }
     };

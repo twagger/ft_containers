@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/10 09:46:58 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 09:05:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace   ft
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
-            t_iterator(void) : _p(nullptr) {}
+            t_iterator(void) : _p(NULL) {}
             t_iterator(node_ptr x) : _p(x) {}
             t_iterator(const t_iterator &it) : _p(it._p) {}
             ~t_iterator(void) {}
