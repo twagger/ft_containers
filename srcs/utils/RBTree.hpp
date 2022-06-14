@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/14 09:32:51 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 14:49:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # include <memory>
+# include <algorithm>
 # include "../iterators/tree_iterator.hpp"
 # include "../containers/Vector.hpp"
 # include "RBNode.hpp"
@@ -142,12 +143,14 @@ namespace   ft
                 node_ptr    grandpa;
                 node_ptr    uncle;
                 node_ptr    inserted = node;
-
+                
+                node->color = RED;
+                node->child[LEFT] = NULL;
+                node->child[RIGHT] = NULL;
                 node->parent = parent;
                 if (parent == NULL)
                 {
                     this->_root = node;
-                    node->color = BLACK;
                     _update_min_max_end(inserted);
                     return ; // Insertion complete
                 }
@@ -198,7 +201,6 @@ namespace   ft
             size_t  erase(key_type const &key)
             {
                 node_ptr to_remove;
-                
                 to_remove = this->search(key);
                 if (to_remove == this->get_end())
                     return (0);
@@ -418,48 +420,12 @@ namespace   ft
                 return (dest);
             }
 
-            // Repair
-            void    _repair(node_ptr node)
-            {
-                int         dir;
-                node_ptr    p;
-                node_ptr    g;
-                
-                if (node->parent == NULL)
-                    node->color = BLACK;
-                else if (node->parent->color == BLACK)
-                    return ;
-                else if (node->uncle() && node->uncle()->color == RED)
-                {
-                    // Parent is red, uncle is red, node is red : SWITCH COLORS
-                    node->parent->color = BLACK;
-                    node->uncle()->color = BLACK;
-                    node->grandparent()->color = RED;
-                    _repair(node->grandparent());
-                }
-                else
-                {
-                    // Parent is red but uncle is black : ROTATE
-                    dir = node->parent->childdir();
-                    if (dir ^ node->childdir())
-                    {
-                        node->parent->rotate(dir);
-                        node = node->child[dir];
-                    }
-                    p = node->parent;
-                    g = node->grandparent();
-                    g->rotate(1 - node->childdir());
-                    p->color = BLACK;
-                    g->color = RED;
-                }
-            }
-
             // Remove
             void    _remove(node_ptr to_remove)
             {
                 node_ptr    replacement;
                 key_type    key = to_remove->value.first;
-                
+
                 // Update min and max
                 if (key == this->_min->value.first)
                     this->_min = to_remove->successor();
@@ -475,6 +441,8 @@ namespace   ft
                     // 2 childs : switch it with predecessor or successor
                     replacement = to_remove->replacement();
                     to_remove->swap(replacement);
+                    if (this->_root == to_remove)
+                        this->_root = replacement;
                 }
                 if (to_remove->color == RED || 
                     (!is_nil(to_remove->child[LEFT]) 
@@ -482,6 +450,7 @@ namespace   ft
                     this->_remove_simple_case(to_remove);
                 else
                     this->_remove_complex_case(to_remove);
+                // Re-attach ghost node to the max as right child
                 if (this->_end->child[RIGHT])
                     this->_end->child[RIGHT]->child[RIGHT] = this->_end;
             }
@@ -494,8 +463,14 @@ namespace   ft
                 if (node->color == RED)
                 {
                     // Node is RED : remove it
-                    this->_save_root();
-                    node->parent->child[node->childdir()] = NULL;
+                    // If root, remove it
+                    if (this->_root == node)
+                        this->_root = NULL;
+                    else
+                    {
+                        this->_save_root();
+                        node->parent->child[node->childdir()] = NULL;
+                    }
                 }
                 else // Node is BLACK
                 {
@@ -565,7 +540,7 @@ namespace   ft
                         p = node->parent;
                         continue;
                     }
-                    this->_clear_node(node);
+                    this->_clear_node(saved);
                     return ;
                 }
                 this->_clear_node(saved);
@@ -648,7 +623,6 @@ namespace   ft
             node_ptr _recursive_find_pos(node_ptr node, key_type const &key) const
             {
                 int dir;
-
                 if (node == NULL)
                     return (NULL);
                 if (node->value.first == key)

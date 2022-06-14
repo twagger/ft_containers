@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 13:35:36 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 13:51:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,40 @@ TYPED_TEST(Map_modifiers, eraseByValueOnlyNode) {
     MAP my_map;
     my_map['a'] = 42;
     my_map.erase('a');
+    EXPECT_EQ(my_map['a'], 0);
+}
+
+TYPED_TEST(Map_modifiers, eraseALot) {
+    MAP         my_map;
+    const char  *to_erase = "abcdefghijklmnopqrstuvwxyz";
+    my_map['a'] = 42;
+    my_map['b'] = 42;
+    my_map['c'] = 42;
+    my_map['d'] = 42;
+    my_map['e'] = 42;
+    my_map['f'] = 42;
+    my_map['g'] = 42;
+    my_map['h'] = 42;
+    my_map['i'] = 42;
+    my_map['j'] = 42;
+    my_map['k'] = 42;
+    my_map['l'] = 42;
+    my_map['m'] = 42;
+    my_map['n'] = 42;
+    my_map['o'] = 42;
+    my_map['p'] = 42;
+    my_map['q'] = 42;
+    my_map['r'] = 42;
+    my_map['s'] = 42;
+    my_map['t'] = 42;
+    my_map['u'] = 42;
+    my_map['v'] = 42;
+    my_map['w'] = 42;
+    my_map['x'] = 42;
+    my_map['y'] = 42;
+    my_map['z'] = 42;
+    for (int i = 0; i < 26; ++i)
+        my_map.erase(to_erase[i]);
     EXPECT_EQ(my_map['a'], 0);
 }
 

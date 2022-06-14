@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/14 09:22:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 14:29:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ namespace   ft
                 node_type       *node;
                 value_compare   comp = this->value_comp();
                 int             dir;
-                
+
                 ret = this->_tree.find_insert_pos(val.first);
                 if (ret == NULL) // Insert first node
                 {

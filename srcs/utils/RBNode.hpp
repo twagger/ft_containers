@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 09:45:38 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 11:02:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBNODE_HPP
 # define RBNODE_HPP
 # include "pair.hpp"
+# include <algorithm>
 
 enum { RED, BLACK, WHITE };
 enum { LEFT, RIGHT };

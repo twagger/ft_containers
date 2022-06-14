@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:36:12 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/12 07:12:27 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 14:50:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_performance);
-/*
+
 // Insert 1000000 
 TYPED_TEST(Map_performance, insert1000000) {
     MAP my_map;
@@ -63,7 +63,7 @@ TYPED_TEST(Map_performance, copyConstructor10000000) {
     MAP my_map2(my_map);
     EXPECT_EQ(my_map2.size(), 10000000);
 }
-/*
+
 // Erase (must recycle nodes to save time)
 TYPED_TEST(Map_performance, erase1000000) {
     MAP my_map;
@@ -76,4 +76,4 @@ TYPED_TEST(Map_performance, erase1000000) {
         my_map.erase(i);
     }
     EXPECT_EQ(my_map.size(), 996064);
-}*/
+}
