@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 15:31:34 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/14 10:35:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 10:40:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ namespace   ft
         {
             if (this != &pr)
             {
-                //this->first = pr.first;
+                // As we use a const for first in map we cannot update it
+                // This operator is not used in the rest of the code for this.
+                //this->first = pr.first; 
                 this->second = pr.second;
             }
             return (*this);
