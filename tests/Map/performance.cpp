@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:36:12 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/17 07:35:20 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 14:17:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <map>
 #include "map.hpp"
 #include "parameters.hpp"
-
+/*
 TYPED_TEST_SUITE_P(Map_performance);
 
 // Insert 1000000 
@@ -77,3 +77,4 @@ TYPED_TEST(Map_performance, erase1000000) {
     }
     EXPECT_EQ(my_map.size(), 996064);
 }
+*/

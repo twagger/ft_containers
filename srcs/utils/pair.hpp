@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 15:31:34 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/14 10:40:10 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 09:27:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PAIR_HPP
 # define PAIR_HPP
+# include <iostream>
 
 namespace   ft
 {
@@ -50,7 +51,7 @@ namespace   ft
     // Non member relational operators
     template <class T1, class T2>
     bool operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)
-    { return lhs.first == rhs.first && lhs.second == rhs.second; }
+    { return lhs.first == rhs.first; } // no need to compare second in the code
 
     template <class T1, class T2>
     bool operator!=(const pair<T1, T2> &lhs, const pair<T1,T2> &rhs)
@@ -78,6 +79,14 @@ namespace   ft
     pair<T1, T2>    make_pair(T1 x, T2 y)
     {
         return (pair<T1, T2>(x, y));
+    }
+
+    // << Overload
+    template <class T1, class T2>
+    std::ostream	&operator<<(std::ostream &o, pair<T1, T2> const &pr)
+    {
+        o << pr.first;
+        return (o);
     }
 }
 

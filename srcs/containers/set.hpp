@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/17 07:51:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 14:14:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,12 @@ namespace   ft
             // Type
             typedef T                                           key_type;
             typedef T                                           value_type;
-            typedef RBTree<value_type, Compare, A>              tree_type;
-            typedef RBNode<value_type, Compare>                 node_type;
             // Compare
             typedef Compare                                     key_compare;
             typedef Compare                                     value_compare;
-
-        private:
-            class pair_compare
-            {   
-                friend class map;
-                
-                protected:
-                    Compare _comp;
-                    pair_compare(Compare c) : _comp(c) {}
-
-                public:
-                    typedef bool        result_type;
-                    typedef value_type  first_argument_type;
-                    typedef value_type  second_argument_type;
-                    
-                    bool operator()(const value_type &x, const value_type &y) \
-                    const
-                    { return _comp(x.first, y.first); }
-            };
-
-        public:
+            // Tree
+            typedef RBTree<value_type, Compare, A>              tree_type;
+            typedef RBNode<value_type, Compare>                 node_type;
             // Memory
             typedef A                                           allocator_type;
             // Size
@@ -156,7 +136,7 @@ namespace   ft
                 value_compare   comp = this->value_comp();
                 int             dir;
 
-                ret = this->_tree.find_insert_pos(val.first);
+                ret = this->_tree.find_insert_pos(val);
                 if (ret == NULL) // Insert first node
                 {
                     node = this->_tree.get_allocator().allocate(1);
@@ -164,7 +144,7 @@ namespace   ft
                     this->_tree.insert(node, ret, LEFT);
                     ++this->_size;
                 }
-                else if (ret->value.first == val.first) // Key already exists
+                else if (ret->value == val) // Key already exists
                     return (pair<iterator, bool>(ret, false));
                 else // New node
                 {

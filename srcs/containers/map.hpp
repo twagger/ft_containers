@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Map.hpp                                            :+:      :+:    :+:   */
+/*   map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/14 14:29:25 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 14:58:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ namespace   ft
             class A = std::allocator<pair<const Key, T> > >
     class map
     {
-        
         public:
             /* ************************************************************** */
             /*  MEMBER TYPES & ALIASES                                        */
@@ -33,14 +32,13 @@ namespace   ft
             typedef Key                                         key_type;
             typedef T                                           mapped_type;
             typedef pair<const key_type, mapped_type>           value_type;
-            typedef RBTree<value_type, Compare, A>              tree_type;
-            typedef RBNode<value_type, Compare>                 node_type;
             // Compare
             typedef Compare                                     key_compare;
             
         private:
             class pair_compare
             {   
+                
                 friend class map;
                 
                 protected:
@@ -59,6 +57,8 @@ namespace   ft
 
         public:
             typedef pair_compare                                value_compare;
+            typedef RBTree<value_type, value_compare, A>        tree_type;
+            typedef RBNode<value_type, value_compare>           node_type;
             // Memory
             typedef A                                           allocator_type;
             // Size
@@ -108,7 +108,7 @@ namespace   ft
             {
                 iterator    it;
                 
-                it = this->_tree.search(k);
+                it = this->_tree.search(value_type(k, mapped_type()));
                 if (it == this->_tree.get_end())
                     it = this->insert(value_type(k, mapped_type())).first;
                 return ((*it).second);    
@@ -164,10 +164,10 @@ namespace   ft
             {
                 node_type       *ret;
                 node_type       *node;
-                value_compare   comp = this->value_comp();
                 int             dir;
+                value_compare   comp = this->value_comp(); 
 
-                ret = this->_tree.find_insert_pos(val.first);
+                ret = this->_tree.find_insert_pos(val);
                 if (ret == NULL) // Insert first node
                 {
                     node = this->_tree.get_allocator().allocate(1);
@@ -192,8 +192,8 @@ namespace   ft
                                            const value_type &val)
             {
                 node_type       *node;
-                value_compare   comp = this->value_comp();
                 int             dir;
+                value_compare   comp = this->value_comp(); 
                 
                 // Compare the value with hint and prev(hint)
                 if (comp(*position, val) && comp(val, *(++position)))
@@ -231,7 +231,7 @@ namespace   ft
 
             size_type               erase(const key_type &k)
             {
-                if (this->_tree.erase(k) == 1)
+                if (this->_tree.erase(value_type(k, mapped_type())) == 1)
                 {
                     --this->_size;
                     return (1);
@@ -276,26 +276,32 @@ namespace   ft
             
             // Operations
             iterator                    find(const key_type &k)
-            { return (iterator(this->_tree.search(k))); }
+            { return (iterator(\
+                      this->_tree.search(value_type(k, mapped_type())))); }
 
             const_iterator              find(const key_type &k) const
-            { return (const_iterator(this->_tree.search(k))); }
+            { return (const_iterator(\
+                      this->_tree.search(value_type(k, mapped_type())))); }
             
             size_type                   count(const key_type &k) const
-            { return ((this->_tree.search(k) 
+            { return ((this->_tree.search(value_type(k, mapped_type())) 
                        == this->_tree.get_end()) ? 0 : 1); }
-            
+
             iterator                    lower_bound(const key_type &k)
-            { return (this->_tree.get_lower_bound(k)); }
+            { return (\
+                this->_tree.get_lower_bound(value_type(k, mapped_type()))); }
             
             const_iterator              lower_bound(const key_type &k) const
-            { return (const_cast<iterator>(this->_tree.get_lower_bound(k))); }
+            { return (const_cast<iterator>(\
+                this->_tree.get_lower_bound(value_type(k, mapped_type())))); }
 
             iterator                    upper_bound(const key_type &k)
-            { return (this->_tree.get_upper_bound(k)); }
+            { return (\
+                this->_tree.get_upper_bound(value_type(k, mapped_type()))); }
             
             const_iterator              upper_bound(const key_type &k) const
-            { return (const_cast<iterator>(this->_tree.get_upper_bound(k))); }
+            { return (const_cast<iterator>(\
+                this->_tree.get_upper_bound(value_type(k, mapped_type())))); }
 
             pair<iterator, iterator>    equal_range(const key_type &k)
             {

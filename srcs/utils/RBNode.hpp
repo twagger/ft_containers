@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 11:02:04 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 14:32:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBNODE_HPP
 # define RBNODE_HPP
 # include "pair.hpp"
+# include "../utils/has_first.hpp"
 # include <algorithm>
 
 enum { RED, BLACK, WHITE };
@@ -24,11 +25,6 @@ namespace   ft
     class RBNode
     {
         private:
-            /* ************************************************************** */
-            /*  PRIVATE MEMBER VARIABLES                                      */
-            /* ************************************************************** */
-            Compare _comp;
-            
             // Default constructor
             RBNode(void){}
 
@@ -36,30 +32,43 @@ namespace   ft
             friend bool is_nil(RBNode<T, Compare> *node)
             { return (node == NULL || (node && node->color == WHITE) );}
 
+            // Compare values
+            template<class U = T>
+            bool    _comp(typename ft::enable_if<!ft::hasFirst<U>::value, \
+                          const U>::type &v1, const U &v2) const
+            {
+                return (Compare()(v1, v2));
+            }
+            
+            bool    _comp(const T &v1, const T &v2) const
+            {
+                return (Compare()(v1.first, v2.first));
+            }
+
         public:
             
             /* ************************************************************** */
             /*  MEMBER TYPES & ALIASES                                        */
             /* ************************************************************** */
             // Type
-            typedef T                       value_type;
-            typedef RBNode<T, Compare>      node_type;
+            typedef T                               value_type;
+            typedef RBNode<T, Compare>              node_type;
             // Compare
-            typedef Compare                 key_compare;
+            typedef Compare                         value_compare;
             // Pointer & Ref
-            typedef T                       &reference;
-            typedef const T                 &const_reference;
-            typedef T                       *pointer;
-            typedef const T                 *const_pointer;
-            typedef node_type               *node_ptr;
-            typedef node_type               &node_ref;
+            typedef T                               &reference;
+            typedef const T                         &const_reference;
+            typedef T                               *pointer;
+            typedef const T                         *const_pointer;
+            typedef node_type                       *node_ptr;
+            typedef node_type                       &node_ref;
 
             /* ************************************************************** */
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Param
-            RBNode(value_type value, const key_compare &comp = key_compare())
-            : _comp(comp), value(value), color(RED), parent(NULL)
+            RBNode(value_type value)
+            : value(value), color(RED), parent(NULL)
             {
                 this->child[LEFT] = NULL;
                 this->child[RIGHT] = NULL;
@@ -67,7 +76,7 @@ namespace   ft
 
             // Copy
             RBNode(const node_type &src)
-            : _comp(src._comp), value(src.value), color(src.color), parent(NULL)
+            : value(src.value), color(src.color), parent(NULL)
             { 
                 this->child[LEFT] = NULL;
                 this->child[RIGHT] = NULL;
@@ -108,9 +117,6 @@ namespace   ft
             /* ************************************************************** */
             /*  MEMBER FUNCTIONS                                              */
             /* ************************************************************** */
-            // Getter
-            key_compare &get_comp(void) const { return (this->_comp); }
-
             // Genealogy
             int childdir(void) const
             {
@@ -204,7 +210,7 @@ namespace   ft
                 if (this->color == WHITE)
                     return (found);
                 if (!is_nil(found) 
-                    && this->_comp(found->value.first, this->value.first))
+                    && this->_comp(found->value, this->value))
                 {
                     while (!is_nil(found->child[LEFT]))
                         found = found->child[LEFT];
@@ -212,7 +218,7 @@ namespace   ft
                 }
                 found = this->child[LEFT];
                 if (!is_nil(found)
-                    && this->_comp(found->value.first, this->value.first))
+                    && this->_comp(found->value, this->value))
                 {
                     while (!is_nil(found->child[RIGHT]))
                         found = found->child[RIGHT];
@@ -221,7 +227,7 @@ namespace   ft
                 found = this->parent;
                 while (found)
                 {
-                    if (this->_comp(found->value.first, this->value.first))
+                    if (this->_comp(found->value, this->value))
                         return (found);
                     found = found->parent;
                 }
@@ -242,7 +248,7 @@ namespace   ft
                 if (found && found->color == WHITE) 
                     return (found);
                 if (!is_nil(found)
-                    && this->_comp(this->value.first, found->value.first))
+                    && this->_comp(this->value, found->value))
                 {
                     while (!is_nil(found->child[LEFT]))
                         found = found->child[LEFT];
@@ -250,7 +256,7 @@ namespace   ft
                 }
                 found = this->child[LEFT];
                 if (!is_nil(found)
-                    && this->_comp(this->value.first, found->value.first))
+                    && this->_comp(this->value, found->value))
                 {
                     while (!is_nil(found->child[RIGHT]))
                         found = found->child[RIGHT];
@@ -259,7 +265,7 @@ namespace   ft
                 found = this->parent;
                 while (found)
                 {
-                    if (this->_comp(this->value.first, found->value.first))
+                    if (this->_comp(this->value, found->value))
                         return (found);
                     found = found->parent;
                 }

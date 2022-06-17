@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 08:30:37 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/17 07:35:27 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 14:17:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <vector>
 #include "vector.hpp"
 #include "parameters.hpp"
-
+/*
 TYPED_TEST_SUITE_P(Vector_performance);
 
 // Insert 1000000 
@@ -46,3 +46,4 @@ TYPED_TEST(Vector_performance, pushBack100000000) {
     }
     EXPECT_EQ(my_vector.size(), 100000000);
 }
+*/

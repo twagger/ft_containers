@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/17 07:27:33 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 15:02:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <algorithm>
 # include "../iterators/tree_iterator.hpp"
 # include "../containers/vector.hpp"
+# include "../utils/has_first.hpp"
 # include "RBNode.hpp"
 
 namespace   ft
@@ -31,10 +32,9 @@ namespace   ft
             typedef T                                           value_type;
             typedef RBTree<T, Compare, A>                       tree_type;
             typedef RBNode<T, Compare>                          node_type;
-            typedef typename T::first_type                      key_type;
             typedef A                                           allocator_type;
             // Compare
-            typedef Compare                                     key_compare;
+            typedef Compare                                     value_compare;
             // Pointer & Ref
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
@@ -78,8 +78,8 @@ namespace   ft
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Default
-            RBTree(void) : _root(NULL), _min(NULL), _max(NULL), \
-                           _comp(key_compare()), _allocator(node_allocator())
+            RBTree(const value_compare &cmp = value_compare()) : _root(NULL), _min(NULL), _max(NULL), \
+                           _allocator(node_allocator()), _comp(cmp)
             {
                 this->_end = this->_allocator.allocate(1);
                 this->_allocator.construct(this->_end, value_type());
@@ -87,7 +87,7 @@ namespace   ft
             }
 
             // Copy
-            RBTree(const tree_ref src) : _root(NULL), _comp(src._comp), \
+            RBTree(const tree_ref src) : _root(NULL), \
                                          _allocator(node_allocator())
             {
                 this->_end = this->_allocator.allocate(1);
@@ -110,7 +110,6 @@ namespace   ft
                 {
                     this->_recycle(this->get_root(), &pool);
                     this->_allocator = rhs._allocator;
-                    this->_comp = rhs._comp;
                     this->_root = this->_copy(rhs.get_root(), &pool);
                     this->_max = this->_find_min();
                     this->_min = this->_find_max();
@@ -198,10 +197,10 @@ namespace   ft
             }
 
             // Erase
-            size_t  erase(key_type const &key)
+            size_t  erase(value_type const &val)
             {
                 node_ptr to_remove;
-                to_remove = this->search(key);
+                to_remove = this->search(val);
                 if (to_remove == this->get_end())
                     return (0);
                 this->_remove(to_remove);
@@ -218,15 +217,15 @@ namespace   ft
             }
 
             // Search
-            node_ptr search(key_type const &key) const
+            node_ptr search(const value_type &val) const
             {
-                return (this->_recursive_search(this->_root, key));
+                return (this->_recursive_search(this->_root, val));
             }
             
             // Find insert pos
-            node_ptr find_insert_pos(key_type const &key) const
+            node_ptr find_insert_pos(const value_type &val) const
             {
-                return (this->_recursive_find_pos(this->_root, key));
+                return (this->_recursive_find_pos(this->_root, val));
             }
 
             // Print
@@ -255,23 +254,23 @@ namespace   ft
             }
 
             // Lower bound
-            iterator    get_lower_bound(key_type &k)
+            iterator    get_lower_bound(const value_type &val)
             {
                 iterator    it = iterator(this->_min);
 
                 while (it._p != this->_end 
-                       && key_compare()((*it).first, k) == true) 
+                       && this->_comp(*it, val) == true) 
                     ++it;
                 return (it);
             }
             
             // Upper bound
-            iterator    get_upper_bound(key_type &k)
+            iterator    get_upper_bound(const value_type &val)
             {
                 iterator    it = iterator(this->_min);
 
                 while (it._p != this->_end
-                       && key_compare()(k, (*it).first) == false)
+                       && this->_comp(val, *it) == false)
                     ++it;
                 return (it);
             }
@@ -281,9 +280,22 @@ namespace   ft
             node_ptr        _min; // begin node
             node_ptr        _max; // pre-end node
             node_ptr        _end; // ghost node for end(). Linked to _max node
-            key_compare     _comp;
             node_allocator  _allocator;
+            value_compare   _comp;
 
+            /* / Compare values
+            template<class U = value_type>
+            bool    _comp(typename ft::enable_if<!ft::hasFirst<U>::value, \
+                          const U>::type &v1, const U &v2) const
+            {
+                return (Compare()(v1, v2));
+            }
+            
+            bool    _comp(const value_type &v1, const value_type &v2) const
+            {
+                return (Compare()(v1.first, v2.first));
+            }*/
+            
             // save the root
             void    _save_root(void)
             {
@@ -297,10 +309,10 @@ namespace   ft
                 if (node == NULL)
                     return ;
                 if (!this->_min || (this->_min 
-                    && this->_comp(node->value.first, this->_min->value.first)))
+                    &&  this->_comp(node->value, this->_min->value)))
                     this->_min = node;
                 if (!this->_max || (this->_max 
-                    && this->_comp(this->_max->value.first, node->value.first)))
+                    && this->_comp(this->_max->value, node->value)))
                 {
                     this->_max = node;
                     node->child[RIGHT] = this->_end;
@@ -316,15 +328,15 @@ namespace   ft
                 if (is_nil(this->_root))
                     return (NULL);
                 if (!is_nil(result->child[LEFT])
-                    && this->_comp(result->child[LEFT]->value.first, \
-                                   result->value.first))
+                    && this->_comp(result->child[LEFT]->value, \
+                                   result->value))
                 {
                     while (!is_nil(result->child[LEFT]))
                     { result = result->child[LEFT]; }
                 }
                 else if (!is_nil(result->child[RIGHT])
-                         && this->_comp(result->child[RIGHT]->value.first, \
-                                   result->value.first))
+                         && this->_comp(result->child[RIGHT]->value, \
+                                   result->value))
                 {
                     while (!is_nil(result->child[RIGHT]))
                     { result = result->child[RIGHT]; }
@@ -340,15 +352,15 @@ namespace   ft
                 if (is_nil(this->_root))
                     return (NULL);
                 if (!is_nil(result->child[LEFT])
-                    && this->_comp(result->value.first, \
-                                   result->child[LEFT]->value.first))
+                    && this->_comp(result->value, \
+                                   result->child[LEFT]->value))
                 {
                     while (!is_nil(result->child[LEFT]))
                     { result = result->child[LEFT]; }
                 }
                 else if (!is_nil(result->child[RIGHT])
-                         && this->_comp(result->value.first, \
-                                   result->child[RIGHT]->value.first))
+                         && this->_comp(result->value, \
+                                        result->child[RIGHT]->value))
                 {
                     while (!is_nil(result->child[RIGHT]))
                     { result = result->child[RIGHT]; }
@@ -424,12 +436,11 @@ namespace   ft
             void    _remove(node_ptr to_remove)
             {
                 node_ptr    replacement;
-                key_type    key = to_remove->value.first;
 
                 // Update min and max
-                if (key == this->_min->value.first)
+                if (to_remove == this->_min)
                     this->_min = to_remove->successor();
-                if (key == this->_max->value.first)
+                if (to_remove == this->_max)
                 {
                     this->_max = to_remove->predecessor();
                     this->_end->child[RIGHT] = this->_max;
@@ -602,38 +613,40 @@ namespace   ft
             }
             
             // Recursive search
-            node_ptr _recursive_search(node_ptr node, key_type const &key) const
+            node_ptr _recursive_search(node_ptr node, \
+                                       const value_type &val) const
             {
                 node_ptr    ret;
                 int         dir;
 
                 if (is_nil(node))
                     return (this->_end);
-                if (node->value.first == key)
+                if (node->value == val)
                     return (node);
                 else 
                 {
-                    dir = this->_comp(node->value.first, key);
-                    ret = this->_recursive_search(node->child[dir], key);
+                    dir = this->_comp(node->value, val);
+                    ret = this->_recursive_search(node->child[dir], val);
                 }
                 return (ret);
             }
 
             // Recursive search
-            node_ptr _recursive_find_pos(node_ptr node, key_type const &key) const
+            node_ptr _recursive_find_pos(node_ptr node, \
+                                         const value_type &val) const
             {
                 int dir;
                 if (node == NULL)
                     return (NULL);
-                if (node->value.first == key)
+                if (node->value == val)
                     return (node);
                 else 
                 {
-                    dir = this->_comp(node->value.first, key);
+                    dir = this->_comp(node->value, val);
                     if (is_nil(node->child[dir]))
                         return (node);
                     else
-                        node = this->_recursive_find_pos(node->child[dir], key);
+                        node = this->_recursive_find_pos(node->child[dir], val);
                 }
                 return (node);
             }
@@ -656,7 +669,7 @@ namespace   ft
                         indent += "|    ";
                     }
                     std::string sColor = node->color ? "BLACK" : "RED";
-                    std::cout << node->value.first << "(" << sColor << ")" 
+                    std::cout << node->value << "(" << sColor << ")" 
                               << std::endl;
                     this->_recursive_print(node->child[LEFT], indent, false);
                     this->_recursive_print(node->child[RIGHT], indent, true);
