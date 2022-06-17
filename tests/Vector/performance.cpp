@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 08:30:37 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 08:40:00 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:35:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <vector>
-#include "Vector.hpp"
+#include "vector.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Vector_performance);

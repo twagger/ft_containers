@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 14:57:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/11 12:48:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:28:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <map>
-#include "Map.hpp"
+#include "map.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_observers);

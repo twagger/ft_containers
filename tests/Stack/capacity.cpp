@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 07:32:16 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 07:37:31 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:28:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <stack>
-#include "Stack.hpp"
+#include "stack.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Stack_capacity);

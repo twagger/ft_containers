@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 07:51:22 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 07:55:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:28:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <stack>
-#include "Stack.hpp"
+#include "stack.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Stack_access);

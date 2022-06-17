@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:36:12 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 14:50:33 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:35:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <map>
-#include "Map.hpp"
+#include "map.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_performance);

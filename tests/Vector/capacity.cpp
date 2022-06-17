@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 09:22:31 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/12 09:28:15 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:29:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include <vector>
-#include "Vector.hpp"
+#include "vector.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Vector_capacity);

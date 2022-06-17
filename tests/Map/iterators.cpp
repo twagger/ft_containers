@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include <map>
-#include "Map.hpp"
+#include "map.hpp"
 #include "parameters.hpp"
 
 TYPED_TEST_SUITE_P(Map_iterators);

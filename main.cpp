@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 08:41:53 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 09:00:25 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/17 07:29:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 	#include <vector>
 	namespace ft = std;
 #else
-	#include "srcs/containers/Map.hpp"
-	#include "srcs/containers/Stack.hpp"
-	#include "srcs/containers/Vector.hpp"
+	#include "srcs/containers/map.hpp"
+	#include "srcs/containers/stack.hpp"
+	#include "srcs/containers/vector.hpp"
 #endif
 
 #include <stdlib.h>
