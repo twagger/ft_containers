@@ -6,14 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/17 14:32:59 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 08:21:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBNODE_HPP
 # define RBNODE_HPP
 # include "pair.hpp"
-# include "../utils/has_first.hpp"
 # include <algorithm>
 
 enum { RED, BLACK, WHITE };
@@ -25,25 +24,15 @@ namespace   ft
     class RBNode
     {
         private:
+            // Attribute
+            Compare _comp;
+
             // Default constructor
             RBNode(void){}
 
             // Non member functions
             friend bool is_nil(RBNode<T, Compare> *node)
             { return (node == NULL || (node && node->color == WHITE) );}
-
-            // Compare values
-            template<class U = T>
-            bool    _comp(typename ft::enable_if<!ft::hasFirst<U>::value, \
-                          const U>::type &v1, const U &v2) const
-            {
-                return (Compare()(v1, v2));
-            }
-            
-            bool    _comp(const T &v1, const T &v2) const
-            {
-                return (Compare()(v1.first, v2.first));
-            }
 
         public:
             
@@ -67,8 +56,8 @@ namespace   ft
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Param
-            RBNode(value_type value)
-            : value(value), color(RED), parent(NULL)
+            RBNode(value_type value, const Compare &comp = Compare())
+            : _comp(comp), value(value), color(RED), parent(NULL)
             {
                 this->child[LEFT] = NULL;
                 this->child[RIGHT] = NULL;
@@ -76,7 +65,7 @@ namespace   ft
 
             // Copy
             RBNode(const node_type &src)
-            : value(src.value), color(src.color), parent(NULL)
+            : _comp(src._comp), value(src.value), color(src.color), parent(NULL)
             { 
                 this->child[LEFT] = NULL;
                 this->child[RIGHT] = NULL;

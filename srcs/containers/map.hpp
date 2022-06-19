@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/17 14:58:00 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 08:36:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ namespace   ft
                     pair_compare(Compare c) : _comp(c) {}
 
                 public:
+                    // This so the RBTree can construct the class
+                    pair_compare(void) : _comp(Compare()) {}
+
                     typedef bool        result_type;
                     typedef value_type  first_argument_type;
                     typedef value_type  second_argument_type;

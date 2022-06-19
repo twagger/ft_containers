@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/17 15:02:48 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 08:32:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <algorithm>
 # include "../iterators/tree_iterator.hpp"
 # include "../containers/vector.hpp"
-# include "../utils/has_first.hpp"
 # include "RBNode.hpp"
 
 namespace   ft
