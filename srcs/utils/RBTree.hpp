@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 09:32:10 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 10:12:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,32 +128,6 @@ namespace   ft
             node_ptr        get_end(void) const { return (this->_end); }
             node_allocator  get_allocator(void) const 
             { return (this->_allocator); }
-
-            // Create and insert
-            pair<iterator, bool>    create_and_insert(const value_type &val)
-            {
-                node_type       *ret;
-                node_type       *node;
-                int             dir;
-                
-                ret = this->find_insert_pos(val);
-                if (ret == NULL) // Insert first node
-                {
-                    node = this->_allocator.allocate(1);
-                    this->_allocator.construct(node, val);
-                    this->insert(node, ret, LEFT);
-                }
-                else if (ret->value == val) // Key already exists
-                    return (pair<iterator, bool>(ret, false));
-                else // New node
-                {
-                    dir = this->_comp(ret->value, val);
-                    node = this->_allocator.allocate(1);
-                    this->_allocator.construct(node, val);
-                    this->insert(node, ret, dir);
-                }
-                return (pair<iterator, bool>(node, true));
-            }
 
             // Insert
             /**

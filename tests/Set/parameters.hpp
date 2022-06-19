@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/17 08:34:03 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 10:15:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ using GenericTypes = testing::Types
 <
     std::set<int>,
     ft::set<int>,
-    std::set<int, std::greater<char>>,
-    ft::set<int, std::greater<char>>
+    std::set<int, std::greater<int>>,
+    ft::set<int, std::greater<int>>
 >;
 
 // Compare functions
-static const std::type_info  &t_less = typeid(std::less<char>);
-static const std::type_info  &t_more = typeid(std::greater<char>);
+static const std::type_info  &t_less = typeid(std::less<int>);
+static const std::type_info  &t_more = typeid(std::greater<int>);
 
 // Test suites
 template<typename T>

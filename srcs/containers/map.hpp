@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 09:34:36 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 10:12:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,12 +168,30 @@ namespace   ft
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
             {
-                pair<iterator, bool>    result;
-                
-                result = this->_tree.create_and_insert(val);
-                if (result.second == true)
+                node_type       *ret;
+                node_type       *node;
+                int             dir;
+                value_compare   comp = this->value_comp(); 
+
+                ret = this->_tree.find_insert_pos(val);
+                if (ret == NULL) // Insert first node
+                {
+                    node = this->_tree.get_allocator().allocate(1);
+                    this->_tree.get_allocator().construct(node, val);
+                    this->_tree.insert(node, ret, LEFT);
                     ++this->_size;
-                return (result);
+                }
+                else if (ret->value.first == val.first) // Key already exists
+                    return (pair<iterator, bool>(ret, false));
+                else // New node
+                {
+                    dir = comp(ret->value, val);
+                    node = this->_tree.get_allocator().allocate(1);
+                    this->_tree.get_allocator().construct(node, val);
+                    this->_tree.insert(node, ret, dir);
+                    ++this->_size;
+                }
+                return (pair<iterator, bool>(node, true));
             }
             
             iterator                insert(iterator position, \
