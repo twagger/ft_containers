@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/19 10:19:37 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 10:39:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,57 +20,103 @@ TYPED_TEST_SUITE_P(Set_modifiers);
 // Insert
 // By val
 TYPED_TEST(Set_modifiers, insertByVal) {
-    SET my_set;
+    SET         my_set;
+    ITERATOR    it;
     my_set.insert(42);
     my_set.insert(43);
     my_set.insert(44);
-    EXPECT_EQ(my_set['a'], 42);
-    EXPECT_EQ(my_set['b'], 43);
-    EXPECT_EQ(my_set['c'], 44);
-    EXPECT_EQ(my_set.size(), 3);
+    it = my_set.begin();
+    const std::type_info &t_comp = typeid(SET::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(*it++, 42);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it, 44);
+    }
+    else
+    {
+        EXPECT_EQ(*it++, 44);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it, 42);
+    }
 }
 
 // By Range
 TYPED_TEST(Set_modifiers, insertByRange) {
-    SET my_set;
-    SET my_set2;
-    my_set['a'] = 42;
-    my_set['b'] = 43;
-    my_set['c'] = 44;
-    my_set['d'] = 45;
-    my_set['e'] = 46;
-    my_set['f'] = 47;
+    SET         my_set;
+    SET         my_set2;
+    ITERATOR    it;
+    my_set.insert(42);
+    my_set.insert(43);
+    my_set.insert(44);
+    my_set.insert(45);
+    my_set.insert(46);
+    my_set.insert(47);
     my_set2.insert(my_set.begin(), my_set.end());
-    EXPECT_EQ(my_set2['a'], 42);
-    EXPECT_EQ(my_set2['b'], 43);
-    EXPECT_EQ(my_set2['c'], 44);
-    EXPECT_EQ(my_set2['d'], 45);
-    EXPECT_EQ(my_set2['e'], 46);
-    EXPECT_EQ(my_set2['f'], 47);
+    it = my_set2.begin();
+    const std::type_info &t_comp = typeid(SET::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(*it++, 42);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it++, 44);
+        EXPECT_EQ(*it++, 45);
+        EXPECT_EQ(*it++, 46);
+        EXPECT_EQ(*it, 47);
+    }
+    else
+    {
+        EXPECT_EQ(*it++, 47);
+        EXPECT_EQ(*it++, 46);
+        EXPECT_EQ(*it++, 45);
+        EXPECT_EQ(*it++, 44);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it, 42);
+    }
     EXPECT_EQ(my_set2.size(), 6);
 }
 
 TYPED_TEST(Set_modifiers, insertByRangeWithDoubleKey) {
-    SET my_set;
-    SET my_set2;
-    my_set['a'] = 42;
-    my_set['b'] = 43;
-    my_set['c'] = 44;
-    my_set['d'] = 45;
-    my_set['e'] = 46;
-    my_set['f'] = 47;
-    my_set2['f'] = 55;
-    my_set2['a'] = 11;
+    SET         my_set;
+    SET         my_set2;
+    ITERATOR    it;
+    my_set.insert(42);
+    my_set.insert(43);
+    my_set.insert(44);
+    my_set.insert(45);
+    my_set.insert(46);
+    my_set.insert(47);
+    my_set2.insert(55);
+    my_set2.insert(11);
     my_set2.insert(my_set.begin(), my_set.end());
-    EXPECT_EQ(my_set2['a'], 11);
-    EXPECT_EQ(my_set2['b'], 43);
-    EXPECT_EQ(my_set2['c'], 44);
-    EXPECT_EQ(my_set2['d'], 45);
-    EXPECT_EQ(my_set2['e'], 46);
-    EXPECT_EQ(my_set2['f'], 55);
-    EXPECT_EQ(my_set2.size(), 6);
+    it = my_set2.begin();
+    const std::type_info &t_comp = typeid(SET::key_compare);
+    if (t_comp == t_less)
+    {
+        EXPECT_EQ(*it++, 11);
+        EXPECT_EQ(*it++, 42);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it++, 44);
+        EXPECT_EQ(*it++, 45);
+        EXPECT_EQ(*it++, 46);
+        EXPECT_EQ(*it++, 47);
+        EXPECT_EQ(*it, 55);
+    }
+    else
+    {
+        EXPECT_EQ(*it++, 55);
+        EXPECT_EQ(*it++, 47);
+        EXPECT_EQ(*it++, 46);
+        EXPECT_EQ(*it++, 45);
+        EXPECT_EQ(*it++, 44);
+        EXPECT_EQ(*it++, 43);
+        EXPECT_EQ(*it++, 42);
+        EXPECT_EQ(*it, 11);
+    }
+    EXPECT_EQ(my_set2.size(), 8);
 }
 
+/*
 // By val with hint
 TYPED_TEST(Set_modifiers, insertByValWithHint) {
     SET my_set;
@@ -328,3 +374,4 @@ TYPED_TEST(Set_modifiers, swap) {
     EXPECT_EQ(my_set2['b'], 43);
     EXPECT_EQ(my_set2['c'], 44);
 }
+*/
