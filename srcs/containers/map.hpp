@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 08:36:22 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 09:27:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,19 +86,22 @@ namespace   ft
             // Empty
             explicit map(const key_compare &comp = key_compare(), \
                         const allocator_type &alloc = allocator_type())
-            : _allocator(alloc), _compare(comp), _size(0) {}
+            : _tree(value_compare(comp)), _allocator(alloc), \
+              _compare(comp), _size(0) {}
               
             // Range
             template <class InputIterator>
             map(InputIterator first, InputIterator last, \
                 const key_compare& comp = key_compare(), \
                 const allocator_type& alloc = allocator_type())
-            : _allocator(alloc), _compare(comp), _size(0)
+            : _tree(value_compare(comp)), _allocator(alloc), _compare(comp), \
+              _size(0)
             { this->insert(first, last); }
             
             // Copy
             map(const map &x)
-            : _allocator(x._allocator), _compare(x._compare), _size(0)
+            : _tree(value_compare(key_compare())), _allocator(x._allocator), \
+              _compare(x._compare), _size(0)
             { *this = x; }
 
             // Destructor
@@ -165,30 +168,12 @@ namespace   ft
             // Modifiers
             pair<iterator, bool>    insert(const value_type &val)
             {
-                node_type       *ret;
-                node_type       *node;
-                int             dir;
-                value_compare   comp = this->value_comp(); 
-
-                ret = this->_tree.find_insert_pos(val);
-                if (ret == NULL) // Insert first node
-                {
-                    node = this->_tree.get_allocator().allocate(1);
-                    this->_tree.get_allocator().construct(node, val);
-                    this->_tree.insert(node, ret, LEFT);
+                pair<iterator, bool>    result;
+                
+                result = this->_tree.create_and_insert(val);
+                if (result.second == true)
                     ++this->_size;
-                }
-                else if (ret->value.first == val.first) // Key already exists
-                    return (pair<iterator, bool>(ret, false));
-                else // New node
-                {
-                    dir = comp(ret->value, val);
-                    node = this->_tree.get_allocator().allocate(1);
-                    this->_tree.get_allocator().construct(node, val);
-                    this->_tree.insert(node, ret, dir);
-                    ++this->_size;
-                }
-                return (pair<iterator, bool>(node, true));
+                return (result);
             }
             
             iterator                insert(iterator position, \

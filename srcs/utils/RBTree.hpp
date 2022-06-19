@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 08:32:05 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 09:26:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,9 @@ namespace   ft
             /*  CONSTRUCTORS & DESTRUCTOR                                     */
             /* ************************************************************** */
             // Default
-            RBTree(const value_compare &cmp = value_compare()) : _root(NULL), _min(NULL), _max(NULL), \
-                           _allocator(node_allocator()), _comp(cmp)
+            RBTree(const value_compare &cmp)
+            : _root(NULL), _min(NULL), _max(NULL), \
+              _allocator(node_allocator()), _comp(cmp)
             {
                 this->_end = this->_allocator.allocate(1);
                 this->_allocator.construct(this->_end, value_type());
@@ -128,7 +129,33 @@ namespace   ft
             node_allocator  get_allocator(void) const 
             { return (this->_allocator); }
 
-            // Insert 2
+            // Create and insert
+            pair<iterator, bool>    create_and_insert(const value_type &val)
+            {
+                node_type       *ret;
+                node_type       *node;
+                int             dir;
+                
+                ret = this->find_insert_pos(val);
+                if (ret == NULL) // Insert first node
+                {
+                    node = this->_allocator.allocate(1);
+                    this->_allocator.construct(node, val);
+                    this->insert(node, ret, LEFT);
+                }
+                else if (ret->value == val) // Key already exists
+                    return (pair<iterator, bool>(ret, false));
+                else // New node
+                {
+                    dir = this->_comp(ret->value, val);
+                    node = this->_allocator.allocate(1);
+                    this->_allocator.construct(node, val);
+                    this->insert(node, ret, dir);
+                }
+                return (pair<iterator, bool>(node, true));
+            }
+
+            // Insert
             /**
              * @brief Insert a node in the right position in the tree
              * 

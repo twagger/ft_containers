@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/17 14:14:12 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/19 09:29:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,22 @@ namespace   ft
             // Empty
             explicit set(const key_compare &comp = key_compare(), \
                         const allocator_type &alloc = allocator_type())
-            : _allocator(alloc), _compare(comp), _size(0) {}
+            : _tree(value_compare()), _allocator(alloc), _compare(comp), \
+              _size(0) {}
               
             // Range
             template <class InputIterator>
             set(InputIterator first, InputIterator last, \
                 const key_compare& comp = key_compare(), \
                 const allocator_type& alloc = allocator_type())
-            : _allocator(alloc), _compare(comp), _size(0)
+            : _tree(value_compare()), _allocator(alloc), _compare(comp), \
+              _size(0)
             { this->insert(first, last); }
             
             // Copy
             set(const set &x)
-            : _allocator(x._allocator), _compare(x._compare), _size(0)
+            : _tree(value_compare()), _allocator(x._allocator), \
+              _compare(x._compare), _size(0)
             { *this = x; }
 
             // Destructor
