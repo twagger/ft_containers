@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RBTree.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 10:18:31 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 10:12:44 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 12:30:44 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ namespace   ft
             }
 
             // Copy
-            RBTree(const tree_ref src) : _root(NULL), \
+            RBTree(const tree_type &src) : _root(NULL), \
                                          _allocator(node_allocator())
             {
                 this->_end = this->_allocator.allocate(1);
