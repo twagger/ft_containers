@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 08:40:15 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/19 09:34:29 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 09:57:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ namespace   ft
             {
                 node_ptr new_left = NULL;
                 node_ptr new_right = NULL;
-
+                
+                // Here I use nesw and not allocator to simplify as the case
+                // here is just to create a temp node for swap then delete the 
+                // swapped
                 if (other.child[LEFT])
                     new_left = new node_type(*other.child[LEFT]);
                 if (other.child[RIGHT])
