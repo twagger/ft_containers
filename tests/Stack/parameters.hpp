@@ -6,12 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 07:23:19 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 07:51:43 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 09:51:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARAMETERS_HPP
 # define PARAMETERS_HPP
+# include <vector>
+# include <deque>
+# include <list>
 
 // Macros
 # define STACK typename TestFixture::Types
@@ -21,7 +24,13 @@
 using GenericTypes = testing::Types
 <
     std::stack<int>,
-    ft::stack<int>
+    ft::stack<int>,
+    std::stack<int, std::vector<int>>,
+    ft::stack<int, std::vector<int>>,
+    std::stack<int, std::deque<int>>,
+    ft::stack<int, std::deque<int>>,
+    std::stack<int, std::list<int>>,
+    ft::stack<int, std::list<int>>
 >;
 
 // Test suites
