@@ -6,7 +6,7 @@
 /*   By: twagner <twagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/12 10:50:15 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/21 12:29:44 by twagner          ###   ########.fr       */
+/*   Updated: 2022/06/21 12:34:19 by twagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ namespace   ft
             { return this->_p != rhs._p; }
 
             reference       operator*(void) { return (this->_p->value); }
-            const T::value_type &operator*(void) const 
+            const typename T::value_type &operator*(void) const 
             { return (this->_p->value); }
             pointer         operator->(void) const { return (&this->_p->value);}
 
@@ -115,7 +115,7 @@ namespace   ft
             bool            operator!=(const t_const_iterator& rhs) const
             { return this->_p != rhs._p; }
 
-            const T::value_type &operator*(void) const
+            const typename T::value_type &operator*(void) const
             { return (this->_p->value); }
             pointer         operator->(void) const { return (&this->_p->value);}
 
