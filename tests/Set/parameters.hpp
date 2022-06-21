@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/19 10:15:08 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 08:33:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,5 @@ TYPED_TEST_CASE(Set_observers, GenericTypes);
 template<typename T>
 struct Set_operations : public testing::Test { using Types = T; };
 TYPED_TEST_CASE(Set_operations, GenericTypes);
-
-template<typename T>
-struct Set_performance : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_performance, GenericTypes);
 
 #endif
