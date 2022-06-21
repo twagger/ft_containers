@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 06:50:19 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 08:33:55 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 10:16:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,30 @@ using StdTypes = testing::Types
 // Test suites
 template<typename T>
 struct Vector_iterators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_iterators, GenericTypes);
+TYPED_TEST_SUITE(Vector_iterators, GenericTypes);
 
 template<typename T>
 struct Vector_capacity : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_capacity, GenericTypes);
+TYPED_TEST_SUITE(Vector_capacity, GenericTypes);
 
 template<typename T>
 struct Vector_operators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_operators, GenericTypes);
+TYPED_TEST_SUITE(Vector_operators, GenericTypes);
 
 template<typename T>
 struct Vector_modifiers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_modifiers, GenericTypes);
+TYPED_TEST_SUITE(Vector_modifiers, GenericTypes);
 
 template<typename T>
 struct Vector_element_access : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_element_access, GenericTypes);
+TYPED_TEST_SUITE(Vector_element_access, GenericTypes);
 
 template<typename T>
 struct Vector_constructors : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_constructors, GenericTypes);
+TYPED_TEST_SUITE(Vector_constructors, GenericTypes);
 
 template<typename T>
 struct Vector_performance : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Vector_performance, GenericTypes);
+TYPED_TEST_SUITE(Vector_performance, GenericTypes);
 
 #endif

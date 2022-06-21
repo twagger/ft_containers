@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/14 13:32:28 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 10:16:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,30 @@ static const std::type_info  &t_more = typeid(std::greater<char>);
 // Test suites
 template<typename T>
 struct Map_iterators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_iterators, GenericTypes);
+TYPED_TEST_SUITE(Map_iterators, GenericTypes);
 
 template<typename T>
 struct Map_constructors : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_constructors, GenericTypes);
+TYPED_TEST_SUITE(Map_constructors, GenericTypes);
 
 template<typename T>
 struct Map_operators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_operators, GenericTypes);
+TYPED_TEST_SUITE(Map_operators, GenericTypes);
 
 template<typename T>
 struct Map_modifiers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_modifiers, GenericTypes);
+TYPED_TEST_SUITE(Map_modifiers, GenericTypes);
 
 template<typename T>
 struct Map_observers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_observers, GenericTypes);
+TYPED_TEST_SUITE(Map_observers, GenericTypes);
 
 template<typename T>
 struct Map_operations : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_operations, GenericTypes);
+TYPED_TEST_SUITE(Map_operations, GenericTypes);
 
 template<typename T>
 struct Map_performance : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Map_performance, PerfTypes);
+TYPED_TEST_SUITE(Map_performance, PerfTypes);
 
 #endif

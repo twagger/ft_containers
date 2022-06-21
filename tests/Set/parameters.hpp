@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:00:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/21 08:33:36 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 10:16:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,26 @@ static const std::type_info  &t_more = typeid(std::greater<int>);
 // Test suites
 template<typename T>
 struct Set_iterators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_iterators, GenericTypes);
+TYPED_TEST_SUITE(Set_iterators, GenericTypes);
 
 template<typename T>
 struct Set_constructors : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_constructors, GenericTypes);
+TYPED_TEST_SUITE(Set_constructors, GenericTypes);
 
 template<typename T>
 struct Set_operators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_operators, GenericTypes);
+TYPED_TEST_SUITE(Set_operators, GenericTypes);
 
 template<typename T>
 struct Set_modifiers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_modifiers, GenericTypes);
+TYPED_TEST_SUITE(Set_modifiers, GenericTypes);
 
 template<typename T>
 struct Set_observers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_observers, GenericTypes);
+TYPED_TEST_SUITE(Set_observers, GenericTypes);
 
 template<typename T>
 struct Set_operations : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Set_operations, GenericTypes);
+TYPED_TEST_SUITE(Set_operations, GenericTypes);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 07:23:19 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/21 09:51:17 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 10:16:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,22 @@ using GenericTypes = testing::Types
 // Test suites
 template<typename T>
 struct Stack_modifiers : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Stack_modifiers, GenericTypes);
+TYPED_TEST_SUITE(Stack_modifiers, GenericTypes);
 
 template<typename T>
 struct Stack_constructors : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Stack_constructors, GenericTypes);
+TYPED_TEST_SUITE(Stack_constructors, GenericTypes);
 
 template<typename T>
 struct Stack_capacity : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Stack_capacity, GenericTypes);
+TYPED_TEST_SUITE(Stack_capacity, GenericTypes);
 
 template<typename T>
 struct Stack_relational_operators : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Stack_relational_operators, GenericTypes);
+TYPED_TEST_SUITE(Stack_relational_operators, GenericTypes);
 
 template<typename T>
 struct Stack_access : public testing::Test { using Types = T; };
-TYPED_TEST_CASE(Stack_access, GenericTypes);
+TYPED_TEST_SUITE(Stack_access, GenericTypes);
 
 #endif
