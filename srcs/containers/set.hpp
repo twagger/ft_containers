@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 12:27:08 by twagner           #+#    #+#             */
-/*   Updated: 2022/06/19 09:29:30 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 08:27:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ namespace   ft
                 while (first != last)
                 {
                     next = first._p->successor();
-                    this->_tree.erase(first);
+                    this->erase(first);
                     first = next;
                 }
             }

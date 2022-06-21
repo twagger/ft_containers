@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:45:02 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/17 07:28:02 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/21 08:26:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ TYPED_TEST(Map_modifiers, eraseByPositionRoot) {
     my_map['c'] = 44;
     it = my_map.find('b');
     my_map.erase(it);
+    EXPECT_EQ(my_map.size(), 2);
     EXPECT_EQ(my_map['a'], 42);
     EXPECT_EQ(my_map['c'], 44);
 }
@@ -109,6 +110,7 @@ TYPED_TEST(Map_modifiers, eraseByPositionNonRoot) {
     my_map['c'] = 44;
     it = my_map.find('a');
     my_map.erase(it);
+    EXPECT_EQ(my_map.size(), 2);
     EXPECT_EQ(my_map['b'], 43);
     EXPECT_EQ(my_map['c'], 44);
 }
@@ -119,6 +121,7 @@ TYPED_TEST(Map_modifiers, eraseByPositionOnlyNode) {
     my_map['a'] = 42;
     it = my_map.find('a');
     my_map.erase(it);
+    EXPECT_EQ(my_map.size(), 0);
     EXPECT_EQ(my_map['a'], 0);
 }
 
@@ -129,6 +132,7 @@ TYPED_TEST(Map_modifiers, eraseByValueRoot) {
     my_map['b'] = 43;
     my_map['c'] = 44;
     my_map.erase('b');
+    EXPECT_EQ(my_map.size(), 2);
     EXPECT_EQ(my_map['a'], 42);
     EXPECT_EQ(my_map['c'], 44);
 }
@@ -139,6 +143,7 @@ TYPED_TEST(Map_modifiers, eraseByValueNonRoot) {
     my_map['b'] = 43;
     my_map['c'] = 44;
     my_map.erase('a');
+    EXPECT_EQ(my_map.size(), 2);
     EXPECT_EQ(my_map['b'], 43);
     EXPECT_EQ(my_map['c'], 44);
 }
@@ -147,6 +152,7 @@ TYPED_TEST(Map_modifiers, eraseByValueOnlyNode) {
     MAP my_map;
     my_map['a'] = 42;
     my_map.erase('a');
+    EXPECT_EQ(my_map.size(), 0);
     EXPECT_EQ(my_map['a'], 0);
 }
 
@@ -181,6 +187,7 @@ TYPED_TEST(Map_modifiers, eraseALot) {
     my_map['z'] = 42;
     for (int i = 0; i < 26; ++i)
         my_map.erase(to_erase[i]);
+    EXPECT_EQ(my_map.size(), 0);
     EXPECT_EQ(my_map['a'], 0);
 }
 
@@ -194,6 +201,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeIncludingRoot) {
     it = my_map.find('b');
     my_map.erase(it, my_map.end());
     const std::type_info &t_comp = typeid(MAP::key_compare);
+    EXPECT_EQ(my_map.size(), 1);
     if (t_comp == t_less)
     {
         EXPECT_EQ(my_map['a'], 42);
@@ -218,6 +226,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeNonIncludingRoot) {
     const std::type_info &t_comp = typeid(MAP::key_compare);
     if (t_comp == t_less)
     {
+        EXPECT_EQ(my_map.size(), 2);
         EXPECT_EQ(my_map['a'], 42);
         EXPECT_EQ(my_map['b'], 43);
         EXPECT_EQ(my_map['c'], 0);
@@ -225,6 +234,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeNonIncludingRoot) {
     }
     else
     {
+        EXPECT_EQ(my_map.size(), 1);
         EXPECT_EQ(my_map['a'], 0);
         EXPECT_EQ(my_map['b'], 0);
         EXPECT_EQ(my_map['c'], 0);
@@ -253,6 +263,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeIncludingBegin) {
     const std::type_info &t_comp = typeid(MAP::key_compare);
     if (t_comp == t_less)
     {
+        EXPECT_EQ(my_map.size(), 2);
         EXPECT_EQ(my_map['a'], 0);
         EXPECT_EQ(my_map['b'], 0);
         EXPECT_EQ(my_map['c'], 44);
@@ -260,6 +271,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeIncludingBegin) {
     }
     else
     {
+        EXPECT_EQ(my_map.size(), 3);
         EXPECT_EQ(my_map['a'], 42);
         EXPECT_EQ(my_map['b'], 43);
         EXPECT_EQ(my_map['c'], 44);
@@ -276,6 +288,7 @@ TYPED_TEST(Map_modifiers, eraseByRangeAllTree) {
     my_map['d'] = 48;
     my_map.erase(my_map.begin(), my_map.end());
     const std::type_info &t_comp = typeid(MAP::key_compare);
+    EXPECT_EQ(my_map.size(), 0);
     if (t_comp == t_less)
     {
         EXPECT_EQ(my_map['a'], 0);
