@@ -1,7 +1,11 @@
 # COMMANDS
 ################################################################################
 RM			= rm -f
+RMRF		= rm -rf
 CC			= c++
+CD			= cd
+MKDIR		= mkdir
+GCLONE		= git clone
 
 # SOURCES
 ################################################################################
@@ -15,6 +19,8 @@ NAME		= 42tester
 # DIRECTORIES
 ################################################################################
 HEADERS		= -Isrcs/containers -Isrcs/iterators -Isrcs/utils
+LIBRARIES	= lib
+BUILD		= build
 
 # FLAGS
 ################################################################################
@@ -40,9 +46,19 @@ all:		$(NAME)
 
 clean:
 			$(RM) $(OBJS)
+			$(RMRF) $(LIBRARIES)
+			$(RMRF) $(BUILD)
 
 fclean:		clean
 			$(RM) $(NAME)
+
+
+test:		clean
+			$(MKDIR) $(LIBRARIES) && $(CD) $(LIBRARIES) && \
+			$(GCLONE) git@github.com:google/googletest.git
+			$(MKDIR) $(BUILD) && $(CD) $(BUILD) && \
+			cmake .. -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
+			make all -C build
 
 re:			fclean all
 
