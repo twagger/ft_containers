@@ -62,4 +62,4 @@ test:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean c.o re
+.PHONY:		all clean fclean cpp.o re
