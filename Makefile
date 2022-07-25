@@ -24,7 +24,7 @@ BUILD		= build
 
 # FLAGS
 ################################################################################
-CPPFLAGS		:= -Wall -Wextra -Werror -Wno-conversion -std=c++98 -pedantic
+CPPFLAGS		:= -Wall -Wextra -Werror -Wno-conversion -std=c++98
 
 ifeq ($(DEBUG), true)
 	CPPFLAGS	+= -fsanitize=address -g3 -O0
@@ -36,7 +36,7 @@ endif
 
 # RULES
 ################################################################################
-.c.o:
+.cpp.o:
 			$(CC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o) -I$(HEADERS)
 
 $(NAME):	$(OBJS)
